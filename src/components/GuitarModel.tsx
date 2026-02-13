@@ -5,33 +5,44 @@ import {
   useGLTF, 
   Float, 
   Environment, 
-  Center, 
   PresentationControls, 
   ContactShadows 
 } from '@react-three/drei';
 import * as THREE from 'three';
 
 function Model() {
-  const { scene } = useGLTF('/tom_morello.glb');
+  const { scene } = useGLTF('/guitar.glb');
   
-  // Ottimizzazione materiali per la massima nitidezza visiva
+  // --- COLOR FIX ---
   scene.traverse((child) => {
     if ((child as THREE.Mesh).isMesh) {
       const mesh = child as THREE.Mesh;
       if (mesh.material) {
-        (mesh.material as THREE.MeshStandardMaterial).needsUpdate = true;
+        const material = mesh.material as THREE.MeshStandardMaterial;
+        const hsl = { h: 0, s: 0, l: 0 };
+        material.color.getHSL(hsl);
+
+        if ((hsl.h < 0.08 || hsl.h > 0.92) && hsl.s > 0.2) {
+           material.color.set("#6366f1"); 
+           material.roughness = 0.2; 
+           material.metalness = 0.5;
+        } else {
+           material.envMapIntensity = 2.5; 
+           material.roughness = 0.3;
+           material.metalness = 0.6;
+        }
+        material.needsUpdate = true;
       }
     }
   });
 
   return (
-    <Center>
-      <primitive 
-        object={scene} 
-        scale={3.5} 
-        rotation={[0.2, -1.5, 0]} 
-      />
-    </Center>
+    <primitive 
+      object={scene} 
+      scale={0.9} // Proporzione confermata
+      position={[3.2, -2.5, 0]} // Posizione confermata
+      rotation={[0, -0.2, 0]} 
+    />
   );
 }
 
@@ -39,60 +50,38 @@ export default function GuitarScene() {
   return (
     <div className="w-full h-full">
       <Canvas 
-        dpr={[1, 2]} // Qualità Retina per eliminare l'effetto sgranato
-        camera={{ position: [0, 0, 9], fov: 35 }} 
+        dpr={[1, 2]} 
+        camera={{ position: [0, 0, 17], fov: 40 }} 
         gl={{ 
           antialias: true,
           powerPreference: "high-performance",
           alpha: true,
           toneMapping: THREE.ACESFilmicToneMapping,
+          toneMappingExposure: 1.0, 
         }}
+        className="pointer-events-auto"
       >
-        {/* --- ILLUMINAZIONE CINEMATICA --- */}
-        {/* Luce ambientale soffusa con tono freddo */}
-        <ambientLight intensity={0.4} color="#1a1a2e" />
-
-        {/* Luce principale bianca per i dettagli */}
-        <spotLight 
-          position={[10, 10, 10]} 
-          angle={0.15} 
-          penumbra={1} 
-          intensity={5} 
-          color="#ffffff" 
-        />
-
-        {/* Riflesso Indigo (sinistra) - Richiama i blob dello sfondo */}
-        <pointLight 
-          position={[-10, 2, 5]} 
-          intensity={15} 
-          distance={20}
-          color="#6366f1" 
-        /> 
-
-        {/* Riflesso Fuchsia (destra/basso) - Effetto neon dinamico */}
-        <spotLight 
-          position={[5, -5, 5]} 
-          angle={0.3}
-          penumbra={1}
-          intensity={10} 
-          color="#d946ef" 
-        />
+        <ambientLight intensity={0.7} color="#2a2a40" />
+        <spotLight position={[5, 8, 8]} angle={0.5} penumbra={0.5} intensity={10} color="#ffffff" castShadow />
+        <pointLight position={[-5, 0, 5]} intensity={8} color="#818cf8" />
+        <spotLight position={[2, -5, 5]} angle={0.5} intensity={10} color="#d946ef" />
 
         <Suspense fallback={null}>
           <PresentationControls
-            global={false}
+            global={true}
             cursor={true}
             snap={true}
             speed={1.5}
             zoom={1}
             rotation={[0, 0, 0]}
             polar={[-Math.PI / 6, Math.PI / 6]}
-            azimuth={[-Math.PI / 4, Math.PI / 4]}
+            azimuth={[-Math.PI / 5, Math.PI / 5]}
           >
+            {/* --- EFFETTO FLUTTUAZIONE POTENZIATO --- */}
             <Float 
-              speed={2} 
-              rotationIntensity={0.2} 
-              floatIntensity={0.5}
+              speed={4} // Velocità dell'oscillazione (da 3 a 4)
+              rotationIntensity={0.8} // Intensità della rotazione casuale (da 0.1 a 0.8)
+              floatIntensity={2} // Ampiezza del movimento verticale (da 0.2 a 2)
             >
               <Model />
             </Float>
@@ -100,10 +89,9 @@ export default function GuitarScene() {
           
           <Environment preset="city" />
           
-          {/* Ombra ottimizzata: calcolata 1 volta sola per non pesare sullo scroll */}
           <ContactShadows 
-            position={[0, -2.5, 0]} 
-            opacity={0.4} 
+            position={[3.2, -4.5, 0]} 
+            opacity={0.5} 
             scale={10} 
             blur={2.5} 
             far={4} 
@@ -116,4 +104,4 @@ export default function GuitarScene() {
   );
 }
 
-useGLTF.preload('/tom_morello.glb');
+useGLTF.preload('/guitar.glb');
