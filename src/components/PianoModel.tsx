@@ -1,7 +1,8 @@
 "use client";
 import React, { Suspense, useState, useEffect, useRef } from 'react';
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
 import { useGLTF, Environment, OrbitControls, ContactShadows } from '@react-three/drei';
+import * as THREE from 'three';
 
 const SCROLL_IDLE_MS = 160;
 
@@ -30,16 +31,26 @@ function useScrollIdle() {
 }
 
 function Model() {
-  // Carica il file dalla cartella public
   const { scene } = useGLTF('/black_piano.glb');
+  const groupRef = useRef<THREE.Group>(null);
+
+  // Animazione di galleggiamento (floating)
+  useFrame((state) => {
+    if (!groupRef.current) return;
+    const t = state.clock.getElapsedTime();
+    // Galleggiamento millimetrico
+    groupRef.current.position.y = -1.6 + Math.sin(t * 0.8) * 0.1;
+  });
   
   return (
-    <primitive 
-      object={scene} 
-      scale={2.0}             // <--- RIDOTTO (da 2.5 a 1.2) per farlo meno ingombrante
-      position={[0, -1.5, 0]} // Posizione Y per tenerlo "appoggiato" a terra
-      rotation={[0, 0.5, 0]} 
-    />
+    // Ho cambiato la posizione Y da -1.5 a -2.0 per abbassarlo
+    <group ref={groupRef} position={[0, -2.0, 0]}>
+      <primitive 
+        object={scene} 
+        scale={2.0}             // SCALE ORIGINALE
+        rotation={[0, 0.5, 0]}  // ROTAZIONE ORIGINALE
+      />
+    </group>
   );
 }
 
@@ -53,24 +64,25 @@ export default function PianoModel() {
     >
       <Canvas
         frameloop={isScrolling ? 'never' : 'always'}
-        camera={{ position: [0, 2, 9], fov: 45 }}
+        camera={{ position: [0, 2, 9], fov: 45 }} // CAMERA ORIGINALE
       >
         
-        {/* Luci ambientali per far brillare il nero lucido del piano */}
-        <ambientLight intensity={0.5} />
-        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} />
+        <ambientLight intensity={0.7} />
+        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1.5} />
         
         <Suspense fallback={null}>
           <Model />
           <Environment preset="city" /> 
-          <ContactShadows position={[0, -1.5, 0]} opacity={0.4} scale={10} blur={2.5} far={4} />
+          {/* Anche l'ombra deve essere abbassata per seguire il piano */}
+          <ContactShadows position={[0, -0.1, 0]} opacity={0.4} scale={10} blur={2.5} far={4} />
         </Suspense>
 
         <OrbitControls 
           enableZoom={false} 
-          autoRotate={true}  
-          autoRotateSpeed={0.5}
+          autoRotate={false}   // ROTAZIONE DISATTIVATA
+          enablePan={false}
           maxPolarAngle={Math.PI / 2} 
+          minPolarAngle={Math.PI / 3}
         />
       </Canvas>
     </div>
