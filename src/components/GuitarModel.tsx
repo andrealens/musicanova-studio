@@ -1,8 +1,34 @@
 "use client";
-import React, { Suspense } from 'react';
+import React, { Suspense, useState, useEffect, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { useGLTF, Float, Environment, PresentationControls, ContactShadows } from '@react-three/drei';
 import * as THREE from 'three';
+
+const SCROLL_IDLE_MS = 160;
+
+function useScrollIdle() {
+  const [isScrolling, setIsScrolling] = useState(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolling(true);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      timeoutRef.current = setTimeout(() => {
+        setIsScrolling(false);
+        timeoutRef.current = null;
+      }, SCROLL_IDLE_MS);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
+
+  return isScrolling;
+}
 
 function Model() {
   const { scene } = useGLTF('/guitar.glb');
@@ -38,16 +64,22 @@ function Model() {
 }
 
 export default function GuitarScene() {
+  const isScrolling = useScrollIdle();
+
   return (
-    <div className="w-full h-full cursor-grab active:cursor-grabbing">
-      <Canvas 
-        dpr={[1, 2]} 
-        camera={{ position: [0, 0, 16], fov: 40 }} 
-        gl={{ 
+    <div
+      className="w-full h-full cursor-grab active:cursor-grabbing"
+      style={{ pointerEvents: isScrolling ? 'none' : 'auto' }}
+    >
+      <Canvas
+        frameloop={isScrolling ? 'never' : 'always'}
+        dpr={[1, 2]}
+        camera={{ position: [0, 0, 16], fov: 40 }}
+        gl={{
           antialias: true,
           alpha: true,
           toneMapping: THREE.ACESFilmicToneMapping,
-          toneMappingExposure: 1.2, // LUMINOSITÀ RIPRISTINATA
+          toneMappingExposure: 1.2,
         }}
       >
         <ambientLight intensity={0.8} /> {/* LUCE AMBIENTE ALZATA */}
