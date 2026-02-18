@@ -7,8 +7,8 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 
-// Importazione Chitarra 3D (Percorso aggiornato per la tua struttura)
-const GuitarScene = dynamic(() => import('../src/components/GuitarModel'), { 
+// Importazione Cassetta 3D
+const CassetteScene = dynamic(() => import('../src/components/CassetteModel'), { 
   ssr: false, 
   loading: () => <div className="h-full w-full bg-transparent" /> 
 });
@@ -43,8 +43,8 @@ export default function Home() {
            <div className="absolute bottom-[-10%] left-[-20%] w-[700px] h-[700px] bg-red-900/10 blur-[120px] rounded-full opacity-40" />
         </div>
 
-        <div className="absolute inset-0 z-0 hidden lg:block">
-           <GuitarScene />
+        <div className="absolute inset-0 z-0 hidden lg:block pointer-events-none">
+           <CassetteScene />
         </div>
         
         <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-10 pointer-events-none">
@@ -63,7 +63,7 @@ export default function Home() {
               {/* --- TITOLO HERO CON GRADIENTE CORRETTO --- */}
               <h1 className="text-5xl md:text-7xl font-bold tracking-tighter leading-[1.1] mb-8 drop-shadow-2xl text-white">
                 MusicaNova: <br/> 
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-red-200 to-red-600">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-orange-400 to-red-600">
                   la tua scuola
                 </span> <br/> 
                 di Musica.
@@ -108,9 +108,14 @@ export default function Home() {
                   </p>
                </div>
                
-               <Link href="/musigramma" className="inline-flex items-center gap-2 text-[#00ced1] font-bold uppercase tracking-widest hover:translate-x-2 transition-transform">
-                 Scopri l'innovazione <ArrowRight size={20}/>
-               </Link>
+               <div className="flex flex-col gap-4">
+                 <Link href="/musigramma" className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#00ced1]/10 border border-[#00ced1]/30 text-[#00ced1] font-bold uppercase tracking-widest rounded-full hover:bg-[#00ced1]/20 hover:border-[#00ced1]/50 transition-all shadow-lg shadow-[#00ced1]/20 hover:shadow-[#00ced1]/40">
+                   Scopri il Metodo <ArrowRight size={20}/>
+                 </Link>
+                 <Link href="/musigramma" className="inline-flex items-center gap-2 text-[#00ced1] font-bold uppercase tracking-widest hover:translate-x-2 transition-transform text-sm px-5 py-2">
+                   Scopri l'innovazione <ArrowRight size={16}/>
+                 </Link>
+               </div>
 
                {/* Decorazione Sfondo */}
                <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-[#00ced1]/5 blur-[80px] group-hover:bg-[#00ced1]/10 transition-all duration-500 rounded-full" />

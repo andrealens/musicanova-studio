@@ -123,6 +123,58 @@ export default function ChitarraPage() {
             ))}
          </div>
       </section>
+
+      {/* --- SEZIONE INSEGNANTE: FRANCESCO MORREALE --- */}
+      <section className="relative z-20 py-24 px-6 md:px-10 bg-[#050505] border-t border-white/5">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center"
+          >
+            {/* Immagine */}
+            <div className="relative group">
+              <div className="absolute inset-0 bg-gradient-to-br from-red-500/20 to-transparent rounded-3xl blur-2xl opacity-50 group-hover:opacity-75 transition-opacity" />
+              <img
+                src="/francesco.jpeg"
+                alt="Francesco Morreale"
+                className="relative w-full h-auto rounded-3xl shadow-2xl border border-white/10 object-cover aspect-[4/5]"
+              />
+            </div>
+
+            {/* Testo */}
+            <div className="space-y-6">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="w-12 h-[2px] bg-red-600 shadow-[0_0_10px_#dc2626]"></span>
+                <span className="text-red-500 uppercase tracking-widest text-sm font-bold">
+                  L'Insegnante
+                </span>
+              </div>
+              
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+                Francesco Morreale
+              </h2>
+
+              <div className="space-y-4 text-gray-300 leading-relaxed text-lg">
+                <p>
+                  La musica è un potentissimo mezzo di espressione. Mi ha letteralmente salvato. Con la musica possiamo entrare in contatto con il bambino che abbiamo dentro, permettergli di esprimersi, farlo giocare.
+                </p>
+                <p>
+                  La musica salva, è terapeutica. E per me è un piacere e un onore cercare di trasmettere emozioni in musica, imbracciando la chitarra. Che sia suonando davanti ad un pubblico, che sia mentre sto insegnando a qualcuno.
+                </p>
+                <p>
+                  Vedere allievi che suonano i loro primi accordi, un arpeggio, un assolo, vedere la soddisfazione e la gioia nei loro volti, sorridenti, è per me importantissimo, mi fa capire quanto la musica sia importante nella vita di tutti, come lo è stata e lo è per me.
+                </p>
+                <p className="text-gray-400 italic">
+                  E mi accorgo di quanto anch'io abbia imparato e impari dai miei allievi, mentre suoniamo e facciamo lezione. Non solo musicalmente, ma anche umanamente. Quindi posso benissimo dire che moltissimi miei allievi sono anche dei cari amici. La musica unisce, in un mondo diviso. La musica è pura, è vita.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
     </div>
   );
 }

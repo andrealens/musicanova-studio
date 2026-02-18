@@ -8,6 +8,9 @@ import { motion } from 'framer-motion';
 const pages = [
   { path: '/', label: 'Home' },
   { path: '/la-scuola', label: 'La Scuola' },
+  { path: '/corsi/pianoforte', label: 'Pianoforte' },
+  { path: '/corsi/chitarra', label: 'Chitarra' },
+  { path: '/musigramma', label: 'Musigramma' },
   { path: '/band-live', label: 'Band & Live' },
   { path: '/chi-siamo', label: 'Chi Siamo' },
 ];

@@ -24,13 +24,17 @@ export default function Navbar() {
             La Scuola
           </Link>
           
-          {/* GRUPPO CORSI (Semplificato visivamente) */}
-          <div className="flex items-center gap-4 px-4 py-1 rounded-full bg-white/5 border border-white/5">
-            <span className="text-xs font-bold uppercase tracking-widest text-gray-500 cursor-default">Corsi:</span>
-            <Link href="/corsi/pianoforte" className="hover:text-white text-gray-300 transition-colors">Pianoforte</Link>
-            <span className="text-gray-600">/</span>
-            <Link href="/corsi/chitarra" className="hover:text-white text-gray-300 transition-colors">Chitarra</Link>
+          {/* GRUPPO CORSI (Evidenziato in viola/indigo come CTA) */}
+          <div className="flex items-center gap-4 px-4 py-1 rounded-full bg-white/5 border border-indigo-500/30">
+            <span className="text-xs font-bold uppercase tracking-widest text-indigo-400 cursor-default">Corsi:</span>
+            <Link href="/corsi/pianoforte" className="hover:text-white text-indigo-400 transition-colors font-semibold">Pianoforte</Link>
+            <span className="text-indigo-600">/</span>
+            <Link href="/corsi/chitarra" className="hover:text-white text-indigo-400 transition-colors font-semibold">Chitarra</Link>
           </div>
+          
+          <Link href="/musigramma" className="hover:text-white transition-colors">
+            Musigramma
+          </Link>
           
           <Link href="/band-live" className="hover:text-white transition-colors">
             Band & Live

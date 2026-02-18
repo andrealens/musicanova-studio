@@ -105,6 +105,58 @@ export default function PianofortePage() {
             ))}
          </div>
       </section>
+
+      {/* --- SEZIONE INSEGNANTE: CLAUDIO BERNARDI --- */}
+      <section className="relative z-20 py-24 px-6 md:px-10 bg-[#050505] border-t border-white/5">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center"
+          >
+            {/* Immagine */}
+            <div className="relative group md:order-2">
+              <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/20 to-transparent rounded-3xl blur-2xl opacity-50 group-hover:opacity-75 transition-opacity" />
+              <img
+                src="/claudio.jpeg"
+                alt="Claudio Bernardi"
+                className="relative w-full h-auto rounded-3xl shadow-2xl border border-white/10 object-cover aspect-[4/5]"
+              />
+            </div>
+
+            {/* Testo */}
+            <div className="space-y-6 md:order-1">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="w-12 h-[2px] bg-indigo-500 shadow-[0_0_10px_#6366f1]"></span>
+                <span className="text-indigo-400 uppercase tracking-widest text-sm font-bold">
+                  L'Insegnante
+                </span>
+              </div>
+              
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+                Claudio Bernardi
+              </h2>
+
+              <div className="space-y-4 text-gray-300 leading-relaxed text-lg">
+                <p>
+                  Musica ed insegnare la musica, ed uno strumento, come il piano, è un atto d'amore. Ho maturato questa consapevolezza nel corso dei miei tanti anni di esperienza "on the road", suonando con svariati musicisti, da cui ho appreso molto.
+                </p>
+                <p>
+                  Continuo a studiare, nonostante l'età, e lo farò finché potrò. Spero che la mia esperienza possa dare, attraverso lo studio della musica, ai i miei allievi momenti di gioia sincera.
+                </p>
+                <p>
+                  A tal proposito: non esiste un'età per iniziare lo studio di uno strumento, come spesso si pensa. Ma l'essenziale, la cosa più importante, è il desiderio di entrare in questo meraviglioso mondo.
+                </p>
+                <p className="text-gray-400 italic">
+                  Ho appreso, grazie ai miei maestri, il modo di studiare, la gioia di poter suonare, l'equilibrio e il metodo. Di tutte queste cose ho fatto una sintesi. Questa è, credo, la maniera migliore (cioè l'esperienza, unità alla comprensione di chi hai davanti) per arrivare a una buona relazione maestro/studente che possa far cresce ed innamorare della musica le persone.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
     </div>
   );
 }
