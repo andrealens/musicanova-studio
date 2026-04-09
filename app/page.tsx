@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { 
-  ArrowRight, Sparkles, Music, Laptop, GraduationCap 
+  ArrowRight, Sparkles, Music, Laptop, GraduationCap, MapPin, Coffee 
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -15,18 +15,24 @@ const CassetteScene = dynamic(() => import('../src/components/CassetteModel'), {
 
 const cardStyle = "bg-[#0A0A0A] border border-white/10 shadow-2xl rounded-[3rem] transition-all duration-300";
 
-const ScrollingBlurText = ({ text }: { text: string }) => {
+// COMPONENTE AGGIORNATO: Ora accetta titolo e descrizione per gestire testi lunghi con eleganza
+const ScrollingBlurText = ({ title, description }: { title: string | React.ReactNode, description?: React.ReactNode }) => {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const blur = useTransform(scrollYProgress, [0, 0.4, 0.6, 1], [10, 0, 0, 10]);
   const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0]);
 
   return (
-    <div className="py-32 px-6 max-w-5xl mx-auto text-center flex flex-col items-center gap-10">
+    <div className="py-32 px-6 max-w-4xl mx-auto text-center flex flex-col items-center gap-10">
       <motion.div ref={ref} style={{ filter: useTransform(blur, (v) => `blur(${v}px)`), opacity }}>
-        <h2 className="text-3xl md:text-5xl font-bold leading-tight text-white">
-          {text}
+        <h2 className="text-3xl md:text-5xl font-bold leading-tight text-white mb-8">
+          {title}
         </h2>
+        {description && (
+          <p className="text-xl md:text-2xl text-gray-300 leading-relaxed font-light">
+            {description}
+          </p>
+        )}
       </motion.div>
     </div>
   );
@@ -89,7 +95,7 @@ export default function Home() {
       <div className="relative z-10 bg-[#050505] shadow-[0_-50px_100px_rgba(0,0,0,1)]">
         <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-[#050505] -mt-32 pointer-events-none" />
 
-        <section id="corsi" className="pt-24 pb-32 px-6 md:px-10 max-w-7xl mx-auto">
+        <section id="corsi" className="pt-24 pb-16 px-6 md:px-10 max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
             
             {/* BOX 1: MUSIGRAMMA */}
@@ -117,13 +123,14 @@ export default function Home() {
                  </Link>
                </div>
 
-               {/* Decorazione Sfondo */}
-               <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-[#00ced1]/5 blur-[80px] group-hover:bg-[#00ced1]/10 transition-all duration-500 rounded-full" />
-               <div className="absolute top-1/2 right-10 hidden md:block opacity-30 group-hover:opacity-100 transition-opacity duration-500">
-                  <svg width="200" height="200" viewBox="0 0 100 100" className="animate-[spin_10s_linear_infinite]">
-                    <circle cx="50" cy="50" r="40" stroke="#00ced1" strokeWidth="1" fill="none" strokeDasharray="5,5" />
-                    <circle cx="50" cy="50" r="20" stroke="#00ced1" strokeWidth="1" fill="none" />
-                  </svg>
+               {/* Decorazione Sfondo - Glow fisso */}
+               <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-[#00ced1]/5 blur-[80px] group-hover:bg-[#00ced1]/10 transition-all duration-500 rounded-full pointer-events-none" />
+
+               {/* Nuovo Effetto Pulse (Radar) */}
+               <div className="absolute top-12 right-16 hidden md:flex items-center justify-center w-32 h-32 opacity-60 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                  <div className="absolute w-3 h-3 bg-[#00ced1] rounded-full shadow-[0_0_12px_#00ced1]"></div>
+                  <div className="absolute w-full h-full border border-[#00ced1]/50 rounded-full animate-ping" style={{ animationDuration: '3s' }}></div>
+                  <div className="absolute w-16 h-16 border border-[#00ced1]/80 rounded-full animate-ping" style={{ animationDuration: '3s', animationDelay: '1.5s' }}></div>
                </div>
             </div>
             
@@ -174,8 +181,63 @@ export default function Home() {
           </div>
         </section>
 
-        {/* LIVE SECTION */}
-        <section id="live" className="py-12 px-6 md:px-10 max-w-7xl mx-auto">
+        {/* --- LA TUA SECONDA CASA --- */}
+        <section className="py-16 px-6 md:px-10 max-w-5xl mx-auto relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className={`${cardStyle} p-10 md:p-16 border-amber-500/20 bg-gradient-to-br from-[#0A0A0A] via-[#120a05] to-[#1a1005] relative overflow-hidden group`}
+          >
+             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-amber-600/10 blur-[120px] rounded-full pointer-events-none transition-opacity duration-700 group-hover:opacity-70 opacity-40" />
+
+             <div className="relative z-10 flex flex-col items-center text-center">
+                <span className="text-amber-500 font-bold tracking-widest text-xs md:text-sm uppercase mb-6 flex items-center gap-2 bg-amber-500/10 px-4 py-2 rounded-full border border-amber-500/20">
+                  <MapPin size={16} /> LA TUA SECONDA CASA A PONTICELLA
+                </span>
+                
+                <h2 className="text-4xl md:text-6xl font-bold mb-8 text-white leading-tight">
+                  La tua musica, <br className="md:hidden" />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-amber-500">
+                    a due passi da casa.
+                  </span>
+                </h2>
+
+                <div className="space-y-6 text-gray-300 text-lg md:text-xl leading-relaxed max-w-3xl">
+                  <p>
+                    Da oltre 20 anni, MusicaNova è molto più di una scuola di musica a San Lazzaro di Savena. È uno spazio dove bambini, ragazzi e adulti (sì, fino agli 80 anni!) si sentono in famiglia.
+                  </p>
+                  <p>
+                    Dimentica le accademie rigide o la frustrazione del "fai-da-te" solitario davanti allo schermo di un telefono. Noi crediamo profondamente nell'innovazione — lo dimostra la web app esclusiva del nostro Metodo Musigramma — ma sappiamo che la tecnologia funziona davvero solo quando è accompagnata dal <strong className="text-white">calore umano</strong>.
+                  </p>
+                  <p>
+                    Qui troverai <strong className="text-white">Francesco</strong> e <strong className="text-white">Claudio</strong>, pronti a guidarti con un percorso costruito su misura per te. Che sia la tua prima nota assoluta o un ritorno di fiamma con la chitarra o il pianoforte, abbiamo il posto giusto per te.
+                  </p>
+                </div>
+
+                <div className="mt-12 inline-flex items-center gap-3 px-6 py-4 rounded-full bg-white/5 border border-white/10 backdrop-blur-md shadow-xl hover:bg-white/10 transition-colors">
+                  <Coffee className="text-amber-400" size={20} />
+                  <p className="text-sm md:text-base text-gray-200 font-medium tracking-wide">
+                    Vieni a conoscerci in studio. Il caffè è sempre pronto.
+                  </p>
+                </div>
+             </div>
+          </motion.div>
+        </section>
+
+        {/* --- SCROLLING TEXT: METODO MUSIGRAMMA EXPANDED --- */}
+        <ScrollingBlurText 
+          title={
+            <>
+              Siamo orgogliosi di essere tra i primi in Italia ad abbracciare il <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00ced1] to-blue-500">Metodo Musigramma</span>.
+            </>
+          }
+          description="Un ecosistema educativo rivoluzionario che rende l'armonia visibile e tangibile. Dimentica i vecchi tomi impolverati: il nostro percorso integra un manuale innovativo ricco di immagini, una web app interattiva e un dispositivo fisico esclusivo. Attraverso geometrie intuitive, trasformiamo concetti astratti in pura comprensione musicale, permettendoti di 'toccare' le note prima ancora di suonarle."
+        />
+
+        {/* --- LIVE SECTION (SPOSTATA IN FONDO) --- */}
+        <section id="live" className="py-12 px-6 md:px-10 max-w-7xl mx-auto mb-20">
           <div className={`${cardStyle} p-12 border-red-900/30 bg-gradient-to-br from-[#0A0A0A] via-[#110505] to-[#1A0505] overflow-hidden relative`}>
              <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-red-600/5 blur-[150px] rounded-full pointer-events-none" />
              <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
@@ -199,7 +261,6 @@ export default function Home() {
           </div>
         </section>
 
-        <ScrollingBlurText text="Siamo orgogliosi di essere tra i primi in Italia ad abbracciare il Metodo Musigramma per l'armonia, un ecosistema educativo rivoluzionario." />
       </div>
     </div>
   );
