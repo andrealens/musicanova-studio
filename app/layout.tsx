@@ -30,6 +30,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="it">
+      <head>
+        <link rel="preload" href="/guitar.glb" as="fetch" crossOrigin="anonymous" />
+        <link rel="preload" href="/black_piano.glb" as="fetch" crossOrigin="anonymous" />
+      </head>
       <body suppressHydrationWarning={true} 
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#020205] text-slate-200 selection:bg-indigo-500/30 overflow-x-hidden`}
       >

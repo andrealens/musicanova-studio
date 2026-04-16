@@ -1,5 +1,6 @@
 "use client";
 import React from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ArrowRight, Music4, Zap, Star } from 'lucide-react';
 import Link from 'next/link';
@@ -8,7 +9,11 @@ import dynamic from 'next/dynamic';
 // IMPORT: Usa questo percorso che funziona con la tua struttura attuale
 const PianoScene = dynamic(() => import('../../../src/components/PianoModel'), { 
   ssr: false, 
-  loading: () => null 
+  loading: () => (
+    <div className="w-full h-full flex items-center justify-center">
+      <div className="w-16 h-16 rounded-full border-2 border-indigo-500/30 border-t-indigo-500 animate-spin" />
+    </div>
+  )
 });
 
 export default function PianofortePage() {
@@ -20,7 +25,7 @@ export default function PianofortePage() {
         
         {/* LIVELLO 0: SFONDO TESTO GIGANTE */}
         <div className="absolute inset-0 flex items-center justify-center z-0 pointer-events-none select-none">
-          <h1 className="text-[18vw] font-bold text-[#111] tracking-tighter leading-none opacity-50">
+          <h1 aria-hidden="true" className="text-[18vw] font-bold text-[#111] tracking-tighter leading-none opacity-50">
             PIANO
           </h1>
         </div>
@@ -117,12 +122,15 @@ export default function PianofortePage() {
             className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center"
           >
             {/* Immagine */}
-            <div className="relative group md:order-2">
+            <div className="relative group md:order-2 aspect-[4/5] overflow-hidden rounded-3xl">
               <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/20 to-transparent rounded-3xl blur-2xl opacity-50 group-hover:opacity-75 transition-opacity" />
-              <img
+              <Image
                 src="/claudio.jpeg"
                 alt="Claudio Bernardi"
-                className="relative w-full h-auto rounded-3xl shadow-2xl border border-white/10 object-cover aspect-[4/5]"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 50vw"
+                priority={true}
               />
             </div>
 

@@ -1,5 +1,5 @@
 "use client";
-import React, { Suspense, useState, useEffect, useRef } from 'react';
+import React, { Suspense, useState, useEffect, useRef, useMemo } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { useGLTF, Float, Environment, PresentationControls, ContactShadows } from '@react-three/drei';
 import * as THREE from 'three';
@@ -31,7 +31,8 @@ function useScrollIdle() {
 }
 
 function Model() {
-  const { scene } = useGLTF('/guitar.glb');
+  const { scene: rawScene } = useGLTF('/guitar.glb');
+  const scene = useMemo(() => rawScene.clone(), [rawScene]);
   
   scene.traverse((child) => {
     if ((child as THREE.Mesh).isMesh) {
@@ -63,8 +64,21 @@ function Model() {
   );
 }
 
+useGLTF.preload('/guitar.glb');
+
 export default function GuitarScene() {
   const isScrolling = useScrollIdle();
+  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (rendererRef.current) {
+        rendererRef.current.dispose();
+        rendererRef.current.forceContextLoss();
+        rendererRef.current = null;
+      }
+    };
+  }, []);
 
   return (
     <div
@@ -72,6 +86,7 @@ export default function GuitarScene() {
       style={{ pointerEvents: isScrolling ? 'none' : 'auto' }}
     >
       <Canvas
+        onCreated={({ gl }) => { rendererRef.current = gl; }}
         frameloop={isScrolling ? 'never' : 'always'}
         dpr={[1, 2]}
         camera={{ position: [0, 0, 16], fov: 40 }}

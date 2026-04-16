@@ -1,5 +1,6 @@
 "use client";
 import React from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ArrowRight, Mic2, Zap, Music2 } from 'lucide-react';
 import Link from 'next/link';
@@ -9,7 +10,11 @@ import dynamic from 'next/dynamic';
 // Questo percorso esce da: chitarra > corsi > app (3 livelli) ed entra in src/components
 const GuitarScene = dynamic(() => import('../../../src/components/GuitarModel'), { 
   ssr: false, 
-  loading: () => null 
+  loading: () => (
+    <div className="w-full h-full flex items-center justify-center">
+      <div className="w-16 h-16 rounded-full border-2 border-red-500/30 border-t-red-500 animate-spin" />
+    </div>
+  )
 });
 
 export default function ChitarraPage() {
@@ -21,7 +26,7 @@ export default function ChitarraPage() {
         
         {/* LIVELLO 0: SFONDO TESTO GIGANTE (Dietro a tutto) */}
         <div className="absolute inset-0 flex items-center justify-center z-0 pointer-events-none select-none">
-          <h1 className="text-[18vw] font-bold text-[#111] tracking-tighter leading-none opacity-50">
+          <h1 aria-hidden="true" className="text-[18vw] font-bold text-[#111] tracking-tighter leading-none opacity-50">
             GUITAR
           </h1>
         </div>
@@ -135,12 +140,15 @@ export default function ChitarraPage() {
             className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center"
           >
             {/* Immagine */}
-            <div className="relative group">
+            <div className="relative group aspect-[4/5] overflow-hidden rounded-3xl">
               <div className="absolute inset-0 bg-gradient-to-br from-red-500/20 to-transparent rounded-3xl blur-2xl opacity-50 group-hover:opacity-75 transition-opacity" />
-              <img
+              <Image
                 src="/francesco.jpeg"
                 alt="Francesco Morreale"
-                className="relative w-full h-auto rounded-3xl shadow-2xl border border-white/10 object-cover aspect-[4/5]"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 50vw"
+                priority={true}
               />
             </div>
 

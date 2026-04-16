@@ -1,5 +1,5 @@
 "use client";
-import React, { Suspense, useState, useEffect, useRef } from 'react';
+import React, { Suspense, useState, useEffect, useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useGLTF, Environment, OrbitControls, ContactShadows } from '@react-three/drei';
 import * as THREE from 'three';
@@ -31,7 +31,8 @@ function useScrollIdle() {
 }
 
 function Model() {
-  const { scene } = useGLTF('/black_piano.glb');
+  const { scene: rawScene } = useGLTF('/black_piano.glb');
+  const scene = useMemo(() => rawScene, [rawScene]);
   const groupRef = useRef<THREE.Group>(null);
 
   // Animazione di galleggiamento (floating)
@@ -54,8 +55,21 @@ function Model() {
   );
 }
 
+useGLTF.preload('/black_piano.glb');
+
 export default function PianoModel() {
   const isScrolling = useScrollIdle();
+  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (rendererRef.current) {
+        rendererRef.current.dispose();
+        rendererRef.current.forceContextLoss();
+        rendererRef.current = null;
+      }
+    };
+  }, []);
 
   return (
     <div
@@ -63,6 +77,7 @@ export default function PianoModel() {
       style={{ pointerEvents: isScrolling ? 'none' : 'auto' }}
     >
       <Canvas
+        onCreated={({ gl }) => { rendererRef.current = gl; }}
         frameloop={isScrolling ? 'never' : 'always'}
         camera={{ position: [0, 2, 9], fov: 45 }} // CAMERA ORIGINALE
       >
