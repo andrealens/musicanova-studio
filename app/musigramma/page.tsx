@@ -3,6 +3,17 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Brain, Shapes, CheckCircle2, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
+import { useIsMobile } from '@/src/hooks/useIsMobile';
+
+const MusigrammaModel = dynamic(() => import('@/src/components/MusigrammaModel'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full flex items-center justify-center">
+      <div className="w-10 h-10 border-4 border-[#00ced1] border-t-transparent rounded-full animate-spin"></div>
+    </div>
+  )
+});
 
 const FadeIn = ({ children, delay = 0 }: { children: React.ReactNode, delay?: number }) => (
   <motion.div
@@ -16,11 +27,13 @@ const FadeIn = ({ children, delay = 0 }: { children: React.ReactNode, delay?: nu
 );
 
 export default function MusigrammaPage() {
+  const isMobile = useIsMobile();
+
   return (
     <div className="w-full bg-[#021a1a] text-white selection:bg-[#00ced1] selection:text-black overflow-hidden">
       
       {/* HERO MUSIGRAMMA */}
-      <section className="relative h-[80vh] flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[80vh] overflow-hidden px-6 md:px-10 pt-40 pb-16">
         {/* Sfondo geometrico astratto */}
         <div className="absolute inset-0 opacity-20 pointer-events-none">
           <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -28,20 +41,26 @@ export default function MusigrammaPage() {
              <path d="M0,60 Q25,10 50,60 T100,60" fill="none" stroke="#00ced1" strokeWidth="0.1" className="animate-[pulse_7s_infinite]"/>
           </svg>
         </div>
-        
-        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }}>
-            <span className="inline-block py-1 px-3 rounded-full bg-[#00ced1]/10 border border-[#00ced1]/30 text-[#00ced1] text-xs font-bold uppercase tracking-widest mb-6">
-              Innovazione Didattica
-            </span>
-            <h1 className="text-6xl md:text-8xl font-bold tracking-tighter mb-8 text-transparent bg-clip-text bg-gradient-to-r from-white via-[#00ced1] to-teal-800">
-              MUSIGRAMMA
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-300 leading-relaxed font-light">
-              L'armonia non è mai stata così visibile. <br/>
-              Un metodo sperimentale, brevettato e validato.
-            </p>
-          </motion.div>
+
+        <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+          <div className="flex flex-col items-start text-left">
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }}>
+              <span className="inline-block py-1 px-3 rounded-full bg-[#00ced1]/10 border border-[#00ced1]/30 text-[#00ced1] text-xs font-bold uppercase tracking-widest mb-6">
+                Innovazione Didattica
+              </span>
+              <h1 className="text-6xl md:text-8xl font-bold tracking-tighter mb-8 text-transparent bg-clip-text bg-gradient-to-r from-white via-[#00ced1] to-teal-800">
+                MUSIGRAMMA
+              </h1>
+              <p className="text-xl md:text-2xl text-gray-300 leading-relaxed font-light">
+                L'armonia non è mai stata cosi visibile. <br/>
+                Un metodo sperimentale, brevettato e validato.
+              </p>
+            </motion.div>
+          </div>
+
+          <div className="relative w-full h-[500px] min-h-[60vh]">
+            {!isMobile && <MusigrammaModel />}
+          </div>
         </div>
       </section>
 
