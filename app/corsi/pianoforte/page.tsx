@@ -5,9 +5,9 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Music4, Zap, Star } from 'lucide-react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
+import { useIsMobile } from '@/src/hooks/useIsMobile';
 
-// IMPORT: Usa questo percorso che funziona con la tua struttura attuale
-const PianoScene = dynamic(() => import('../../../src/components/PianoModel'), { 
+const PianoScene = dynamic(() => import('@/src/components/PianoModel'), { 
   ssr: false, 
   loading: () => (
     <div className="w-full h-full flex items-center justify-center">
@@ -17,6 +17,8 @@ const PianoScene = dynamic(() => import('../../../src/components/PianoModel'), {
 });
 
 export default function PianofortePage() {
+  const isMobile = useIsMobile();
+
   return (
     <div className="w-full bg-[#050505] text-white overflow-hidden">
       
@@ -32,7 +34,7 @@ export default function PianofortePage() {
 
         {/* LIVELLO 1: MODELLO 3D (Tutto Schermo) */}
         <div className="absolute inset-0 z-10 w-full h-full">
-           <PianoScene />
+           {!isMobile && <PianoScene />}
         </div>
 
         {/* LIVELLO 2: CONTENUTO TESTUALE */}

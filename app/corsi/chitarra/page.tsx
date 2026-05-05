@@ -5,9 +5,8 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Mic2, Zap, Music2 } from 'lucide-react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
+import { useIsMobile } from '@/src/hooks/useIsMobile';
 
-// --- FIX IMPORT ---
-// Questo percorso esce da: chitarra > corsi > app (3 livelli) ed entra in src/components
 const GuitarScene = dynamic(() => import('../../../src/components/GuitarModel'), { 
   ssr: false, 
   loading: () => (
@@ -18,32 +17,30 @@ const GuitarScene = dynamic(() => import('../../../src/components/GuitarModel'),
 });
 
 export default function ChitarraPage() {
+  const isMobile = useIsMobile(); // Usa l'hook
+
   return (
     <div className="w-full bg-[#050505] text-white overflow-hidden">
       
-      {/* --- HERO SECTION IMMERSIVA (LAYERED) --- */}
       <section className="relative h-screen w-full flex items-center overflow-hidden">
         
-        {/* LIVELLO 0: SFONDO TESTO GIGANTE (Dietro a tutto) */}
         <div className="absolute inset-0 flex items-center justify-center z-0 pointer-events-none select-none">
           <h1 aria-hidden="true" className="text-[18vw] font-bold text-[#111] tracking-tighter leading-none opacity-50">
             GUITAR
           </h1>
         </div>
 
-        {/* LIVELLO 1: MODELLO 3D (In mezzo) */}
-        {/* Absolute inset-0 permette al 3D di prendersi tutto lo spazio senza rompere il layout */}
+        {/* --- MODIFICA CRUCIALE QUI --- */}
         <div className="absolute inset-0 z-10 w-full h-full">
-           <GuitarScene />
+           {/* Il componente viene "montato" SOLO se non siamo su mobile */}
+           {!isMobile && <GuitarScene />}
         </div>
 
-        {/* LIVELLO 2: CONTENUTO TESTUALE (Sopra a tutto) */}
-        {/* z-20 per stare sopra alla chitarra. pointer-events-none per lasciar ruotare la chitarra sotto se si clicca a vuoto */}
+        {/* ... il resto del tuo codice rimane invariato ... */}
         <div className="relative z-20 w-full max-w-7xl mx-auto px-6 md:px-10 h-full flex flex-col justify-center pointer-events-none">
           
           <div className="grid grid-cols-1 md:grid-cols-2">
             
-            {/* Colonna Testo: Riattiviamo il mouse qui (pointer-events-auto) altrimenti i bottoni non vanno */}
             <motion.div 
                initial={{ opacity: 0, x: -50 }} 
                animate={{ opacity: 1, x: 0 }} 
@@ -79,15 +76,12 @@ export default function ChitarraPage() {
               </div>
             </motion.div>
 
-            {/* Colonna Destra vuota (spazio per vedere la chitarra 3D) */}
             <div className="hidden md:block"></div>
 
           </div>
         </div>
       </section>
 
-      {/* --- DETTAGLI / CARDS --- */}
-      {/* Z-index 20 e background solido per coprire il 3D quando si scrolla giù */}
       <section id="programma" className="relative z-20 py-24 px-6 md:px-10 bg-[#050505] border-t border-white/5">
          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
@@ -129,7 +123,6 @@ export default function ChitarraPage() {
          </div>
       </section>
 
-      {/* --- SEZIONE INSEGNANTE: FRANCESCO MORREALE --- */}
       <section className="relative z-20 py-24 px-6 md:px-10 bg-[#050505] border-t border-white/5">
         <div className="max-w-7xl mx-auto">
           <motion.div
@@ -139,7 +132,6 @@ export default function ChitarraPage() {
             transition={{ duration: 0.8 }}
             className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center"
           >
-            {/* Immagine */}
             <div className="relative group aspect-[4/5] overflow-hidden rounded-3xl">
               <div className="absolute inset-0 bg-gradient-to-br from-red-500/20 to-transparent rounded-3xl blur-2xl opacity-50 group-hover:opacity-75 transition-opacity" />
               <Image
@@ -152,7 +144,6 @@ export default function ChitarraPage() {
               />
             </div>
 
-            {/* Testo */}
             <div className="space-y-6">
               <div className="flex items-center gap-3 mb-4">
                 <span className="w-12 h-[2px] bg-red-600 shadow-[0_0_10px_#dc2626]"></span>
