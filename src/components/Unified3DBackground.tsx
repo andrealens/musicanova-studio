@@ -7,14 +7,8 @@ import { Suspense } from "react";
 import dynamic from "next/dynamic";
 
 const CassetteScene = dynamic(() => import("./CassetteModel"), { ssr: false });
-const PianoScene = dynamic(
-  () => import("./PianoModel").then((m) => m.PianoScene),
-  { ssr: false }
-);
-const GuitarScene = dynamic(
-  () => import("./GuitarModel").then((m) => m.GuitarScene),
-  { ssr: false }
-);
+const PianoScene = dynamic(() => import("./PianoModel"), { ssr: false });
+const GuitarScene = dynamic(() => import("./GuitarModel"), { ssr: false });
 
 const SCROLL_IDLE_MS = 160;
 
