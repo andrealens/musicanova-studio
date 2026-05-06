@@ -6,10 +6,7 @@ import { Canvas } from "@react-three/fiber";
 import { Suspense } from "react";
 import dynamic from "next/dynamic";
 
-const CassetteScene = dynamic(
-  () => import("./CassetteModel").then((m) => m.CassetteScene),
-  { ssr: false }
-);
+const CassetteScene = dynamic(() => import("./CassetteModel"), { ssr: false });
 const PianoScene = dynamic(
   () => import("./PianoModel").then((m) => m.PianoScene),
   { ssr: false }

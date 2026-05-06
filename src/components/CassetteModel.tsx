@@ -1,5 +1,5 @@
 "use client";
-import React, { Suspense, useRef } from 'react';
+import React, { Suspense, useEffect, useState, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useGLTF, Environment, ContactShadows, PresentationControls } from '@react-three/drei';
 import * as THREE from 'three';
@@ -10,6 +10,8 @@ interface ModelProps {
   scale: number;
   baseRotation: [number, number, number];
 }
+
+useGLTF.preload('/cassette_tape.glb');
 
 function Model({ position, scale, baseRotation }: ModelProps) {
   const { scene } = useGLTF('/cassette_tape.glb');
@@ -32,16 +34,34 @@ function Model({ position, scale, baseRotation }: ModelProps) {
 }
 
 export default function CassetteModel() {
+  const [frameloopMode, setFrameloopMode] = useState<'always' | 'demand'>('always');
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(pointer: coarse)');
+    const updateFrameloop = () => {
+      setFrameloopMode(mediaQuery.matches ? 'demand' : 'always');
+    };
+
+    updateFrameloop();
+    mediaQuery.addEventListener('change', updateFrameloop);
+
+    return () => {
+      mediaQuery.removeEventListener('change', updateFrameloop);
+    };
+  }, []);
+
   return (
-    <div className="absolute inset-0 w-full h-full -z-10 overflow-hidden">
+    <div className="absolute inset-0 w-full h-full -z-10 overflow-hidden touch-pan-y">
       <Canvas 
         camera={{ position: [0, 0, 5], fov: 25 }} 
         dpr={[1, 2]}
+        frameloop={frameloopMode}
+        style={{ touchAction: 'pan-y' }}
       >
         <ambientLight intensity={1.5} />
         <spotLight position={[10, 10, 10]} intensity={2} angle={0.3} penumbra={1} />
         
-        <Suspense fallback={null}>
+        <Suspense fallback={<color attach="background" args={['#e5e7eb']} />}>
           <PresentationControls
             global
             snap // snap come booleano per evitare errori TypeScript
