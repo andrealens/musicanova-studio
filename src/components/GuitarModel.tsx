@@ -38,18 +38,28 @@ function Model() {
     if ((child as THREE.Mesh).isMesh) {
       const mesh = child as THREE.Mesh;
       if (mesh.material) {
-        const material = mesh.material as THREE.MeshStandardMaterial;
+        // Cloniamo il materiale per evitare mutazioni globali
+        const material = (mesh.material as THREE.MeshStandardMaterial).clone();
         
-        // Colori e materiali vibranti
+        // Forziamo il rendering su entrambi i lati (salva la mesh se i normals sono invertiti o i piani monodimensionali)
+        material.side = THREE.DoubleSide;
+        
+        // Risolve bug di trasparenza non voluta
+        if (material.transparent) {
+          material.alphaTest = 0.5;
+        }
+        
+        // Boost ai materiali metallici per far staccare visivamente ponte e meccaniche
         if (material.name.toLowerCase().includes('metal') || material.metalness > 0.5) {
-          material.metalness = 0.8;
-          material.roughness = 0.2;
-          material.envMapIntensity = 2; 
+          material.metalness = 0.9;
+          material.roughness = 0.15;
+          material.envMapIntensity = 2.5; 
         } else {
           material.roughness = 0.3;
           material.envMapIntensity = 1.5;
         }
-        material.needsUpdate = true;
+        
+        mesh.material = material;
       }
     }
   });

@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Brain, Shapes, CheckCircle2, ExternalLink } from 'lucide-react';
+import { ArrowRight, Brain, Shapes, CheckCircle2, ExternalLink, Network } from 'lucide-react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { useIsMobile } from '@/src/hooks/useIsMobile';
@@ -33,23 +33,28 @@ export default function MusigrammaPage() {
     <div className="w-full bg-[#021a1a] text-white selection:bg-[#00ced1] selection:text-black overflow-hidden">
       
       {/* HERO MUSIGRAMMA */}
-      <section className="relative min-h-[80vh] overflow-hidden px-6 md:px-10 pt-40 pb-16">
+      <section className="relative w-full min-h-[100dvh] flex flex-col md:flex-row items-center justify-center pt-24 md:pt-0 overflow-hidden bg-[#021a1a]">
         {/* Sfondo geometrico astratto */}
-        <div className="absolute inset-0 opacity-20 pointer-events-none">
+        <div className="absolute inset-0 z-[1] opacity-20 pointer-events-none">
           <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
              <path d="M0,50 Q25,0 50,50 T100,50" fill="none" stroke="#00ced1" strokeWidth="0.2" className="animate-[pulse_5s_infinite]"/>
              <path d="M0,60 Q25,10 50,60 T100,60" fill="none" stroke="#00ced1" strokeWidth="0.1" className="animate-[pulse_7s_infinite]"/>
           </svg>
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-          <div className="flex flex-col items-start text-left">
+        <div className="max-w-6xl mx-auto w-full px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-8 z-10">
+          <div className="w-full md:w-1/2 min-w-0 flex flex-col justify-center">
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }}>
               <span className="inline-block py-1 px-3 rounded-full bg-[#00ced1]/10 border border-[#00ced1]/30 text-[#00ced1] text-xs font-bold uppercase tracking-widest mb-6">
                 Innovazione Didattica
               </span>
-              <h1 className="text-6xl md:text-8xl font-bold tracking-tighter mb-8 text-transparent bg-clip-text bg-gradient-to-r from-white via-[#00ced1] to-teal-800">
-                MUSIGRAMMA
+              <h1 
+                aria-label="MUSIGRAMMA" 
+                className="w-fit text-[clamp(3rem,5vw,5rem)] font-bold tracking-tighter leading-[0.85] mb-6 drop-shadow-2xl"
+              >
+                <span aria-hidden="true" className="inline-block text-transparent bg-clip-text bg-gradient-to-br from-white via-indigo-100 to-[#00ced1]">
+                  MUSI<br />GRAMMA
+                </span>
               </h1>
               <p className="text-xl md:text-2xl text-gray-300 leading-relaxed font-light">
                 L'armonia non è mai stata cosi visibile. <br/>
@@ -58,9 +63,11 @@ export default function MusigrammaPage() {
             </motion.div>
           </div>
 
-          <div className="relative w-full h-[500px] min-h-[60vh]">
-            {!isMobile && <MusigrammaModel />}
-          </div>
+          {!isMobile && (
+            <div className="relative hidden md:flex w-full md:w-1/2 h-[600px] items-center justify-center">
+              <MusigrammaModel/>
+            </div>
+          )}
         </div>
       </section>
 
@@ -215,35 +222,53 @@ export default function MusigrammaPage() {
         </div>
       </section>
 
-      {/* ===== SEZIONE: NUMERI ===== */}
+      {/* ===== SEZIONE: MUSIGRAMMA UNIVERSO (KNOWLEDGE GRAPH) ===== */}
       <section className="py-24 px-6 md:px-10 max-w-6xl mx-auto">
         <FadeIn>
-          <div className="text-center mb-16">
-            <span className="inline-block py-1 px-3 rounded-full bg-[#00ced1]/10 border border-[#00ced1]/30 text-[#00ced1] text-xs font-bold uppercase tracking-widest mb-4">
-              Dati
-            </span>
-            <h2 className="text-4xl md:text-5xl font-bold">Il metodo in numeri</h2>
+          <div className="relative flex flex-col md:flex-row items-center gap-12 p-8 md:p-16 rounded-[3rem] bg-gradient-to-br from-[#00ced1]/10 via-[#011010] to-transparent border border-[#00ced1]/20 overflow-hidden group">
+            
+            {/* Effetto luce in background */}
+            <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/3 w-96 h-96 bg-[#00ced1]/20 rounded-full blur-[100px] pointer-events-none transition-transform duration-700 group-hover:scale-110" />
+
+            <div className="w-full md:w-3/5 space-y-6 z-10">
+              <span className="inline-block py-1 px-3 rounded-full bg-white/10 border border-white/20 text-white text-xs font-bold uppercase tracking-widest">
+                Knowledge Graph Gratuito
+              </span>
+              <h2 className="text-4xl md:text-5xl font-bold">
+                Musigramma <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00ced1] to-blue-400">Universo</span>
+              </h2>
+              <p className="text-gray-300 text-lg leading-relaxed max-w-lg">
+                Esplora la rete a navigazione infinita che unisce musica, società ed economia. Prova con <em>«Perché il blues ha cambiato il mondo?»</em> o <em>«Come funzionava l'armonia nel Rinascimento?»</em>: ogni risposta collega il contesto storico, sociale e tecnico-armonico in tre nodi interattivi.
+              </p>
+              
+              <div className="pt-4">
+                <Link 
+                  href="https://app.universo.musigramma.eu/" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-3 px-8 py-4 bg-[#00ced1] text-[#021a1a] font-bold rounded-full hover:bg-white hover:scale-105 transition-all shadow-[0_0_30px_rgba(0,206,209,0.2)]"
+                >
+                  Inizia l'esplorazione <ArrowRight size={20} />
+                </Link>
+              </div>
+            </div>
+
+            {/* Grafica/Icona per il Knowledge Graph */}
+            <div className="w-full md:w-2/5 flex justify-center items-center z-10 relative">
+              <div className="relative w-48 h-48 md:w-64 md:h-64 flex items-center justify-center">
+                {/* Anelli animati */}
+                <div className="absolute inset-0 border-2 border-[#00ced1]/30 rounded-full animate-[spin_15s_linear_infinite]" />
+                <div className="absolute inset-4 border border-dashed border-[#00ced1]/40 rounded-full animate-[spin_20s_linear_infinite_reverse]" />
+                <div className="absolute inset-8 border border-[#00ced1]/10 rounded-full animate-[spin_10s_linear_infinite]" />
+                
+                <div className="bg-[#021a1a] p-6 rounded-full border border-[#00ced1]/40 shadow-[0_0_50px_rgba(0,206,209,0.3)] z-10 group-hover:scale-110 transition-transform duration-500">
+                  <Network size={64} className="text-[#00ced1]" />
+                </div>
+              </div>
+            </div>
+
           </div>
         </FadeIn>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {[
-            { value: "10x", label: "Riduzione tempi di apprendimento", sub: "vs metodi tradizionali" },
-            { value: "50K+", label: "Musicisti amatoriali target", sub: "solo mercato italiano Anno 1" },
-            { value: "85", label: "Istituti pilota B2B", sub: "obiettivo Anno 1" },
-            { value: "93%", label: "Margine di contribuzione", sub: "sul digitale" },
-          ].map((stat, i) => (
-            <FadeIn key={i} delay={i * 0.1}>
-              <div className="flex flex-col items-center text-center p-8 rounded-3xl bg-white/5 border border-white/5 hover:border-[#00ced1]/30 transition-all">
-                <span className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-[#00ced1] mb-2">
-                  {stat.value}
-                </span>
-                <span className="text-white font-semibold mb-1 text-sm leading-snug">{stat.label}</span>
-                <span className="text-gray-500 text-xs">{stat.sub}</span>
-              </div>
-            </FadeIn>
-          ))}
-        </div>
       </section>
 
       {/* CTA FINALE */}
