@@ -6,9 +6,22 @@ import { Canvas } from "@react-three/fiber";
 import { Suspense } from "react";
 import dynamic from "next/dynamic";
 
-const CassetteScene = dynamic(() => import("./CassetteModel"), { ssr: false });
-const PianoScene = dynamic(() => import("./PianoModel"), { ssr: false });
-const GuitarScene = dynamic(() => import("./GuitarModel"), { ssr: false });
+const dynamicLoadingFallback = () => (
+  <div style={{ width: "100%", height: "100%", backgroundColor: "transparent" }} />
+);
+
+const CassetteScene = dynamic(() => import("./CassetteModel"), {
+  ssr: false,
+  loading: dynamicLoadingFallback,
+});
+const PianoScene = dynamic(() => import("./PianoModel"), {
+  ssr: false,
+  loading: dynamicLoadingFallback,
+});
+const GuitarScene = dynamic(() => import("./GuitarModel"), {
+  ssr: false,
+  loading: dynamicLoadingFallback,
+});
 
 const SCROLL_IDLE_MS = 160;
 
