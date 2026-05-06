@@ -44,14 +44,14 @@ function getCamera(pathname: string) {
   return CAMERAS[pathname] ?? CAMERAS["/"];
 }
 
-function getActiveScene(pathname: string, isScrolling: boolean) {
+function getActiveScene(pathname: string) {
   switch (pathname) {
     case "/":
-      return <CassetteScene isScrolling={isScrolling} />;
+      return <CassetteScene />;
     case "/corsi/pianoforte":
-      return <PianoScene isScrolling={isScrolling} />;
+      return <PianoScene />;
     case "/corsi/chitarra":
-      return <GuitarScene isScrolling={isScrolling} />;
+      return <GuitarScene />;
     default:
       return null;
   }
@@ -61,7 +61,7 @@ export default function Unified3DBackground() {
   const pathname = usePathname();
   const isScrolling = useScrollIdle();
   const camera = getCamera(pathname);
-  const activeScene = getActiveScene(pathname, isScrolling);
+  const activeScene = getActiveScene(pathname);
 
   return (
     <div className="fixed inset-0 z-[-1] pointer-events-none" aria-hidden>
