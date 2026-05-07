@@ -2,19 +2,55 @@
 import React, { useRef, useMemo } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { useGLTF, Environment, PresentationControls, ContactShadows } from '@react-three/drei';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 import * as THREE from 'three';
 
 function Model() {
   const { scene: rawScene } = useGLTF('/black_piano.glb');
   const scene = useMemo(() => rawScene, [rawScene]);
   const groupRef = useRef<THREE.Group>(null);
+  const baseYRef = useRef(0);
+
+  useGSAP(() => {
+    if (!groupRef.current) return;
+
+    const materials: THREE.Material[] = [];
+    scene.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        const mesh = child as THREE.Mesh;
+        const meshMaterials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+        meshMaterials.forEach((material) => {
+          if (!material) return;
+          material.transparent = true;
+          (material as THREE.Material & { opacity?: number }).opacity = 0;
+          materials.push(material);
+        });
+      }
+    });
+
+    const tl = gsap.timeline();
+    tl.fromTo(
+      groupRef.current.position,
+      { y: -0.5 },
+      { y: 0, duration: 1.5, ease: 'power3.out' },
+      0
+    )
+      .fromTo(
+        groupRef.current.scale,
+        { x: 0.9, y: 0.9, z: 0.9 },
+        { x: 1, y: 1, z: 1, duration: 1.5, ease: 'power3.out' },
+        0
+      )
+      .fromTo(materials, { opacity: 0 }, { opacity: 1, duration: 1.2, ease: 'power2.out' }, 0.1);
+  }, { scope: groupRef, dependencies: [scene] });
 
   // Animazione di galleggiamento (floating)
   useFrame((state) => {
     if (!groupRef.current) return;
     const t = state.clock.getElapsedTime();
     // Galleggiamento millimetrico
-    groupRef.current.position.y = Math.sin(t * 0.8) * 0.1;
+    groupRef.current.position.y = baseYRef.current + Math.sin(t * 0.8) * 0.1;
   });
   
   return (

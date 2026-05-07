@@ -10,7 +10,7 @@ import Link from 'next/link';
 import CassetteModel from '../src/components/CassetteModel';
 import { useIsMobile } from '@/src/hooks/useIsMobile';
 
-const cardStyle = "bg-[#0A0A0A] border border-white/10 shadow-2xl rounded-[3rem] transition-all duration-300";
+const cardStyle = "bg-white/5 backdrop-blur-3xl border border-white/10 shadow-2xl rounded-[3rem] transition-all duration-300";
 
 // COMPONENTE AGGIORNATO: Ora accetta titolo e descrizione per gestire testi lunghi con eleganza
 const ScrollingBlurText = ({ title, description }: { title: string | React.ReactNode, description?: React.ReactNode }) => {
@@ -20,7 +20,7 @@ const ScrollingBlurText = ({ title, description }: { title: string | React.React
   const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0]);
 
   return (
-    <div className="py-32 px-6 max-w-4xl mx-auto text-center flex flex-col items-center gap-10 pointer-events-auto relative z-20 bg-[#020205]">
+    <div className="py-32 px-6 max-w-4xl mx-auto text-center flex flex-col items-center gap-10 pointer-events-auto relative z-20 bg-transparent">
       <motion.div ref={ref} style={{ filter: useTransform(blur, (v) => `blur(${v}px)`), opacity }}>
         <h2 className="text-3xl md:text-5xl font-bold leading-tight text-white mb-8">
           {title}
@@ -128,14 +128,13 @@ export default function Home() {
       </section>
 
       {/* --- CONTENT COVER --- */}
-      <div className="relative z-20 bg-transparent shadow-[0_-50px_100px_rgba(0,0,0,1)]">
-        <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-[#050505] -mt-32 pointer-events-none" />
+      <div className="relative z-20 bg-transparent">
 
-        <section id="corsi" className="pt-24 pb-16 px-6 md:px-10 max-w-7xl mx-auto pointer-events-auto relative z-20 bg-[#020205]">
+        <section id="corsi" className="pt-24 pb-16 px-6 md:px-10 max-w-7xl mx-auto pointer-events-auto relative z-20">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
             
             {/* BOX 1: MUSIGRAMMA */}
-            <div className={`md:col-span-8 md:row-span-2 ${cardStyle} p-12 relative overflow-hidden group border-[#00ced1]/20 hover:border-[#00ced1]/60 flex flex-col justify-between min-h-[500px]`}>
+            <div className={`md:col-span-8 md:row-span-2 ${cardStyle} p-12 relative overflow-hidden group border-[#00ced1]/20 hover:border-[#00ced1]/60 flex flex-col justify-between min-h-[500px] bg-transparent`}>
                <div>
                   <div className="flex items-center gap-3 mb-6">
                     <Sparkles className="text-[#00ced1]" size={32} />
@@ -171,7 +170,7 @@ export default function Home() {
             </div>
             
             {/* BOX 2: I CORSI */}
-            <div className={`md:col-span-4 ${cardStyle} p-10 flex flex-col justify-between border-white/10 group hover:border-white/30 bg-[#0A0A0A]`}>
+            <div className={`md:col-span-4 ${cardStyle} p-10 flex flex-col justify-between border-white/10 group hover:border-white/30 bg-transparent`}>
                <GraduationCap className="text-white mb-6 group-hover:scale-110 transition-transform duration-300" size={32} />
                <div>
                  <h4 className="text-2xl font-bold mb-4 uppercase italic text-white">I Corsi</h4>
@@ -189,7 +188,7 @@ export default function Home() {
             </div>
 
             {/* BOX 3: COMMUNITY */}
-            <div className={`md:col-span-4 ${cardStyle} p-10 flex flex-col justify-between border-indigo-500/20 group hover:border-indigo-500/50 bg-gradient-to-b from-[#0A0A0A] to-[#0a0a1a]`}>
+            <div className={`md:col-span-4 ${cardStyle} p-10 flex flex-col justify-between border-indigo-500/20 group hover:border-indigo-500/50 bg-transparent`}>
                <Music className="text-indigo-500 mb-6 group-hover:scale-110 transition-transform duration-300" size={32} />
                <div>
                  <h4 className="text-2xl font-bold mb-2 uppercase italic text-white">All Ages</h4>
@@ -198,7 +197,7 @@ export default function Home() {
             </div>
 
             {/* BOX 4: TECH SPECS */}
-            <div className={`md:col-span-12 ${cardStyle} p-10 border-white/5 flex flex-col md:flex-row items-center justify-between gap-8 bg-[#080808]`}>
+            <div className={`md:col-span-12 ${cardStyle} p-10 border-white/5 flex flex-col md:flex-row items-center justify-between gap-8 bg-transparent`}>
               <div className="flex items-center gap-6">
                 <div className="w-16 h-16 rounded-2xl bg-[#111] flex items-center justify-center text-white border border-white/10">
                   <Laptop size={32} />
@@ -218,13 +217,13 @@ export default function Home() {
         </section>
 
         {/* --- LA TUA SECONDA CASA --- */}
-        <section className="py-16 px-6 md:px-10 max-w-5xl mx-auto relative z-20 pointer-events-auto bg-[#020205]">
+        <section className="py-16 px-6 md:px-10 max-w-5xl mx-auto relative z-20 pointer-events-auto">
           <motion.div 
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className={`${cardStyle} p-10 md:p-16 border-amber-500/20 bg-gradient-to-br from-[#0A0A0A] via-[#120a05] to-[#1a1005] relative overflow-hidden group`}
+            className={`${cardStyle} p-10 md:p-16 border-amber-500/20 relative overflow-hidden group`}
           >
              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-amber-600/10 blur-[120px] rounded-full pointer-events-none transition-opacity duration-700 group-hover:opacity-70 opacity-40" />
 
@@ -274,7 +273,7 @@ export default function Home() {
 
         {/* --- LIVE SECTION (SPOSTATA IN FONDO) --- */}
         <section id="live" className="py-12 px-6 md:px-10 max-w-7xl mx-auto mb-20 pointer-events-auto relative z-20 bg-transparent">
-          <div className={`${cardStyle} p-12 border-red-900/30 bg-gradient-to-br from-[#0A0A0A] via-[#110505] to-[#1A0505] overflow-hidden relative`}>
+          <div className={`${cardStyle} p-12 border-red-900/30 overflow-hidden relative`}>
              <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-red-600/5 blur-[150px] rounded-full pointer-events-none" />
              <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
                <div>

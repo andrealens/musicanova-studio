@@ -52,7 +52,7 @@ export default function MusigrammaPage() {
                 aria-label="MUSIGRAMMA" 
                 className="w-fit text-[clamp(3rem,5vw,5rem)] font-bold tracking-tighter leading-[0.85] mb-6 drop-shadow-2xl"
               >
-                <span aria-hidden="true" className="inline-block text-transparent bg-clip-text bg-gradient-to-br from-white via-indigo-100 to-[#00ced1]">
+                <span aria-hidden="true" className="inline-block pr-2 pb-1 text-transparent bg-clip-text bg-gradient-to-br from-white via-indigo-100 to-[#00ced1]">
                   MUSI<br />GRAMMA
                 </span>
               </h1>

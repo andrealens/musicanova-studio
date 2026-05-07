@@ -1,25 +1,41 @@
 "use client";
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Canvas } from '@react-three/fiber';
 import { Environment } from '@react-three/drei';
 import { motion } from 'framer-motion';
 import { ArrowRight, Music4, Zap, Star } from 'lucide-react';
 import Link from 'next/link';
-import PianoModel from '@/src/components/PianoModel';
+import dynamic from 'next/dynamic';
+import { usePathname } from 'next/navigation';
 import { useIsMobile } from '@/src/hooks/useIsMobile';
 
+const PianoModel = dynamic(() => import('@/src/components/PianoModel'), { ssr: false });
+
 export default function PianofortePage() {
+  const pathname = usePathname();
   const isMobile = useIsMobile();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsMounted(true);
+  }, []);
 
   return (
-    <div className="w-full bg-[#050505] text-white overflow-hidden">
+    <div className="w-full bg-transparent text-white overflow-hidden">
       
       {/* --- HERO SECTION IMMERSIVA (3 LIVELLI) --- */}
       <section className="relative h-screen w-full flex items-center overflow-hidden">
-        {!isMobile && (
-          <div className="absolute inset-0 z-10 pointer-events-auto">
-            <Canvas gl={{ antialias: true, alpha: true }} camera={{ position: [0, 2, 9], fov: 45 }}>
+        {!isMobile && isMounted && (
+          <motion.div
+            key="piano-canvas-wrapper"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.2, delay: 0.3 }}
+            className="absolute inset-0 z-10 pointer-events-auto"
+          >
+            <Canvas key={pathname} gl={{ antialias: true, alpha: true }} camera={{ position: [0, 2, 9], fov: 45 }}>
               <ambientLight intensity={0.7} />
               <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1.5} />
               <Suspense fallback={null}>
@@ -27,12 +43,12 @@ export default function PianofortePage() {
                 <Environment preset="city" />
               </Suspense>
             </Canvas>
-          </div>
+          </motion.div>
         )}
         
         {/* LIVELLO 0: SFONDO TESTO GIGANTE */}
         <div className="absolute inset-0 flex items-center justify-center z-0 pointer-events-none select-none">
-          <h1 aria-hidden="true" className="text-[18vw] font-bold text-[#111] tracking-tighter leading-none opacity-50">
+          <h1 aria-hidden="true" className="text-[18vw] font-bold text-white tracking-tighter leading-none opacity-[0.08]">
             PIANO
           </h1>
         </div>
@@ -44,10 +60,10 @@ export default function PianofortePage() {
             
             {/* Colonna Testo: pointer-events-auto per cliccare i bottoni */}
             <motion.div 
-               initial={{ opacity: 0, x: -50 }} 
+               initial={{ opacity: 0, x: -40 }} 
                animate={{ opacity: 1, x: 0 }} 
-               transition={{ duration: 1 }}
-               className="pointer-events-auto"
+               transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
+               className="pointer-events-auto will-change-transform"
             >
               <div className="flex items-center gap-3 mb-6">
                  <span className="w-12 h-[2px] bg-indigo-500 shadow-[0_0_10px_#6366f1]"></span>
@@ -86,7 +102,7 @@ export default function PianofortePage() {
       </section>
 
       {/* --- DETTAGLI --- */}
-      <section id="dettagli" className="relative z-20 py-24 px-6 md:px-10 bg-[#050505] border-t border-white/5">
+      <section id="dettagli" className="relative z-20 py-24 px-6 md:px-10 bg-transparent border-t border-white/10">
          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               { t: "Tecnica", d: "Postura, agilità e tocco. Le basi solide per ogni genere.", i: Zap },
@@ -97,9 +113,9 @@ export default function PianofortePage() {
                  key={i}
                  initial={{ opacity: 0, y: 30 }}
                  whileInView={{ opacity: 1, y: 0 }}
-                 transition={{ delay: i * 0.2 }}
-                 viewport={{ once: true }}
-                 className="group p-8 rounded-3xl bg-[#0a0a0a] border border-white/5 hover:border-indigo-500/30 transition-all hover:bg-[#0f0f0f]"
+                transition={{ duration: 0.8, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
+                viewport={{ once: true, margin: "-50px" }}
+                className="group p-8 rounded-3xl bg-white/5 backdrop-blur-2xl border border-white/5 hover:border-indigo-500/30 transition-all hover:bg-white/10"
                >
                  <div className="w-14 h-14 rounded-2xl bg-indigo-900/10 flex items-center justify-center text-indigo-500 mb-6 group-hover:scale-110 transition-transform">
                     <item.i size={28}/>
@@ -114,13 +130,13 @@ export default function PianofortePage() {
       </section>
 
       {/* --- SEZIONE INSEGNANTE: CLAUDIO BERNARDI --- */}
-      <section className="relative z-20 py-24 px-6 md:px-10 bg-[#050505] border-t border-white/5">
+      <section className="relative z-20 py-24 px-6 md:px-10 bg-transparent border-t border-white/10">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
             className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center"
           >
             {/* Immagine */}
