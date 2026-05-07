@@ -1,34 +1,8 @@
 "use client";
-import React, { Suspense, useState, useEffect, useRef, useMemo } from 'react';
-import { Canvas } from '@react-three/fiber';
+import React, { useMemo } from 'react';
+import { useThree } from '@react-three/fiber';
 import { useGLTF, Float, Environment, PresentationControls, ContactShadows } from '@react-three/drei';
 import * as THREE from 'three';
-
-const SCROLL_IDLE_MS = 160;
-
-function useScrollIdle() {
-  const [isScrolling, setIsScrolling] = useState(false);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolling(true);
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-      timeoutRef.current = setTimeout(() => {
-        setIsScrolling(false);
-        timeoutRef.current = null;
-      }, SCROLL_IDLE_MS);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    };
-  }, []);
-
-  return isScrolling;
-}
 
 function Model() {
   const { scene: rawScene } = useGLTF('/guitar.glb');
@@ -67,8 +41,6 @@ function Model() {
   return (
     <primitive 
       object={scene} 
-      scale={0.9} 
-      position={[3.0, -2.2, 0]} 
       rotation={[0, -0.2, 0]} 
     />
   );
@@ -77,58 +49,53 @@ function Model() {
 useGLTF.preload('/guitar.glb');
 
 export default function GuitarScene() {
-  const isScrolling = useScrollIdle();
-  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
+  const { viewport, size } = useThree();
 
-  useEffect(() => {
-    return () => {
-      if (rendererRef.current) {
-        rendererRef.current.dispose();
-        rendererRef.current.forceContextLoss();
-        rendererRef.current = null;
-      }
-    };
-  }, []);
+  let currentScale = 0.35; // NOTA: Cursor, adatta questo valore base se il piano o la chitarra sono nativamente molto più grandi o piccoli
+  let posX = 0;
+  let posY = 0;
+
+  if (size.width >= 1600) {
+    currentScale = 0.75;
+    posX = viewport.width * 0.15;
+    posY = -2.55;
+  } else if (size.width >= 1366) {
+    currentScale = 0.65;
+    posX = viewport.width * 0.15;
+    posY = -2.55;
+  } else if (size.width >= 1024) {
+    currentScale = 0.45;
+    posX = viewport.width * 0.15;
+    posY = -2.00;
+  } else {
+    currentScale = 0.25;
+    posX = 0;
+    posY = -viewport.height * 0.15;
+  }
 
   return (
-    <div
-      className="w-full h-full cursor-grab active:cursor-grabbing"
-      style={{ pointerEvents: isScrolling ? 'none' : 'auto' }}
-    >
-      <Canvas
-        onCreated={({ gl }) => { rendererRef.current = gl; }}
-        frameloop={isScrolling ? 'never' : 'always'}
-        dpr={[1, 2]}
-        camera={{ position: [0, 0, 16], fov: 40 }}
-        gl={{
-          antialias: true,
-          alpha: true,
-          toneMapping: THREE.ACESFilmicToneMapping,
-          toneMappingExposure: 1.2,
-        }}
-      >
-        <ambientLight intensity={0.8} /> {/* LUCE AMBIENTE ALZATA */}
-        <spotLight position={[10, 10, 10]} angle={0.15} intensity={15} penumbra={1} />
-        <pointLight position={[-10, 0, -10]} intensity={5} color="#6366f1" />
+    <>
+      <ambientLight intensity={0.8} /> {/* LUCE AMBIENTE ALZATA */}
+      <spotLight position={[10, 10, 10]} angle={0.15} intensity={15} penumbra={1} />
+      <pointLight position={[-10, 0, -10]} intensity={5} color="#6366f1" />
 
-        <Suspense fallback={null}>
-          <PresentationControls
-            global={true} // Fondamentale per ruotare ovunque
-            cursor={true}
-            snap={true}
-            speed={1.5}
-            zoom={1}
-            polar={[-Math.PI / 6, Math.PI / 6]}
-            azimuth={[-Math.PI / 5, Math.PI / 5]}
-          >
-            <Float speed={4} rotationIntensity={0.6} floatIntensity={1.5}>
-              <Model />
-            </Float>
-          </PresentationControls>
-          <Environment preset="city" /> 
-          <ContactShadows position={[3.0, -4.5, 0]} opacity={0.4} scale={10} blur={2.5} />
-        </Suspense>
-      </Canvas>
-    </div>
+      <PresentationControls
+        global={true} // Fondamentale per ruotare ovunque
+        cursor={true}
+        snap={true}
+        speed={1.5}
+        zoom={1}
+        polar={[-Math.PI / 6, Math.PI / 6]}
+        azimuth={[-Math.PI / 5, Math.PI / 5]}
+      >
+        <Float speed={4} rotationIntensity={0.6} floatIntensity={1.5}>
+          <group position={[posX, posY, 0]} scale={currentScale}>
+            <Model />
+          </group>
+        </Float>
+      </PresentationControls>
+      <Environment preset="city" />
+      <ContactShadows position={[3.0, -4.5, 0]} opacity={0.4} scale={10} blur={2.5} />
+    </>
   );
 }

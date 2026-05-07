@@ -1,28 +1,41 @@
 "use client";
-import React from 'react';
+import React, { Suspense } from 'react';
 import Image from 'next/image';
+import { Canvas } from '@react-three/fiber';
+import { Environment, PresentationControls } from '@react-three/drei';
 import { motion } from 'framer-motion';
 import { ArrowRight, Mic2, Zap, Music2 } from 'lucide-react';
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
+import GuitarScene from '@/src/components/GuitarModel';
 import { useIsMobile } from '@/src/hooks/useIsMobile';
 
-const GuitarScene = dynamic(() => import('../../../src/components/GuitarModel'), { 
-  ssr: false, 
-  loading: () => (
-    <div className="w-full h-full flex items-center justify-center">
-      <div className="w-16 h-16 rounded-full border-2 border-red-500/30 border-t-red-500 animate-spin" />
-    </div>
-  )
-});
-
 export default function ChitarraPage() {
-  const isMobile = useIsMobile(); // Usa l'hook
+  const isMobile = useIsMobile();
 
   return (
     <div className="w-full bg-[#050505] text-white overflow-hidden">
       
       <section className="relative h-screen w-full flex items-center overflow-hidden">
+        {!isMobile && (
+          <div className="absolute inset-0 z-10 pointer-events-auto">
+            <Canvas gl={{ antialias: true, alpha: true }} camera={{ position: [0, 0, 16], fov: 40 }}>
+              <ambientLight intensity={0.8} />
+              <spotLight position={[10, 10, 10]} angle={0.15} intensity={15} penumbra={1} />
+              <Suspense fallback={null}>
+                <PresentationControls
+                  global
+                  snap
+                  rotation={[0, 0, 0]}
+                  polar={[-Math.PI / 4, Math.PI / 4]}
+                  azimuth={[-Math.PI / 3, Math.PI / 3]}
+                >
+                  <GuitarScene />
+                </PresentationControls>
+                <Environment preset="city" />
+              </Suspense>
+            </Canvas>
+          </div>
+        )}
         
         <div className="absolute inset-0 flex items-center justify-center z-0 pointer-events-none select-none">
           <h1 aria-hidden="true" className="text-[18vw] font-bold text-[#111] tracking-tighter leading-none opacity-50">
@@ -30,14 +43,7 @@ export default function ChitarraPage() {
           </h1>
         </div>
 
-        {/* --- MODIFICA CRUCIALE QUI --- */}
-        <div className="absolute inset-0 z-10 w-full h-full">
-           {/* Il componente viene "montato" SOLO se non siamo su mobile */}
-           {!isMobile && <GuitarScene />}
-        </div>
-
-        {/* ... il resto del tuo codice rimane invariato ... */}
-        <div className="relative z-20 w-full max-w-7xl mx-auto px-6 md:px-10 h-full flex flex-col justify-center pointer-events-none">
+        <div className="relative z-20 pointer-events-none w-full max-w-7xl mx-auto px-6 md:px-10 h-full flex flex-col justify-center">
           
           <div className="grid grid-cols-1 md:grid-cols-2">
             
@@ -148,7 +154,7 @@ export default function ChitarraPage() {
               <div className="flex items-center gap-3 mb-4">
                 <span className="w-12 h-[2px] bg-red-600 shadow-[0_0_10px_#dc2626]"></span>
                 <span className="text-red-500 uppercase tracking-widest text-sm font-bold">
-                  L'Insegnante
+                  L&apos;Insegnante
                 </span>
               </div>
               
@@ -167,7 +173,7 @@ export default function ChitarraPage() {
                   Vedere allievi che suonano i loro primi accordi, un arpeggio, un assolo, vedere la soddisfazione e la gioia nei loro volti, sorridenti, è per me importantissimo, mi fa capire quanto la musica sia importante nella vita di tutti, come lo è stata e lo è per me.
                 </p>
                 <p className="text-gray-400 italic">
-                  E mi accorgo di quanto anch'io abbia imparato e impari dai miei allievi, mentre suoniamo e facciamo lezione. Non solo musicalmente, ma anche umanamente. Quindi posso benissimo dire che moltissimi miei allievi sono anche dei cari amici. La musica unisce, in un mondo diviso. La musica è pura, è vita.
+                  E mi accorgo di quanto anch&apos;io abbia imparato e impari dai miei allievi, mentre suoniamo e facciamo lezione. Non solo musicalmente, ma anche umanamente. Quindi posso benissimo dire che moltissimi miei allievi sono anche dei cari amici. La musica unisce, in un mondo diviso. La musica è pura, è vita.
                 </p>
               </div>
             </div>

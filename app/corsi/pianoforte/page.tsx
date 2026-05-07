@@ -1,20 +1,13 @@
 "use client";
-import React from 'react';
+import React, { Suspense } from 'react';
 import Image from 'next/image';
+import { Canvas } from '@react-three/fiber';
+import { Environment } from '@react-three/drei';
 import { motion } from 'framer-motion';
 import { ArrowRight, Music4, Zap, Star } from 'lucide-react';
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
+import PianoModel from '@/src/components/PianoModel';
 import { useIsMobile } from '@/src/hooks/useIsMobile';
-
-const PianoScene = dynamic(() => import('@/src/components/PianoModel'), { 
-  ssr: false, 
-  loading: () => (
-    <div className="w-full h-full flex items-center justify-center">
-      <div className="w-16 h-16 rounded-full border-2 border-indigo-500/30 border-t-indigo-500 animate-spin" />
-    </div>
-  )
-});
 
 export default function PianofortePage() {
   const isMobile = useIsMobile();
@@ -24,6 +17,18 @@ export default function PianofortePage() {
       
       {/* --- HERO SECTION IMMERSIVA (3 LIVELLI) --- */}
       <section className="relative h-screen w-full flex items-center overflow-hidden">
+        {!isMobile && (
+          <div className="absolute inset-0 z-10 pointer-events-auto">
+            <Canvas gl={{ antialias: true, alpha: true }} camera={{ position: [0, 2, 9], fov: 45 }}>
+              <ambientLight intensity={0.7} />
+              <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1.5} />
+              <Suspense fallback={null}>
+                <PianoModel />
+                <Environment preset="city" />
+              </Suspense>
+            </Canvas>
+          </div>
+        )}
         
         {/* LIVELLO 0: SFONDO TESTO GIGANTE */}
         <div className="absolute inset-0 flex items-center justify-center z-0 pointer-events-none select-none">
@@ -32,13 +37,8 @@ export default function PianofortePage() {
           </h1>
         </div>
 
-        {/* LIVELLO 1: MODELLO 3D (Tutto Schermo) */}
-        <div className="absolute inset-0 z-10 w-full h-full">
-           {!isMobile && <PianoScene />}
-        </div>
-
         {/* LIVELLO 2: CONTENUTO TESTUALE */}
-        <div className="relative z-20 w-full max-w-7xl mx-auto px-6 md:px-10 h-full flex flex-col justify-center pointer-events-none">
+        <div className="relative z-20 pointer-events-none w-full max-w-7xl mx-auto px-6 md:px-10 h-full flex flex-col justify-center">
           
           <div className="grid grid-cols-1 md:grid-cols-2">
             
@@ -65,7 +65,7 @@ export default function PianofortePage() {
               </h2>
               
               <p className="text-xl text-gray-200 max-w-md leading-relaxed mb-10 font-light drop-shadow-lg bg-black/30 backdrop-blur-sm p-4 rounded-xl border-l-2 border-indigo-500">
-                Dalla tecnica classica all'improvvisazione jazz. Scopri il pianoforte con un approccio su misura per te.
+                Dalla tecnica classica all&apos;improvvisazione jazz. Scopri il pianoforte con un approccio su misura per te.
               </p>
               
               <div className="flex flex-wrap gap-4">
@@ -141,7 +141,7 @@ export default function PianofortePage() {
               <div className="flex items-center gap-3 mb-4">
                 <span className="w-12 h-[2px] bg-indigo-500 shadow-[0_0_10px_#6366f1]"></span>
                 <span className="text-indigo-400 uppercase tracking-widest text-sm font-bold">
-                  L'Insegnante
+                  L&apos;Insegnante
                 </span>
               </div>
               
@@ -151,16 +151,16 @@ export default function PianofortePage() {
 
               <div className="space-y-4 text-gray-300 leading-relaxed text-lg">
                 <p>
-                  Musica ed insegnare la musica, ed uno strumento, come il piano, è un atto d'amore. Ho maturato questa consapevolezza nel corso dei miei tanti anni di esperienza "on the road", suonando con svariati musicisti, da cui ho appreso molto.
+                  Musica ed insegnare la musica, ed uno strumento, come il piano, è un atto d&apos;amore. Ho maturato questa consapevolezza nel corso dei miei tanti anni di esperienza &quot;on the road&quot;, suonando con svariati musicisti, da cui ho appreso molto.
                 </p>
                 <p>
-                  Continuo a studiare, nonostante l'età, e lo farò finché potrò. Spero che la mia esperienza possa dare, attraverso lo studio della musica, ai i miei allievi momenti di gioia sincera.
+                  Continuo a studiare, nonostante l&apos;età, e lo farò finché potrò. Spero che la mia esperienza possa dare, attraverso lo studio della musica, ai i miei allievi momenti di gioia sincera.
                 </p>
                 <p>
-                  A tal proposito: non esiste un'età per iniziare lo studio di uno strumento, come spesso si pensa. Ma l'essenziale, la cosa più importante, è il desiderio di entrare in questo meraviglioso mondo.
+                  A tal proposito: non esiste un&apos;età per iniziare lo studio di uno strumento, come spesso si pensa. Ma l&apos;essenziale, la cosa più importante, è il desiderio di entrare in questo meraviglioso mondo.
                 </p>
                 <p className="text-gray-400 italic">
-                  Ho appreso, grazie ai miei maestri, il modo di studiare, la gioia di poter suonare, l'equilibrio e il metodo. Di tutte queste cose ho fatto una sintesi. Questa è, credo, la maniera migliore (cioè l'esperienza, unità alla comprensione di chi hai davanti) per arrivare a una buona relazione maestro/studente che possa far cresce ed innamorare della musica le persone.
+                  Ho appreso, grazie ai miei maestri, il modo di studiare, la gioia di poter suonare, l&apos;equilibrio e il metodo. Di tutte queste cose ho fatto una sintesi. Questa è, credo, la maniera migliore (cioè l&apos;esperienza, unità alla comprensione di chi hai davanti) per arrivare a una buona relazione maestro/studente che possa far cresce ed innamorare della musica le persone.
                 </p>
               </div>
             </div>

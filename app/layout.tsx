@@ -7,7 +7,6 @@ import Navbar from "../src/components/Navbar";
 import SmoothScroll from "../src/components/SmoothScroll";
 import Footer from "../src/components/Footer";
 import PageNavigation from "../src/components/PageNavigation"; // <--- 1. IMPORT NUOVO COMPONENTE
-import Unified3DBackground from "../src/components/Unified3DBackground";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -43,7 +42,6 @@ export default function RootLayout({
         {/* SFONDI STATICI (Ottimizzati per performance) */}
         <div className="fixed inset-0 -z-20 bg-[#020205] pointer-events-none" />
         <div className="fixed inset-0 -z-10 opacity-[0.03] bg-[url('/noise.png')] pointer-events-none mix-blend-overlay" />
-        <Unified3DBackground />
 
         <Navbar />
 
@@ -51,7 +49,7 @@ export default function RootLayout({
         <PageNavigation /> {/* <--- 2. INSERITO QUI (Sopra al contenuto principale) */}
         
         {/* MAIN CONTENT */}
-        <main className="relative z-10 flex flex-col min-h-screen">
+        <main className="relative z-10 flex flex-col min-h-screen pointer-events-none">
           {children}
         </main>
         

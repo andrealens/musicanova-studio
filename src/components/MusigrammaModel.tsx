@@ -5,6 +5,11 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { Environment, Float, OrbitControls, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
+function pseudoRandom(seed: number) {
+  const x = Math.sin(seed * 12.9898) * 43758.5453;
+  return x - Math.floor(x);
+}
+
 function Musigramma() {
   const ref = useRef<THREE.Object3D | null>(null);
   const { scene } = useGLTF("/musigramma_materials.glb");
@@ -94,7 +99,8 @@ function Particles({ count = 220 }: { count?: number }) {
   const geometry = useMemo(() => {
     const positions = new Float32Array(count * 3);
     for (let i = 0; i < count * 3; i += 1) {
-      positions[i] = (Math.random() - 0.5) * 10;
+      const randomValue = pseudoRandom(i + count * 0.1234);
+      positions[i] = (randomValue - 0.5) * 10;
     }
 
     const geo = new THREE.BufferGeometry();

@@ -1,34 +1,8 @@
 "use client";
-import React, { Suspense, useState, useEffect, useRef, useMemo } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { useGLTF, Environment, OrbitControls, ContactShadows } from '@react-three/drei';
+import React, { useRef, useMemo } from 'react';
+import { useFrame, useThree } from '@react-three/fiber';
+import { useGLTF, Environment, PresentationControls, ContactShadows } from '@react-three/drei';
 import * as THREE from 'three';
-
-const SCROLL_IDLE_MS = 160;
-
-function useScrollIdle() {
-  const [isScrolling, setIsScrolling] = useState(false);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolling(true);
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-      timeoutRef.current = setTimeout(() => {
-        setIsScrolling(false);
-        timeoutRef.current = null;
-      }, SCROLL_IDLE_MS);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    };
-  }, []);
-
-  return isScrolling;
-}
 
 function Model() {
   const { scene: rawScene } = useGLTF('/black_piano.glb');
@@ -40,15 +14,13 @@ function Model() {
     if (!groupRef.current) return;
     const t = state.clock.getElapsedTime();
     // Galleggiamento millimetrico
-    groupRef.current.position.y = -1.6 + Math.sin(t * 0.8) * 0.1;
+    groupRef.current.position.y = Math.sin(t * 0.8) * 0.1;
   });
   
   return (
-    // Ho cambiato la posizione Y da -1.5 a -2.0 per abbassarlo
-    <group ref={groupRef} position={[0, -2.0, 0]}>
+    <group ref={groupRef}>
       <primitive 
         object={scene} 
-        scale={2.0}             // SCALE ORIGINALE
         rotation={[0, 0.5, 0]}  // ROTAZIONE ORIGINALE
       />
     </group>
@@ -58,48 +30,52 @@ function Model() {
 useGLTF.preload('/black_piano.glb');
 
 export default function PianoModel() {
-  const isScrolling = useScrollIdle();
-  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
+  const { viewport, size } = useThree();
 
-  useEffect(() => {
-    return () => {
-      if (rendererRef.current) {
-        rendererRef.current.dispose();
-        rendererRef.current.forceContextLoss();
-        rendererRef.current = null;
-      }
-    };
-  }, []);
+  let currentScale = 0.35; // NOTA: Cursor, adatta questo valore base se il piano o la chitarra sono nativamente molto più grandi o piccoli
+  let posX = 0;
+  let posY = 0;
+
+  if (size.width >= 1600) {
+    currentScale = 1.60;
+    posX = viewport.width * 0.05;
+    posY = -1.00;
+  } else if (size.width >= 1245) {
+    currentScale = 1.40;
+    posX = viewport.width * 0.03;
+    posY = -1.00;
+  } else if (size.width >= 919) {
+    currentScale = 1.00;
+    posX = viewport.width * 0.05;
+    posY = -0.80;
+  } else {
+    currentScale = 0.25;
+    posX = 0;
+    posY = -viewport.height * 0.15;
+  }
 
   return (
-    <div
-      className="w-full h-full"
-      style={{ pointerEvents: isScrolling ? 'none' : 'auto' }}
-    >
-      <Canvas
-        onCreated={({ gl }) => { rendererRef.current = gl; }}
-        frameloop={isScrolling ? 'never' : 'always'}
-        camera={{ position: [0, 2, 9], fov: 45 }} // CAMERA ORIGINALE
-      >
-        
-        <ambientLight intensity={0.7} />
-        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1.5} />
-        
-        <Suspense fallback={null}>
-          <Model />
-          <Environment preset="city" /> 
-          {/* Anche l'ombra deve essere abbassata per seguire il piano */}
-          <ContactShadows position={[0, -0.1, 0]} opacity={0.4} scale={10} blur={2.5} far={4} />
-        </Suspense>
+    <>
+      <ambientLight intensity={0.7} />
+      <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1.5} />
 
-        <OrbitControls 
-          enableZoom={false} 
-          autoRotate={false}   // ROTAZIONE DISATTIVATA
-          enablePan={false}
-          maxPolarAngle={Math.PI / 2} 
-          minPolarAngle={Math.PI / 3}
-        />
-      </Canvas>
-    </div>
+      <group position={[posX, posY, 0]} scale={currentScale}>
+        <PresentationControls
+          global={true}
+          cursor={true}
+          snap={true}
+          speed={1}
+          zoom={1}
+          rotation={[0, -0.5, 0]}
+          polar={[-0.05, 0.05]}
+          azimuth={[-0.4, 0.4]}
+        >
+          <Model />
+        </PresentationControls>
+      </group>
+      <Environment preset="city" />
+      {/* Anche l'ombra deve essere abbassata per seguire il piano */}
+      <ContactShadows position={[0, -0.1, 0]} opacity={0.4} scale={10} blur={2.5} far={4} />
+    </>
   );
 }

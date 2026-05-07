@@ -1,19 +1,12 @@
 "use client";
-import React, { Suspense, useEffect, useState, useRef } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { useGLTF, Environment, ContactShadows, PresentationControls } from '@react-three/drei';
+import React, { useRef } from 'react';
+import { useFrame, useThree } from '@react-three/fiber';
+import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
-
-// Interfaccia per i tipi - Risolve gli errori "any" in Cursor
-interface ModelProps {
-  position: [number, number, number];
-  scale: number;
-  baseRotation: [number, number, number];
-}
 
 useGLTF.preload('/cassette_tape.glb');
 
-function Model({ position, scale, baseRotation }: ModelProps) {
+function Model() {
   const { scene } = useGLTF('/cassette_tape.glb');
   const groupRef = useRef<THREE.Group>(null);
 
@@ -21,12 +14,12 @@ function Model({ position, scale, baseRotation }: ModelProps) {
     if (!groupRef.current) return;
     const t = state.clock.getElapsedTime();
     // Fluttuazione minima ed elegante
-    groupRef.current.position.y = position[1] + Math.sin(t * 1.0) * 0.015;
+    groupRef.current.position.y = Math.sin(t * 1.0) * 0.015;
   });
 
   return (
-    <group ref={groupRef} position={position}>
-      <group rotation={baseRotation} scale={scale}>
+    <group ref={groupRef}>
+      <group rotation={[Math.PI / 2, 0, 0]}>
         <primitive object={scene} />
       </group>
     </group>
@@ -34,61 +27,37 @@ function Model({ position, scale, baseRotation }: ModelProps) {
 }
 
 export default function CassetteModel() {
-  const [frameloopMode, setFrameloopMode] = useState<'always' | 'demand'>('always');
+  const { viewport, size } = useThree();
 
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(pointer: coarse)');
-    const updateFrameloop = () => {
-      setFrameloopMode(mediaQuery.matches ? 'demand' : 'always');
-    };
+  let currentScale = 0.35;
+  let posX = 0;
+  let posY = 0;
 
-    updateFrameloop();
-    mediaQuery.addEventListener('change', updateFrameloop);
-
-    return () => {
-      mediaQuery.removeEventListener('change', updateFrameloop);
-    };
-  }, []);
+  if (size.width >= 1600) {
+    // Desktop Grande
+    currentScale = 0.40;
+    posX = viewport.width * 0.20;
+    posY = -0.05;
+  } else if (size.width >= 1366) {
+    // Desktop Medio/Laptop (es. 1598px) - Spostata leggermente più a sinistra
+    currentScale = 0.32;
+    posX = viewport.width * 0.20;
+    posY = -0.05;
+  } else if (size.width >= 1024) {
+    // Tablet orizzontale / Laptop piccoli
+    currentScale = 0.28;
+    posX = viewport.width * 0.20;
+    posY = -0.05;
+  } else {
+    // Mobile
+    currentScale = 0.25;
+    posX = 0;
+    posY = -viewport.height * 0.15;
+  }
 
   return (
-    <div className="absolute inset-0 w-full h-full -z-10 overflow-hidden touch-pan-y">
-      <Canvas 
-        camera={{ position: [0, 0, 5], fov: 25 }} 
-        dpr={[1, 2]}
-        frameloop={frameloopMode}
-        style={{ touchAction: 'pan-y' }}
-      >
-        <ambientLight intensity={1.5} />
-        <spotLight position={[10, 10, 10]} intensity={2} angle={0.3} penumbra={1} />
-        
-        <Suspense fallback={<color attach="background" args={['#e5e7eb']} />}>
-          <PresentationControls
-            global
-            snap // snap come booleano per evitare errori TypeScript
-            rotation={[0, 0, 0]}
-            polar={[-Math.PI / 4, Math.PI / 4]} 
-            azimuth={[-Math.PI / 3, Math.PI / 3]}
-          >
-            <Model
-              // POSIZIONE: Spostata a 1.5 per allontanarla bene dal testo
-              position={[0.8, -0.1, 0]} 
-              // SCALA: 0.55 per renderla leggermente più grande e d'impatto
-              scale={0.45} 
-              baseRotation={[Math.PI / 2, 0, 0]} 
-            />
-          </PresentationControls>
-
-          <Environment preset="city" />
-          
-          <ContactShadows 
-            // Ombra allineata alla nuova posizione X
-            position={[1.5, -1.8, 0]} 
-            opacity={0.3} 
-            scale={5} 
-            blur={3} 
-          />
-        </Suspense>
-      </Canvas>
-    </div>
+    <group position={[posX, posY, 0]} scale={currentScale}>
+      <Model />
+    </group>
   );
 }

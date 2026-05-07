@@ -1,9 +1,9 @@
 "use client";
-import React, { useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { 
   Music, Mic2, Drum, Sparkles, Wine, Coffee, 
-  PartyPopper, Warehouse, ArrowRight, PlayCircle, Calendar 
+  PartyPopper, Warehouse, PlayCircle, Calendar 
 } from 'lucide-react';
 
 // --- COMPONENTI UI & ANIMAZIONI ---
@@ -22,6 +22,11 @@ const FadeIn = ({ children, delay = 0 }: { children: React.ReactNode, delay?: nu
 
 // Animazione SVG "Onde Sonore" per la sezione Blues/Jazz
 const AudioWave = () => {
+  const durations = useMemo(
+    () => Array.from({ length: 20 }, (_, i) => 1 + ((i * 37) % 100) / 100),
+    []
+  );
+
   return (
     <div className="flex items-center justify-center gap-1 h-24 mb-8">
       {[...Array(20)].map((_, i) => (
@@ -31,7 +36,7 @@ const AudioWave = () => {
           initial={{ height: "20%" }}
           animate={{ height: ["20%", "100%", "20%"] }}
           transition={{
-            duration: 1 + Math.random(),
+            duration: durations[i],
             repeat: Infinity,
             ease: "easeInOut",
             delay: i * 0.1
@@ -116,7 +121,7 @@ export default function BandLivePage() {
             <h2 className="text-4xl font-bold mb-8">Radici Profonde, Feeling Autentico.</h2>
             <p className="text-lg text-gray-300 leading-relaxed mb-6">
               Siamo un duo acustico (o trio con batteria) che unisce chitarra, voce e pianoforte in un sound caldo e coinvolgente. 
-              La nostra musica nasce dall'incontro tra <span className="text-red-400 font-bold">blues</span> e <span className="text-indigo-400 font-bold">jazz</span>: improvvisazione, feeling, e quella capacità di creare atmosfera che solo chi suona con il cuore riesce a trasmettere.
+              La nostra musica nasce dall&apos;incontro tra <span className="text-red-400 font-bold">blues</span> e <span className="text-indigo-400 font-bold">jazz</span>: improvvisazione, feeling, e quella capacità di creare atmosfera che solo chi suona con il cuore riesce a trasmettere.
             </p>
           </FadeIn>
         </div>
@@ -128,26 +133,28 @@ export default function BandLivePage() {
           
           {/* SX: Chitarra & Voce (Blues) */}
           <div className="relative group overflow-hidden">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="https://images.unsplash.com/photo-1525201548942-d8732f6617a0?q=80&w=1200" alt="Chitarra Blues" className="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-110" />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-red-900/40 to-transparent opacity-90" />
             <div className="absolute bottom-0 left-0 p-10 md:p-16 relative z-10">
               <Mic2 className="text-red-500 mb-4" size={40} />
               <h3 className="text-3xl font-bold mb-4 text-red-400 uppercase italic">Chitarra e Voce</h3>
               <p className="text-gray-300 leading-relaxed max-w-md">
-                Un sound blues viscerale: groove, slide, fingerpicking e una voce che racconta storie. Il linguaggio dell'anima, suonato con la stessa passione dell'insegnamento.
+                Un sound blues viscerale: groove, slide, fingerpicking e una voce che racconta storie. Il linguaggio dell&apos;anima, suonato con la stessa passione dell&apos;insegnamento.
               </p>
             </div>
           </div>
 
           {/* DX: Pianoforte (Jazz) */}
           <div className="relative group overflow-hidden">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="https://images.unsplash.com/photo-1552422535-c45813c61732?q=80&w=1200" alt="Piano Jazz" className="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-110" />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-indigo-900/40 to-transparent opacity-90" />
             <div className="absolute bottom-0 left-0 p-10 md:p-16 relative z-10">
               <Music className="text-indigo-500 mb-4" size={40} />
               <h3 className="text-3xl font-bold mb-4 text-indigo-400 uppercase italic">Pianoforte</h3>
               <p className="text-gray-300 leading-relaxed max-w-md">
-                Una formazione jazz solida: armonie ricercate e tocco raffinato. Dialoga con la chitarra, crea tensioni e apre spazi per l'improvvisazione.
+                Una formazione jazz solida: armonie ricercate e tocco raffinato. Dialoga con la chitarra, crea tensioni e apre spazi per l&apos;improvvisazione.
               </p>
             </div>
           </div>
@@ -161,7 +168,7 @@ export default function BandLivePage() {
         
         <div className="text-center mb-20 relative z-10">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">La Nostra Proposta Live</h2>
-          <p className="text-gray-400 max-w-2xl mx-auto">Adattiamo il repertorio e l'energia al momento e al pubblico. Non siamo una cover band meccanica: sentiamo quello che suoniamo.</p>
+          <p className="text-gray-400 max-w-2xl mx-auto">Adattiamo il repertorio e l&apos;energia al momento e al pubblico. Non siamo una cover band meccanica: sentiamo quello che suoniamo.</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 relative z-10">
@@ -170,6 +177,7 @@ export default function BandLivePage() {
           <FadeIn>
             <div className="bg-[#111] rounded-3xl overflow-hidden border border-white/10 group hover:border-indigo-500/50 transition-all h-full flex flex-col">
               <div className="h-64 relative overflow-hidden">
+                 {/* eslint-disable-next-line @next/next/no-img-element */}
                  <img src="https://images.unsplash.com/photo-1543584860-840ad949c31a?q=80&w=1200" alt="Duo Acustico Intimo" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                  <div className="absolute inset-0 bg-indigo-900/30 mix-blend-multiply" />
                  <div className="absolute bottom-6 left-6 bg-indigo-600 py-1 px-3 rounded text-xs font-bold uppercase">Intimo & Versatile</div>
@@ -192,6 +200,7 @@ export default function BandLivePage() {
           <FadeIn delay={0.2}>
             <div className="bg-[#111] rounded-3xl overflow-hidden border border-white/10 group hover:border-red-500/50 transition-all h-full flex flex-col">
               <div className="h-64 relative overflow-hidden">
+                 {/* eslint-disable-next-line @next/next/no-img-element */}
                  <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1200" alt="Band Live Stage" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                  <div className="absolute inset-0 bg-red-900/30 mix-blend-multiply" />
                  <div className="absolute bottom-6 left-6 bg-red-600 py-1 px-3 rounded text-xs font-bold uppercase">Energia & Dinamica</div>
@@ -221,11 +230,11 @@ export default function BandLivePage() {
           <FadeIn>
             <h2 className="text-3xl font-bold mb-8">Ogni concerto è un viaggio.</h2>
             <p className="text-lg text-gray-300 leading-relaxed mb-8">
-              Il repertorio spazia tra blues classico, jazz standard e brani d'autore riarrangiati. 
-              Partiamo da brani amati, ma lasciamo sempre spazio all'improvvisazione e a quei momenti magici che nascono solo dal vivo.
+              Il repertorio spazia tra blues classico, jazz standard e brani d&apos;autore riarrangiati. 
+              Partiamo da brani amati, ma lasciamo sempre spazio all&apos;improvvisazione e a quei momenti magici che nascono solo dal vivo.
             </p>
             <p className="text-gray-400 italic">
-              "Intima e raccolta, energica e coinvolgente, sofisticata o spontanea: sappiamo creare l'atmosfera giusta."
+              &quot;Intima e raccolta, energica e coinvolgente, sofisticata o spontanea: sappiamo creare l&apos;atmosfera giusta.&quot;
             </p>
           </FadeIn>
         </div>
@@ -237,6 +246,7 @@ export default function BandLivePage() {
           <div className="relative group cursor-pointer rounded-[3rem] overflow-hidden border border-red-500/20 shadow-2xl shadow-red-900/20">
             <div className="aspect-video relative overflow-hidden">
                {/* Placeholder Immagine Video */}
+               {/* eslint-disable-next-line @next/next/no-img-element */}
                <img src="https://images.unsplash.com/photo-1501386761578-eac5c94b800a?q=80&w=1200" className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700" alt="Live Video Placeholder" />
                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
                {/* Play Button UI */}
@@ -247,7 +257,7 @@ export default function BandLivePage() {
                </div>
                <div className="absolute bottom-8 left-8">
                  <p className="text-red-400 font-mono uppercase text-sm mb-2">Live Session</p>
-                 <h3 className="text-2xl font-bold text-white">Guarda l'energia dal vivo</h3>
+                <h3 className="text-2xl font-bold text-white">Guarda l&apos;energia dal vivo</h3>
                </div>
             </div>
           </div>
@@ -257,7 +267,7 @@ export default function BandLivePage() {
            <h2 className="text-4xl font-bold mb-6">Due musicisti, <br/>una storia condivisa.</h2>
            <p className="text-gray-300 text-lg leading-relaxed mb-8">
              Suonare insieme non è solo un lavoro: è il modo in cui condividiamo la nostra passione anche fuori dalla sala prove. 
-             La musica dal vivo è l'altra faccia della nostra identità: se in sala prove trasmettiamo tecnica, sul palco trasmettiamo emozione pura.
+              La musica dal vivo è l&apos;altra faccia della nostra identità: se in sala prove trasmettiamo tecnica, sul palco trasmettiamo emozione pura.
            </p>
            <div className="flex items-center gap-4 text-gray-400">
              <div className="w-12 h-1 px-2 bg-gradient-to-r from-red-500 to-indigo-500 rounded-full" />
@@ -277,7 +287,7 @@ export default function BandLivePage() {
              <h2 className="text-5xl md:text-6xl font-bold mb-8 tracking-tight">Vuoi la nostra musica <br/> al tuo evento?</h2>
              <p className="text-xl text-gray-300 leading-relaxed mb-12 max-w-2xl mx-auto">
                Organizzi un matrimonio, una festa privata o cerchi una band per il tuo locale? 
-               Scrivici: costruiremo insieme la scaletta perfetta per l'occasione.
+              Scrivici: costruiremo insieme la scaletta perfetta per l&apos;occasione.
              </p>
 
              <div className="flex flex-col md:flex-row justify-center gap-6 mb-16">

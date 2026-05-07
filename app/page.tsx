@@ -1,17 +1,14 @@
 "use client";
-import React, { useRef } from 'react';
-import dynamic from 'next/dynamic';
+import React, { Suspense, useRef } from 'react';
+import { Canvas } from '@react-three/fiber';
+import { ContactShadows, Environment, PresentationControls } from '@react-three/drei';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { 
   ArrowRight, Sparkles, Music, Laptop, GraduationCap, MapPin, Coffee 
 } from 'lucide-react';
 import Link from 'next/link';
-
-// Importazione Cassetta 3D
-const CassetteScene = dynamic(() => import('../src/components/CassetteModel'), { 
-  ssr: false, 
-  loading: () => <div className="h-full w-full bg-transparent" /> 
-});
+import CassetteModel from '../src/components/CassetteModel';
+import { useIsMobile } from '@/src/hooks/useIsMobile';
 
 const cardStyle = "bg-[#0A0A0A] border border-white/10 shadow-2xl rounded-[3rem] transition-all duration-300";
 
@@ -23,7 +20,7 @@ const ScrollingBlurText = ({ title, description }: { title: string | React.React
   const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0]);
 
   return (
-    <div className="py-32 px-6 max-w-4xl mx-auto text-center flex flex-col items-center gap-10">
+    <div className="py-32 px-6 max-w-4xl mx-auto text-center flex flex-col items-center gap-10 pointer-events-auto relative z-20 bg-[#020205]">
       <motion.div ref={ref} style={{ filter: useTransform(blur, (v) => `blur(${v}px)`), opacity }}>
         <h2 className="text-3xl md:text-5xl font-bold leading-tight text-white mb-8">
           {title}
@@ -39,63 +36,102 @@ const ScrollingBlurText = ({ title, description }: { title: string | React.React
 };
 
 export default function Home() {
+  const isMobile = useIsMobile();
+
   return (
-    <div className="w-full bg-[#050505] text-white selection:bg-red-500 selection:text-white">
+    <div className="w-full bg-transparent text-white selection:bg-red-500 selection:text-white">
       
       {/* --- HERO SECTION (STICKY) --- */}
-      <section className="sticky top-0 h-screen w-full flex items-center overflow-hidden z-0">
+      <section className="relative w-full min-h-screen flex items-center overflow-hidden z-0">
+        {!isMobile && (
+          <div className="absolute inset-0 z-0 pointer-events-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 28 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
+              className="w-full h-full"
+            >
+              <Canvas camera={{ position: [0, 0, 5], fov: 25 }} dpr={[1, 2]}>
+                <ambientLight intensity={1.5} />
+                <spotLight position={[10, 10, 10]} intensity={2} angle={0.3} penumbra={1} />
+                <Suspense fallback={null}>
+                  <PresentationControls
+                    global
+                    snap
+                    rotation={[0, 0, 0]}
+                    polar={[-Math.PI / 4, Math.PI / 4]}
+                    azimuth={[-Math.PI / 3, Math.PI / 3]}
+                  >
+                    <CassetteModel />
+                  </PresentationControls>
+                  <Environment preset="city" />
+                  <ContactShadows position={[0, -1.8, 0]} opacity={0.25} scale={5} blur={3} />
+                </Suspense>
+              </Canvas>
+            </motion.div>
+          </div>
+        )}
+
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
            <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-indigo-900/10 blur-[120px] rounded-full opacity-50" />
            <div className="absolute bottom-[-10%] left-[-20%] w-[700px] h-[700px] bg-red-900/10 blur-[120px] rounded-full opacity-40" />
         </div>
 
-        <div className="absolute inset-0 z-0 hidden lg:block pointer-events-none">
-           <CassetteScene />
-        </div>
-        
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-10 pointer-events-none">
-          <div className="grid grid-cols-1 lg:grid-cols-2 items-center">
-            <motion.div 
-              initial={{ opacity: 0, x: -50 }} 
-              animate={{ opacity: 1, x: 0 }} 
-              className="max-w-xl pointer-events-auto"
-            >
-              <div className="inline-block px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-6 shadow-lg">
-                <span className="text-red-400 font-bold uppercase text-xs tracking-widest flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"/> Iscrizioni Aperte
-                </span>
-              </div>
-              
-              {/* --- TITOLO HERO CON GRADIENTE CORRETTO --- */}
-              <h1 className="text-5xl md:text-7xl font-bold tracking-tighter leading-[1.1] mb-8 drop-shadow-2xl text-white">
-                MusicaNova: <br/> 
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-orange-400 to-red-600">
-                  la tua scuola
-                </span> <br/> 
-                di Musica.
-              </h1>
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 pointer-events-none">
+          <div className="max-w-xl pointer-events-auto">
+              <motion.div
+                initial={{ opacity: 0, y: -24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.55, ease: "easeOut" }}
+              >
+                <div className="inline-block px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-6 shadow-lg">
+                  <span className="text-red-400 font-bold uppercase text-xs tracking-widest flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"/> Iscrizioni Aperte
+                  </span>
+                </div>
+                
+                {/* --- TITOLO HERO CON GRADIENTE CORRETTO --- */}
+                <h1 className="text-5xl md:text-7xl font-bold tracking-tighter leading-[1.1] mb-8 drop-shadow-2xl text-white">
+                  MusicaNova: <br/> 
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-orange-400 to-red-600">
+                    la tua scuola
+                  </span> <br/> 
+                  di Musica.
+                </h1>
+              </motion.div>
 
-              <p className="text-xl text-gray-300 mb-10 leading-relaxed font-light border-l-4 border-indigo-500 pl-6">
-                Uno spazio creativo dove l'empatia incontra la musica moderna.
-              </p>
-              <div className="flex flex-wrap gap-4">
+              <motion.div
+                initial={{ opacity: 0, y: -18 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.12, ease: "easeOut" }}
+              >
+                <p className="text-xl text-gray-300 mb-10 leading-relaxed font-light border-l-4 border-indigo-500 pl-6">
+                  Uno spazio creativo dove l&apos;empatia incontra la musica moderna.
+                </p>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.22, ease: "easeOut" }}
+                className="flex flex-wrap gap-4"
+              >
                 <Link href="#contatti" className="bg-white text-black px-8 py-4 rounded-full font-bold flex items-center gap-2 hover:bg-red-500 hover:text-white transition-all group shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(239,68,68,0.5)] transform hover:scale-105">
                   Prenota una Prova <ArrowRight className="group-hover:translate-x-2 transition-transform" />
                 </Link>
                 <Link href="/la-scuola" className="border border-white/20 px-8 py-4 rounded-full font-bold hover:bg-white/5 backdrop-blur-sm transition-colors">
                   Scopri di più
                 </Link>
-              </div>
-            </motion.div>
+              </motion.div>
           </div>
         </div>
       </section>
 
       {/* --- CONTENT COVER --- */}
-      <div className="relative z-10 bg-[#050505] shadow-[0_-50px_100px_rgba(0,0,0,1)]">
+      <div className="relative z-20 bg-transparent shadow-[0_-50px_100px_rgba(0,0,0,1)]">
         <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-[#050505] -mt-32 pointer-events-none" />
 
-        <section id="corsi" className="pt-24 pb-16 px-6 md:px-10 max-w-7xl mx-auto">
+        <section id="corsi" className="pt-24 pb-16 px-6 md:px-10 max-w-7xl mx-auto pointer-events-auto relative z-20 bg-[#020205]">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
             
             {/* BOX 1: MUSIGRAMMA */}
@@ -110,7 +146,7 @@ export default function Home() {
                     Siamo tra le <strong>prime scuole in Italia</strong> ad adottare questo sistema rivoluzionario.
                   </p>
                   <p className="text-gray-400 max-w-lg text-sm leading-relaxed mb-8">
-                    Un approccio all'armonia ancora in fase sperimentale, ma già <strong>validato scientificamente</strong> (Progetto SUNRAISE). Rendiamo visibile l'invisibile.
+                    Un approccio all&apos;armonia ancora in fase sperimentale, ma già <strong>validato scientificamente</strong> (Progetto SUNRAISE). Rendiamo visibile l&apos;invisibile.
                   </p>
                </div>
                
@@ -119,7 +155,7 @@ export default function Home() {
                    Scopri il Metodo <ArrowRight size={20}/>
                  </Link>
                  <Link href="/musigramma" className="inline-flex items-center gap-2 text-[#00ced1] font-bold uppercase tracking-widest hover:translate-x-2 transition-transform text-sm px-5 py-2">
-                   Scopri l'innovazione <ArrowRight size={16}/>
+                  Scopri l&apos;innovazione <ArrowRight size={16}/>
                  </Link>
                </div>
 
@@ -182,7 +218,7 @@ export default function Home() {
         </section>
 
         {/* --- LA TUA SECONDA CASA --- */}
-        <section className="py-16 px-6 md:px-10 max-w-5xl mx-auto relative z-10">
+        <section className="py-16 px-6 md:px-10 max-w-5xl mx-auto relative z-20 pointer-events-auto bg-[#020205]">
           <motion.div 
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -209,7 +245,7 @@ export default function Home() {
                     Da oltre 20 anni, MusicaNova è molto più di una scuola di musica a San Lazzaro di Savena. È uno spazio dove bambini, ragazzi e adulti (sì, fino agli 80 anni!) si sentono in famiglia.
                   </p>
                   <p>
-                    Dimentica le accademie rigide o la frustrazione del "fai-da-te" solitario davanti allo schermo di un telefono. Noi crediamo profondamente nell'innovazione — lo dimostra la web app esclusiva del nostro Metodo Musigramma — ma sappiamo che la tecnologia funziona davvero solo quando è accompagnata dal <strong className="text-white">calore umano</strong>.
+                    Dimentica le accademie rigide o la frustrazione del &quot;fai-da-te&quot; solitario davanti allo schermo di un telefono. Noi crediamo profondamente nell&apos;innovazione — lo dimostra la web app esclusiva del nostro Metodo Musigramma — ma sappiamo che la tecnologia funziona davvero solo quando è accompagnata dal <strong className="text-white">calore umano</strong>.
                   </p>
                   <p>
                     Qui troverai <strong className="text-white">Francesco</strong> e <strong className="text-white">Claudio</strong>, pronti a guidarti con un percorso costruito su misura per te. Che sia la tua prima nota assoluta o un ritorno di fiamma con la chitarra o il pianoforte, abbiamo il posto giusto per te.
@@ -233,11 +269,11 @@ export default function Home() {
               Siamo orgogliosi di essere tra i primi in Italia ad abbracciare il <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00ced1] to-blue-500">Metodo Musigramma</span>.
             </>
           }
-          description="Un ecosistema educativo rivoluzionario che rende l'armonia visibile e tangibile. Dimentica i vecchi tomi impolverati: il nostro percorso integra un manuale innovativo ricco di immagini, una web app interattiva e un dispositivo fisico esclusivo. Attraverso geometrie intuitive, trasformiamo concetti astratti in pura comprensione musicale, permettendoti di 'toccare' le note prima ancora di suonarle."
+          description="Un ecosistema educativo rivoluzionario che rende l&apos;armonia visibile e tangibile. Dimentica i vecchi tomi impolverati: il nostro percorso integra un manuale innovativo ricco di immagini, una web app interattiva e un dispositivo fisico esclusivo. Attraverso geometrie intuitive, trasformiamo concetti astratti in pura comprensione musicale, permettendoti di &apos;toccare&apos; le note prima ancora di suonarle."
         />
 
         {/* --- LIVE SECTION (SPOSTATA IN FONDO) --- */}
-        <section id="live" className="py-12 px-6 md:px-10 max-w-7xl mx-auto mb-20">
+        <section id="live" className="py-12 px-6 md:px-10 max-w-7xl mx-auto mb-20 pointer-events-auto relative z-20 bg-transparent">
           <div className={`${cardStyle} p-12 border-red-900/30 bg-gradient-to-br from-[#0A0A0A] via-[#110505] to-[#1A0505] overflow-hidden relative`}>
              <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-red-600/5 blur-[150px] rounded-full pointer-events-none" />
              <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
@@ -255,6 +291,7 @@ export default function Home() {
                  </Link>
                </div>
                <div className="relative aspect-video rounded-3xl overflow-hidden border border-white/10 group shadow-2xl rotate-1 hover:rotate-0 transition-transform duration-500">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                  <img src="https://images.unsplash.com/photo-1514320298574-2b9d53b05423?q=80&w=1200" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Live Performance" />
                </div>
              </div>

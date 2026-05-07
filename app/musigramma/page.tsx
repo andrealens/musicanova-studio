@@ -57,7 +57,7 @@ export default function MusigrammaPage() {
                 </span>
               </h1>
               <p className="text-xl md:text-2xl text-gray-300 leading-relaxed font-light">
-                L'armonia non è mai stata cosi visibile. <br/>
+                L&apos;armonia non è mai stata cosi visibile. <br/>
                 Un metodo sperimentale, brevettato e validato.
               </p>
             </motion.div>
@@ -238,7 +238,7 @@ export default function MusigrammaPage() {
                 Musigramma <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00ced1] to-blue-400">Universo</span>
               </h2>
               <p className="text-gray-300 text-lg leading-relaxed max-w-lg">
-                Esplora la rete a navigazione infinita che unisce musica, società ed economia. Prova con <em>«Perché il blues ha cambiato il mondo?»</em> o <em>«Come funzionava l'armonia nel Rinascimento?»</em>: ogni risposta collega il contesto storico, sociale e tecnico-armonico in tre nodi interattivi.
+                Esplora la rete a navigazione infinita che unisce musica, società ed economia. Prova con <em>«Perché il blues ha cambiato il mondo?»</em> o <em>«Come funzionava l&apos;armonia nel Rinascimento?»</em>: ogni risposta collega il contesto storico, sociale e tecnico-armonico in tre nodi interattivi.
               </p>
               
               <div className="pt-4">
@@ -248,7 +248,7 @@ export default function MusigrammaPage() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-3 px-8 py-4 bg-[#00ced1] text-[#021a1a] font-bold rounded-full hover:bg-white hover:scale-105 transition-all shadow-[0_0_30px_rgba(0,206,209,0.2)]"
                 >
-                  Inizia l'esplorazione <ArrowRight size={20} />
+                  Inizia l&apos;esplorazione <ArrowRight size={20} />
                 </Link>
               </div>
             </div>

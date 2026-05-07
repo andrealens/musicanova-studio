@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 import Link from 'next/link';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import {
-  Music, Heart, Users, Sparkles, Brain,
+  Heart, Users, Sparkles, Brain,
   Eye, Hand, GraduationCap, Home, ArrowRight
 } from 'lucide-react';
 
@@ -70,6 +70,7 @@ export default function LaScuola() {
       <section className="relative h-[60vh] md:h-[80vh] flex items-center justify-center overflow-hidden">
         <motion.div style={{ y: yParallax }} className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/60 to-[#050505] z-10" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=2000"
             alt="MusicaNova Studio Interno"
@@ -106,8 +107,8 @@ export default function LaScuola() {
                 Qui ci si chiama per nome, si ride e si sperimenta senza paura di sbagliare.
               </p>
               <div className="pl-6 border-l-2 border-indigo-500 italic text-gray-300">
-                "Il nostro allievo più grande ha 80 anni e suona con un entusiasmo contagioso.
-                Qui non ci sono limiti, solo voglia di emozionarsi."
+                &quot;Il nostro allievo più grande ha 80 anni e suona con un entusiasmo contagioso.
+                Qui non ci sono limiti, solo voglia di emozionarsi.&quot;
               </div>
             </FadeIn>
 
@@ -127,6 +128,7 @@ export default function LaScuola() {
 
           <FadeIn delay={0.3}>
             <div className="relative h-[600px] w-full bg-[#0A0A0A] rounded-[3rem] overflow-hidden border border-white/5">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=800"
                 className="absolute inset-0 w-full h-full object-cover opacity-60 hover:scale-105 transition-transform duration-1000"
@@ -161,7 +163,7 @@ export default function LaScuola() {
               </h2>
               <p className="text-xl text-gray-300 max-w-2xl mx-auto">
                 Rendiamo la teoria musicale visibile, concreta e accessibile.
-                Dimentica l'astrazione: qui la musica si tocca.
+                Dimentica l&apos;astrazione: qui la musica si tocca.
               </p>
             </div>
           </FadeIn>
@@ -173,7 +175,7 @@ export default function LaScuola() {
 
               <FadeIn delay={0.2} className="relative z-10">
                 <h3 className="text-3xl font-bold text-white mb-6">
-                  Vedere i suoni, <br /> toccare l'armonia.
+                  Vedere i suoni, <br /> toccare l&apos;armonia.
                 </h3>
                 <p className="text-gray-300 text-lg leading-relaxed mb-8">
                   Musigramma è un sistema brevettato che trasforma concetti complessi (scale, accordi) in forme geometriche.
@@ -245,6 +247,7 @@ export default function LaScuola() {
               <div className="group relative h-[350px] rounded-[2.5rem] overflow-hidden bg-[#111] border border-white/5 hover:border-indigo-500/50 transition-colors cursor-pointer">
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={imgUrl}
                   alt={`Gallery MusicaNova ${i + 1}`}

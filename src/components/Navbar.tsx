@@ -1,12 +1,10 @@
 "use client";
 import React, { useRef, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 
 export default function Navbar() {
-  const router = useRouter();
   const navRef = useRef<HTMLElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -44,22 +42,24 @@ export default function Navbar() {
         display: "none"
       });
     }
-  }, [isOpen]); // Riesegue l'animazione ogni volta che isOpen cambia
+  }, [isOpen]);
 
   return (
     <>
       <div className="fixed top-6 left-0 w-full flex justify-center z-[100] px-4 pointer-events-none">
         <nav 
           ref={navRef}
-          className="pointer-events-auto w-full md:w-auto flex items-center justify-between gap-8 px-6 md:px-8 py-4 rounded-full bg-white/5 backdrop-blur-2xl border border-white/10 shadow-2xl"
+          // Modificato md:w-auto in min-[920px]:w-auto
+          className="pointer-events-auto w-full min-[920px]:w-auto flex items-center justify-between gap-8 px-6 min-[920px]:px-8 py-4 rounded-full bg-white/5 backdrop-blur-2xl border border-white/10 shadow-2xl"
         >
           {/* LOGO */}
           <Link href="/" className="text-white font-bold tracking-tighter text-xl group">
             MN<span className="text-indigo-500 group-hover:text-white transition-colors">.</span>
           </Link>
 
-          {/* MENU CENTRALE (Solo Desktop) */}
-          <div className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-400">
+          {/* MENU CENTRALE (Solo Desktop da 920px in su) */}
+          {/* Modificato md:flex in min-[920px]:flex */}
+          <div className="hidden min-[920px]:flex items-center gap-6 text-sm font-medium text-gray-400">
             <Link href="/la-scuola" className="hover:text-white transition-colors">La Scuola</Link>
             
             <div className="flex items-center gap-4 px-4 py-1 rounded-full bg-white/5 border border-indigo-500/30">
@@ -84,10 +84,11 @@ export default function Navbar() {
               Prova
             </Link>
 
-            {/* HAMBURGER BUTTON (Solo Mobile) */}
+            {/* HAMBURGER BUTTON (Mobile e fino a 919px) */}
+            {/* Modificato md:hidden in min-[920px]:hidden */}
             <button 
               onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden flex flex-col justify-center items-center gap-1.5 w-8 h-8 z-[101]"
+              className="min-[920px]:hidden flex flex-col justify-center items-center gap-1.5 w-8 h-8 z-[101]"
             >
               <span className={`block w-6 h-0.5 bg-white transition-transform duration-300 ${isOpen ? 'rotate-45 translate-y-2' : ''}`}></span>
               <span className={`block w-6 h-0.5 bg-white transition-opacity duration-300 ${isOpen ? 'opacity-0' : ''}`}></span>
@@ -101,7 +102,7 @@ export default function Navbar() {
       <div 
         ref={mobileMenuRef}
         className="fixed inset-0 z-[90] bg-[#050505]/95 backdrop-blur-md hidden flex-col items-center justify-center gap-8 px-4"
-        style={{ transform: "translateY(-100%)", opacity: 0 }} // Stato CSS iniziale
+        style={{ transform: "translateY(-100%)", opacity: 0 }}
       >
         <Link href="/la-scuola" onClick={() => setIsOpen(false)} className="text-2xl font-bold text-white">La Scuola</Link>
         <Link href="/corsi/pianoforte" onClick={() => setIsOpen(false)} className="text-2xl font-bold text-indigo-400">Pianoforte</Link>

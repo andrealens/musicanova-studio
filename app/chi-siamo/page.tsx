@@ -1,7 +1,7 @@
 "use client";
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { Music, Heart, Users, Calendar, ArrowRight, Mic2, MapPin } from 'lucide-react';
+import { Music, Heart, Users, Calendar, Mic2, MapPin } from 'lucide-react';
 
 // Componente per le sezioni di testo che appaiono dal basso
 const FadeInSection = ({ children, delay = 0 }: { children: React.ReactNode, delay?: number }) => {
@@ -32,6 +32,7 @@ export default function ChiSiamo() {
         {/* Sfondo Parallax */}
         <motion.div style={{ y: yBg }} className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#050505]/80 to-[#050505] z-10" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img 
             src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=2000" 
             alt="Piano e Chitarra" 
@@ -73,7 +74,7 @@ export default function ChiSiamo() {
               <h2 className="text-3xl font-bold mb-4">Le Radici</h2>
               <p className="text-gray-400 leading-relaxed">
                 MusicaNova Studio nasce a <span className="text-white font-bold">Ponticella di San Lazzaro</span>. 
-                Nel 2019 ho raccolto il testimone dal mio maestro, trasformando "Le Magiche Note" in un progetto con nuova energia.
+                Nel 2019 ho raccolto il testimone dal mio maestro, trasformando &quot;Le Magiche Note&quot; in un progetto con nuova energia.
               </p>
             </FadeInSection>
           </div>
@@ -81,6 +82,7 @@ export default function ChiSiamo() {
           {/* Foto Radici */}
           <FadeInSection delay={0.2}>
             <div className="aspect-square rounded-[3rem] overflow-hidden border border-white/10 rotate-3 hover:rotate-0 transition-transform duration-700">
+               {/* eslint-disable-next-line @next/next/no-img-element */}
                <img src="https://images.unsplash.com/photo-1525201548942-d8732f6617a0?w=800" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all" alt="Chitarra Vintage" />
             </div>
           </FadeInSection>
@@ -88,6 +90,7 @@ export default function ChiSiamo() {
           {/* Foto Duo */}
           <FadeInSection delay={0.2}>
              <div className="aspect-video rounded-[3rem] overflow-hidden border border-white/10 -rotate-3 hover:rotate-0 transition-transform duration-700 order-2 md:order-1">
+               {/* eslint-disable-next-line @next/next/no-img-element */}
                <img src="https://images.unsplash.com/photo-1514320298574-2b9d53b05423?w=800" className="w-full h-full object-cover" alt="Duo Musicale" />
              </div>
           </FadeInSection>
@@ -118,7 +121,7 @@ export default function ChiSiamo() {
             <Music className="w-20 h-20 text-indigo-500 mx-auto mb-8 opacity-80" />
             <h2 className="text-4xl md:text-6xl font-bold mb-8">Da 8 a 80 Anni.</h2>
             <p className="text-xl md:text-2xl text-gray-300 leading-relaxed mb-12">
-              "Il nostro allievo più grande ha proprio 80 anni, ed è una gioia vederlo suonare!"
+              &quot;Il nostro allievo più grande ha proprio 80 anni, ed è una gioia vederlo suonare!&quot;
             </p>
           </FadeInSection>
 
@@ -149,8 +152,8 @@ export default function ChiSiamo() {
            <FadeInSection>
              <h3 className="text-indigo-400 font-mono uppercase tracking-widest mb-6">Connessioni</h3>
              <blockquote className="text-2xl md:text-3xl font-light leading-relaxed text-gray-200 mb-8">
-               "L'altra sera sono andato al concerto di <span className="text-white font-bold">Tommy Emmanuel</span> al Teatro Duse con due allievi. 
-               Sono orgoglioso di aver fatto scoprire loro questo artista, proprio come il mio maestro lo fece scoprire a me."
+               &quot;L&apos;altra sera sono andato al concerto di <span className="text-white font-bold">Tommy Emmanuel</span> al Teatro Duse con due allievi. 
+               Sono orgoglioso di aver fatto scoprire loro questo artista, proprio come il mio maestro lo fece scoprire a me.&quot;
              </blockquote>
              <p className="text-gray-500 italic">— È così che la musica si tramanda, da cuore a cuore.</p>
            </FadeInSection>
@@ -185,6 +188,7 @@ export default function ChiSiamo() {
                <div className="relative group cursor-pointer">
                   <div className="absolute inset-0 bg-red-600/20 blur-[60px] rounded-full group-hover:bg-red-600/30 transition-all duration-500" />
                   <div className="relative aspect-video rounded-3xl overflow-hidden border border-white/10">
+                     {/* eslint-disable-next-line @next/next/no-img-element */}
                      <img src="https://images.unsplash.com/photo-1501612722927-d1d5d738d026?w=1200" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Live Concert" />
                      <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors" />
                      <div className="absolute center inset-0 flex items-center justify-center">
