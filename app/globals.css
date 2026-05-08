@@ -1,17 +1,60 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* ─────────────────────────────────────────────────────────────────
+   TAILWIND v4 — la direttiva corretta è @import, NON @tailwind.
+   Le direttive @tailwind base/components/utilities appartengono
+   alla v3 e in v4 vengono ignorate silenziosamente, producendo
+   un sito senza stili.
+───────────────────────────────────────────────────────────────── */
+@import "tailwindcss";
 
-@layer base {
-  :root {
-    --background: #020205;
-    --foreground: #e2e8f0; /* slate-200 */
-  }
-  
-  html,
-  body {
-    background-color: var(--background);
-    color: var(--foreground);
-  }
+/* ─────────────────────────────────────────────────────────────────
+   @theme inline: espone i token Tailwind come custom properties CSS.
+   Necessario per far funzionare le utility che usano var() internamente
+   (es. font-sans, colori custom, ecc.).
+───────────────────────────────────────────────────────────────── */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   VARIABILI DI COLORE
+───────────────────────────────────────────────────────────────── */
+:root {
+  --background: #020205;
+  --foreground: #e2e8f0; /* slate-200 */
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   FIX SAFARI MOBILE — elastic overscroll / rubber band background
+
+   Problema: Safari su iOS applica un effetto "rubber band" oltre
+   i bordi della pagina. Se il body è bg-transparent, in quell'area
+   elastica viene mostrato il colore predefinito del browser (bianco).
+   Le classi Tailwind sull'elemento <html> non bastano perché Safari
+   legge il colore di sfondo per l'overscroll da qui, non dal DOM.
+
+   Soluzione in due parti:
+   1. background-color hardcoded su html E body via CSS puro
+      (non classi Tailwind: questo CSS viene parsato prima che
+      Tailwind sia processato, eliminando il flash anche a freddo)
+   2. overscroll-behavior: none blocca il rubber band su tutti i browser
+      moderni che lo supportano (Chrome, Firefox, Safari 16+)
+───────────────────────────────────────────────────────────────── */
+html {
+  background-color: #020205;
+  /* Colore che Safari usa per l'area fuori dal documento */
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  /* Blocca il rubber band scroll — supportato da Safari 16+,
+     Chrome, Firefox. Su Safari < 16 il background scuro
+     sulla html mitiga comunque il flash visivo. */
+  overscroll-behavior: none;
+  background-color: #020205;
+  color: #e2e8f0;
 }
 /* Forza deploy Vercel per fix mobile */
