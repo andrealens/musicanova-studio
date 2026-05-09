@@ -3,9 +3,16 @@ import React, { useRef } from 'react';
 import Link from 'next/link';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import {
-  Heart, Users, Sparkles, Brain,
-  Eye, Hand, GraduationCap, Home, ArrowRight
-} from 'lucide-react';
+  Heart,
+  Users,
+  Sparkle,
+  Brain,
+  Eye,
+  Hand,
+  GraduationCap,
+  House,
+  ArrowRight,
+} from "@phosphor-icons/react";
 
 const FadeIn = ({
   children,
@@ -116,7 +123,12 @@ export default function LaScuola() {
               <div className="bg-[#111] p-8 rounded-3xl border border-white/5 relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 blur-[50px] rounded-full group-hover:bg-indigo-500/20 transition-all" />
                 <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
-                  <Heart className="text-red-500 fill-red-500/20" size={20} /> Oltre la lezione
+                  <Heart
+                    weight="duotone"
+                    className="text-red-500 fill-red-500/20"
+                    size={20}
+                  />{" "}
+                  Oltre la lezione
                 </h3>
                 <p className="text-sm text-gray-400">
                   Spesso gli allievi diventano amici. Condividiamo concerti (come Tommy Emmanuel al Duse!)
@@ -137,7 +149,7 @@ export default function LaScuola() {
               <div className="absolute bottom-0 left-0 w-full p-8 bg-gradient-to-t from-black to-transparent">
                 <div className="flex items-center gap-4 text-white">
                   <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center">
-                    <Users size={24} />
+                    <Users weight="duotone" size={24} />
                   </div>
                   <div>
                     <p className="font-bold text-lg">Ambiente Familiare</p>
@@ -207,7 +219,7 @@ export default function LaScuola() {
                 <FadeIn key={i} delay={0.3 + (i * 0.1)}>
                   <div className="bg-[#0A0A0A] p-6 rounded-3xl border border-white/10 hover:border-[#00ced1]/50 transition-colors flex items-start gap-4 group h-full">
                     <div className="min-w-[48px] h-12 rounded-xl bg-[#00ced1]/10 flex items-center justify-center text-[#00ced1] group-hover:scale-110 transition-transform">
-                      <item.icon size={24} />
+                      <item.icon size={24} weight="duotone" />
                     </div>
                     <div>
                       <h4 className="text-lg font-bold text-white mb-1 group-hover:text-[#00ced1] transition-colors">{item.title}</h4>
@@ -258,10 +270,16 @@ export default function LaScuola() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-white font-bold tracking-wider text-xl mb-1">In Studio</p>
-                      <p className="text-indigo-300 text-sm flex items-center gap-1"><Sparkles size={14} /> MusicaNova</p>
+                      <p className="text-indigo-300 text-sm flex items-center gap-1">
+                      <Sparkle weight="duotone" size={14} /> MusicaNova
+                    </p>
                     </div>
                     <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white shadow-xl">
-                      <Heart size={20} className="text-indigo-400" />
+                      <Heart
+                        weight="duotone"
+                        size={20}
+                        className="text-indigo-400"
+                      />
                     </div>
                   </div>
                 </div>
@@ -276,7 +294,10 @@ export default function LaScuola() {
           <div className="bg-[#111] rounded-[3rem] p-12 text-center border border-white/10 relative overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-indigo-500 via-red-500 to-[#00ced1]" />
 
-            <GraduationCap className="w-16 h-16 text-white mx-auto mb-6 opacity-50" />
+            <GraduationCap
+              weight="duotone"
+              className="w-16 h-16 text-white mx-auto mb-6 opacity-50"
+            />
             <h2 className="text-4xl font-bold mb-8">Come Funziona</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
@@ -289,7 +310,7 @@ export default function LaScuola() {
                 <p className="text-[#00ced1] uppercase text-sm tracking-widest font-bold">Lezione Gratuita</p>
               </div>
               <div className="flex flex-col items-center">
-                <Home size={40} className="text-white mb-2" />
+                <House weight="duotone" size={40} className="text-white mb-2" />
                 <p className="text-gray-400 uppercase text-sm tracking-widest">Anche a Domicilio</p>
               </div>
             </div>

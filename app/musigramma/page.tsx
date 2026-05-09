@@ -1,7 +1,20 @@
 "use client";
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Brain, Shapes, CheckCircle2, ExternalLink, Network } from 'lucide-react';
+import {
+  ArrowRight,
+  Brain,
+  Shapes,
+  CheckCircle,
+  ArrowSquareOut,
+  Network,
+  HandPointing,
+  Lightning,
+  HandHeart,
+  Robot,
+  HandTap,
+  BookOpenText,
+} from "@phosphor-icons/react";
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { useIsMobile } from '@/src/hooks/useIsMobile';
@@ -92,7 +105,10 @@ export default function MusigrammaPage() {
               ].map((item, i) => (
                 <FadeIn key={i} delay={i * 0.1}>
                   <div className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5 hover:border-[#00ced1]/30 transition-colors">
-                    <CheckCircle2 className="text-[#00ced1] shrink-0" />
+                    <CheckCircle
+                      weight="duotone"
+                      className="text-[#00ced1] shrink-0"
+                    />
                     <span className="text-gray-200">{item}</span>
                   </div>
                 </FadeIn>
@@ -103,8 +119,16 @@ export default function MusigrammaPage() {
           <FadeIn delay={0.3}>
              <div className="aspect-square rounded-[3rem] bg-gradient-to-br from-[#00ced1]/20 to-transparent border border-[#00ced1]/20 relative overflow-hidden flex items-center justify-center group">
                 <div className="absolute inset-0 bg-[url('/noise.png')] opacity-20 mix-blend-overlay"/>
-                <Brain size={120} className="text-[#00ced1] opacity-80 group-hover:scale-110 transition-transform duration-700" />
-                <Shapes size={80} className="absolute top-10 right-10 text-white opacity-20 animate-spin-slow" />
+                <Brain
+                  weight="duotone"
+                  size={120}
+                  className="text-[#00ced1] opacity-80 group-hover:scale-110 transition-transform duration-700"
+                />
+                <Shapes
+                  weight="duotone"
+                  size={80}
+                  className="absolute top-10 right-10 text-white opacity-20 animate-spin-slow"
+                />
              </div>
           </FadeIn>
         </div>
@@ -126,13 +150,21 @@ export default function MusigrammaPage() {
 
         {/* Step cards orizzontali */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[
+          {(
+            [
             {
               step: "01",
               title: "Tocca l'armonia",
               description:
                 "Il dispositivo fisico brevettato usa forme geometriche e relazioni spaziali per visualizzare accordi, intervalli e rivolti. La teoria musicale non si legge. Si tocca.",
               tag: "Phygital 1.0",
+              icon: (
+                <HandTap
+                  weight="duotone"
+                  size={32}
+                  className="text-[#00ced1] mb-4"
+                />
+              ),
             },
             {
               step: "02",
@@ -140,6 +172,13 @@ export default function MusigrammaPage() {
               description:
                 "L'app iOS/Android non è un lettore di contenuti. È un tutor adattivo: riconosce gradi e intervalli, personalizza il percorso e ti accompagna al livello successivo.",
               tag: "Vibe Coding & AI",
+              icon: (
+                <Robot
+                  weight="duotone"
+                  size={32}
+                  className="text-indigo-400 mb-4"
+                />
+              ),
             },
             {
               step: "03",
@@ -147,14 +186,29 @@ export default function MusigrammaPage() {
               description:
                 "Il manuale — cartaceo e digitale — è progettato per tutti: studenti standard, DSA e non vedenti. Inclusività radicale non è un'aggiunta. È nella struttura del metodo.",
               tag: "Inclusività Radicale",
+              icon: (
+                <BookOpenText
+                  weight="duotone"
+                  size={32}
+                  className="text-amber-400 mb-4"
+                />
+              ),
             },
-          ].map((card, i) => (
+          ] satisfies {
+            step: string;
+            title: string;
+            description: string;
+            tag: string;
+            icon: React.ReactNode;
+          }[]
+          ).map((card, i) => (
             <FadeIn key={i} delay={i * 0.15}>
               <div className="relative flex flex-col h-full p-8 rounded-3xl bg-white/5 border border-white/5 hover:border-[#00ced1]/40 transition-all group overflow-hidden">
                 {/* Numero sfondo decorativo */}
                 <span className="absolute top-4 right-6 text-8xl font-black text-white/5 select-none group-hover:text-[#00ced1]/10 transition-colors">
                   {card.step}
                 </span>
+                {card.icon}
                 <span className="inline-block mb-4 py-1 px-3 rounded-full bg-[#00ced1]/10 border border-[#00ced1]/20 text-[#00ced1] text-xs font-bold uppercase tracking-widest w-fit">
                   {card.tag}
                 </span>
@@ -181,33 +235,43 @@ export default function MusigrammaPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
               {
-                icon: "🖐️",
+                icon: <HandPointing weight="duotone" size={36} className="text-[#00ced1]" />,
                 title: "Phygital 1.0",
                 headline: "L'unico dispositivo fisico al mondo di questo tipo",
                 body: "Nessun software può replicare l'apprendimento cinestetico. Girare, toccare, vedere le geometrie dell'armonia attiva meccanismi cognitivi che il video da solo non raggiunge. Protetto da brevetto UE.",
+                accent: "border-[#00ced1]/30 hover:border-[#00ced1]/60",
+                hoverBg: "hover:bg-[#00ced1]/5",
               },
               {
-                icon: "⚡",
+                icon: <Lightning weight="duotone" size={36} className="text-amber-400" />,
                 title: "Metodo 10x",
                 headline: "Fino a 10 volte più veloce dei metodi tradizionali",
                 body: "Non è gamification superficiale. È comprensione profonda e strutturale della grammatica musicale. Meno nozionismo, più padronanza reale — in una frazione del tempo.",
+                accent: "border-amber-500/30 hover:border-amber-400/60",
+                hoverBg: "hover:bg-amber-500/5",
               },
               {
-                icon: "♿",
+                icon: <HandHeart weight="duotone" size={36} className="text-rose-400" />,
                 title: "Inclusività Radicale",
                 headline: "Nativamente pensato per DSA e non vedenti",
                 body: "Il supporto Braille e il design inclusivo non sono stati aggiunti in un secondo momento. Sono nella struttura originale del prodotto. La musica è davvero per tutti.",
+                accent: "border-rose-500/30 hover:border-rose-400/60",
+                hoverBg: "hover:bg-rose-500/5",
               },
               {
-                icon: "🤖",
+                icon: <Robot weight="duotone" size={36} className="text-indigo-400" />,
                 title: "Vibe Coding & AI",
                 headline: "Un tutor adattivo disponibile 24/7",
                 body: "L'integrazione con OpenAI API permette all'app di riconoscere automaticamente gradi, intervalli e rivolti e di personalizzare ogni percorso utente in tempo reale.",
+                accent: "border-indigo-500/30 hover:border-indigo-400/60",
+                hoverBg: "hover:bg-indigo-500/5",
               },
             ].map((adv, i) => (
               <FadeIn key={i} delay={i * 0.1}>
-                <div className="flex gap-6 p-8 rounded-3xl bg-white/5 border border-white/5 hover:border-[#00ced1]/40 hover:bg-[#00ced1]/5 transition-all group">
-                  <div className="text-4xl shrink-0 mt-1">{adv.icon}</div>
+                <div className={`flex gap-6 p-8 rounded-3xl bg-white/5 border ${adv.accent} ${adv.hoverBg} transition-all group`}>
+                  <div className="shrink-0 mt-1 w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    {adv.icon}
+                  </div>
                   <div>
                     <span className="text-[#00ced1] text-xs font-bold uppercase tracking-widest mb-1 block">
                       {adv.title}
@@ -262,7 +326,7 @@ export default function MusigrammaPage() {
                 <div className="absolute inset-8 border border-[#00ced1]/10 rounded-full animate-[spin_10s_linear_infinite]" />
                 
                 <div className="bg-[#021a1a] p-6 rounded-full border border-[#00ced1]/40 shadow-[0_0_50px_rgba(0,206,209,0.3)] z-10 group-hover:scale-110 transition-transform duration-500">
-                  <Network size={64} className="text-[#00ced1]" />
+                  <Network weight="duotone" size={64} className="text-[#00ced1]" />
                 </div>
               </div>
             </div>
@@ -284,7 +348,7 @@ export default function MusigrammaPage() {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-3 px-10 py-5 bg-[#00ced1] text-black font-bold rounded-full hover:bg-[#00a8a8] hover:scale-105 transition-all shadow-[0_0_40px_rgba(0,206,209,0.3)]"
           >
-            Vai al sito ufficiale <ExternalLink size={20}/>
+            Vai al sito ufficiale <ArrowSquareOut size={20}/>
           </a>
         </FadeIn>
       </section>

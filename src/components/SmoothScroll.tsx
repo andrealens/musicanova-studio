@@ -5,10 +5,12 @@ import Lenis from 'lenis'
 export default function SmoothScroll() {
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 0.8, // Durata della "frenata" (più alto = più morbido)
-      easing: (t) => 1 - Math.pow(1 - t, 3), // Curva più immediata
+      duration: 1.1,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
-      touchMultiplier: 2, // Se vuoi scroll più veloce su trackpad
+      wheelMultiplier: 0.9,
+      touchMultiplier: 1.5,
+      infinite: false,
     })
 
     function raf(time: number) {

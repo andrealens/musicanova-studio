@@ -1,7 +1,14 @@
 "use client";
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { Music, Heart, Users, Calendar, Mic2, MapPin } from 'lucide-react';
+import {
+  MusicNote,
+  Heart,
+  Users,
+  CalendarBlank,
+  Microphone,
+  MapPin,
+} from "@phosphor-icons/react";
 
 // Componente per le sezioni di testo che appaiono dal basso
 const FadeInSection = ({ children, delay = 0 }: { children: React.ReactNode, delay?: number }) => {
@@ -69,7 +76,7 @@ export default function ChiSiamo() {
           <div className="md:text-right">
             <FadeInSection>
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-indigo-900/20 text-indigo-400 mb-6 border border-indigo-500/20">
-                <Calendar size={32} />
+                <CalendarBlank weight="duotone" size={32} />
               </div>
               <h2 className="text-3xl font-bold mb-4">Le Radici</h2>
               <p className="text-gray-400 leading-relaxed">
@@ -99,7 +106,7 @@ export default function ChiSiamo() {
           <div className="order-1 md:order-2">
              <FadeInSection>
                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-red-900/20 text-red-400 mb-6 border border-red-500/20">
-                  <Users size={32} />
+                  <Users weight="duotone" size={32} />
                 </div>
                 <h2 className="text-3xl font-bold mb-4">Il Duo</h2>
                 <p className="text-gray-400 leading-relaxed">
@@ -118,7 +125,10 @@ export default function ChiSiamo() {
 
         <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
           <FadeInSection>
-            <Music className="w-20 h-20 text-indigo-500 mx-auto mb-8 opacity-80" />
+            <MusicNote
+              weight="duotone"
+              className="w-20 h-20 text-indigo-500 mx-auto mb-8 opacity-80"
+            />
             <h2 className="text-4xl md:text-6xl font-bold mb-8">Da 8 a 80 Anni.</h2>
             <p className="text-xl md:text-2xl text-gray-300 leading-relaxed mb-12">
               &quot;Il nostro allievo più grande ha proprio 80 anni, ed è una gioia vederlo suonare!&quot;
@@ -146,7 +156,7 @@ export default function ChiSiamo() {
       <section className="py-32 px-6 max-w-5xl mx-auto">
         <div className="bg-gradient-to-br from-[#111] to-[#080808] border border-white/10 rounded-[3rem] p-10 md:p-16 relative overflow-hidden">
            <div className="absolute top-0 right-0 p-10 opacity-10">
-              <Heart size={200} />
+              <Heart weight="duotone" size={200} />
            </div>
            
            <FadeInSection>
@@ -193,7 +203,7 @@ export default function ChiSiamo() {
                      <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors" />
                      <div className="absolute center inset-0 flex items-center justify-center">
                         <div className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 group-hover:scale-110 transition-transform">
-                           <Mic2 className="text-white w-8 h-8" />
+                           <Microphone className="text-white w-8 h-8" />
                         </div>
                      </div>
                   </div>

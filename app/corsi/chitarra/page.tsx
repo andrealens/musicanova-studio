@@ -3,7 +3,7 @@ import React, { Suspense, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Canvas } from '@react-three/fiber';
 import { motion } from 'framer-motion';
-import { ArrowRight, Mic2, Zap, Music2 } from 'lucide-react';
+import { ArrowRight, Microphone, Lightning, MusicNotes } from "@phosphor-icons/react";
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { useIsMobile } from '@/src/hooks/useIsMobile';
@@ -61,6 +61,8 @@ export default function ChitarraPage() {
             className="absolute inset-0 z-[10] pointer-events-auto"
           >
             <Canvas
+              frameloop="always"
+              performance={{ min: 0.5 }}
               gl={{ antialias: true, alpha: true }}
               camera={{ position: [0, 0, 16], fov: 40 }}
               style={{ background: 'transparent' }}
@@ -146,17 +148,17 @@ export default function ChitarraPage() {
             {
               t: "Ritmica Solida",
               d: "Groove, strumming e timing. Impara a portare il tempo come un batterista.",
-              icon: Zap,
+              icon: Lightning,
             },
             {
               t: "Solista & Espressione",
               d: "Scale, bending, vibrato. L'arte di far 'cantare' lo strumento.",
-              icon: Mic2,
+              icon: Microphone,
             },
             {
               t: "Sound & Gear",
               d: "Come gestire amplificatori, pedali ed effettistica per trovare il tuo suono.",
-              icon: Music2,
+              icon: MusicNotes,
             },
           ].map((item, i) => (
             <motion.div
@@ -168,7 +170,7 @@ export default function ChitarraPage() {
               className="group p-8 rounded-3xl bg-white/5 backdrop-blur-2xl border border-white/10 hover:border-red-500/30 transition-all hover:bg-white/10"
             >
               <div className="w-14 h-14 rounded-2xl bg-red-900/10 flex items-center justify-center text-red-500 mb-6 group-hover:scale-110 transition-transform">
-                <item.icon size={28} />
+                <item.icon size={28} weight="duotone" />
               </div>
               <h3 className="text-2xl font-bold mb-4 group-hover:text-red-400 transition-colors">
                 {item.t}

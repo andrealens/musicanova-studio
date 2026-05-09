@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { Canvas } from '@react-three/fiber';
 import { Environment } from '@react-three/drei';
 import { motion } from 'framer-motion';
-import { ArrowRight, Music4, Zap, Star } from 'lucide-react';
+import { ArrowRight, MusicNotes, Lightning, Star } from "@phosphor-icons/react";
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { usePathname } from 'next/navigation';
@@ -35,7 +35,13 @@ export default function PianofortePage() {
             transition={{ duration: 1.2, delay: 0.3 }}
             className="absolute inset-0 z-10 pointer-events-auto"
           >
-            <Canvas key={pathname} gl={{ antialias: true, alpha: true }} camera={{ position: [0, 2, 9], fov: 45 }}>
+            <Canvas
+              key={pathname}
+              frameloop="always"
+              performance={{ min: 0.5 }}
+              gl={{ antialias: true, alpha: true }}
+              camera={{ position: [0, 2, 9], fov: 45 }}
+            >
               <ambientLight intensity={0.7} />
               <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1.5} />
               <Suspense fallback={null}>
@@ -105,8 +111,8 @@ export default function PianofortePage() {
       <section id="dettagli" className="relative z-20 py-24 px-6 md:px-10 bg-transparent border-t border-white/10">
          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { t: "Tecnica", d: "Postura, agilità e tocco. Le basi solide per ogni genere.", i: Zap },
-              { t: "Repertorio", d: "Da Bach ai Coldplay. Suoniamo ciò che ami davvero.", i: Music4 },
+              { t: "Tecnica", d: "Postura, agilità e tocco. Le basi solide per ogni genere.", i: Lightning },
+              { t: "Repertorio", d: "Da Bach ai Coldplay. Suoniamo ciò che ami davvero.", i: MusicNotes },
               { t: "Creatività", d: "Composizione e improvvisazione fin dalle prime lezioni.", i: Star }
             ].map((item, i) => (
                <motion.div 
@@ -118,7 +124,7 @@ export default function PianofortePage() {
                 className="group p-8 rounded-3xl bg-white/5 backdrop-blur-2xl border border-white/5 hover:border-indigo-500/30 transition-all hover:bg-white/10"
                >
                  <div className="w-14 h-14 rounded-2xl bg-indigo-900/10 flex items-center justify-center text-indigo-500 mb-6 group-hover:scale-110 transition-transform">
-                    <item.i size={28}/>
+                    <item.i size={28} weight="duotone"/>
                  </div>
                  <h3 className="text-2xl font-bold mb-4 group-hover:text-indigo-400 transition-colors">
                    {item.t}

@@ -2,7 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from "@phosphor-icons/react";
 
 const pages = [
   { path: '/', label: 'Home' },
@@ -12,6 +12,7 @@ const pages = [
   { path: '/musigramma', label: 'Musigramma' },
   { path: '/band-live', label: 'Band & Live' },
   { path: '/chi-siamo', label: 'Chi Siamo' },
+  { path: '/contatti', label: 'Contatti' },
 ];
 
 export default function PageNavigation() {

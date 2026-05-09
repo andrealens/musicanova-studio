@@ -1,10 +1,18 @@
 "use client";
 import React, { useMemo, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { 
-  Music, Mic2, Drum, Sparkles, Wine, Coffee, 
-  PartyPopper, Warehouse, PlayCircle, Calendar 
-} from 'lucide-react';
+import {
+  MusicNote,
+  Microphone,
+  Cylinder,
+  Sparkle,
+  Wine,
+  Coffee,
+  Confetti,
+  Warehouse,
+  PlayCircle,
+  CalendarBlank,
+} from "@phosphor-icons/react";
 
 // --- COMPONENTI UI & ANIMAZIONI ---
 
@@ -137,7 +145,11 @@ export default function BandLivePage() {
             <img src="https://images.unsplash.com/photo-1525201548942-d8732f6617a0?q=80&w=1200" alt="Chitarra Blues" className="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-110" />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-red-900/40 to-transparent opacity-90" />
             <div className="absolute bottom-0 left-0 p-10 md:p-16 relative z-10">
-              <Mic2 className="text-red-500 mb-4" size={40} />
+              <Microphone
+                weight="duotone"
+                className="text-red-500 mb-4"
+                size={40}
+              />
               <h3 className="text-3xl font-bold mb-4 text-red-400 uppercase italic">Chitarra e Voce</h3>
               <p className="text-gray-300 leading-relaxed max-w-md">
                 Un sound blues viscerale: groove, slide, fingerpicking e una voce che racconta storie. Il linguaggio dell&apos;anima, suonato con la stessa passione dell&apos;insegnamento.
@@ -151,7 +163,11 @@ export default function BandLivePage() {
             <img src="https://images.unsplash.com/photo-1552422535-c45813c61732?q=80&w=1200" alt="Piano Jazz" className="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-110" />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-indigo-900/40 to-transparent opacity-90" />
             <div className="absolute bottom-0 left-0 p-10 md:p-16 relative z-10">
-              <Music className="text-indigo-500 mb-4" size={40} />
+              <MusicNote
+                weight="duotone"
+                className="text-indigo-500 mb-4"
+                size={40}
+              />
               <h3 className="text-3xl font-bold mb-4 text-indigo-400 uppercase italic">Pianoforte</h3>
               <p className="text-gray-300 leading-relaxed max-w-md">
                 Una formazione jazz solida: armonie ricercate e tocco raffinato. Dialoga con la chitarra, crea tensioni e apre spazi per l&apos;improvvisazione.
@@ -184,12 +200,15 @@ export default function BandLivePage() {
               </div>
               <div className="p-10 flex-grow flex flex-col justify-between">
                 <div>
-                  <h3 className="text-2xl font-bold mb-2 flex items-center gap-2"><Wine className="text-indigo-400" size={24} /> Duo Acustico</h3>
+                  <h3 className="text-2xl font-bold mb-2 flex items-center gap-2">
+                    <Wine weight="duotone" className="text-indigo-400" size={24} />{" "}
+                    Duo Acustico
+                  </h3>
                   <p className="text-gray-400 text-sm mb-8">Chitarra, Voce e Piano. La formula perfetta per atmosfere rilassate ed eleganti.</p>
                   <ul className="space-y-4 mb-8">
                     <li className="flex items-start gap-3 text-gray-300"><Coffee size={18} className="text-indigo-500 mt-1 shrink-0"/> Locali, wine bar e dehors estivi.</li>
-                    <li className="flex items-start gap-3 text-gray-300"><Sparkles size={18} className="text-indigo-500 mt-1 shrink-0"/> Eventi privati, cene aziendali, matrimoni.</li>
-                    <li className="flex items-start gap-3 text-gray-300"><Music size={18} className="text-indigo-500 mt-1 shrink-0"/> Aperitivi musicali con classe.</li>
+                    <li className="flex items-start gap-3 text-gray-300"><Sparkle size={18} className="text-indigo-500 mt-1 shrink-0"/> Eventi privati, cene aziendali, matrimoni.</li>
+                    <li className="flex items-start gap-3 text-gray-300"><MusicNote size={18} className="text-indigo-500 mt-1 shrink-0"/> Aperitivi musicali con classe.</li>
                   </ul>
                 </div>
               </div>
@@ -207,12 +226,15 @@ export default function BandLivePage() {
               </div>
               <div className="p-10 flex-grow flex flex-col justify-between">
                 <div>
-                  <h3 className="text-2xl font-bold mb-2 flex items-center gap-2"><Drum className="text-red-400" size={24} /> Trio (con Batteria)</h3>
+                  <h3 className="text-2xl font-bold mb-2 flex items-center gap-2">
+                    <Cylinder weight="duotone" className="text-red-400" size={24} />{" "}
+                    Trio (con Batteria)
+                  </h3>
                   <p className="text-gray-400 text-sm mb-8">Quando serve più spinta. La batteria completa il sound e apre nuove possibilità.</p>
                   <ul className="space-y-4 mb-8">
                     <li className="flex items-start gap-3 text-gray-300"><Warehouse size={18} className="text-red-500 mt-1 shrink-0"/> Concerti su palchi, festival e rassegne.</li>
-                    <li className="flex items-start gap-3 text-gray-300"><PartyPopper size={18} className="text-red-500 mt-1 shrink-0"/> Feste di piazza, coinvolgimento ritmato.</li>
-                    <li className="flex items-start gap-3 text-gray-300"><Mic2 size={18} className="text-red-500 mt-1 shrink-0"/> Jazz club, blues bar e live venue.</li>
+                    <li className="flex items-start gap-3 text-gray-300"><Confetti size={18} className="text-red-500 mt-1 shrink-0"/> Feste di piazza, coinvolgimento ritmato.</li>
+                    <li className="flex items-start gap-3 text-gray-300"><Microphone size={18} className="text-red-500 mt-1 shrink-0"/> Jazz club, blues bar e live venue.</li>
                   </ul>
                 </div>
               </div>
@@ -283,7 +305,11 @@ export default function BandLivePage() {
          
          <div className="max-w-4xl mx-auto text-center relative z-10">
            <FadeIn>
-             <Mic2 size={48} className="text-red-500 mx-auto mb-6" />
+             <Microphone
+                weight="duotone"
+                size={48}
+                className="text-red-500 mx-auto mb-6"
+              />
              <h2 className="text-5xl md:text-6xl font-bold mb-8 tracking-tight">Vuoi la nostra musica <br/> al tuo evento?</h2>
              <p className="text-xl text-gray-300 leading-relaxed mb-12 max-w-2xl mx-auto">
                Organizzi un matrimonio, una festa privata o cerchi una band per il tuo locale? 
@@ -292,7 +318,7 @@ export default function BandLivePage() {
 
              <div className="flex flex-col md:flex-row justify-center gap-6 mb-16">
                <button className="px-10 py-5 bg-red-600 text-white font-bold rounded-full hover:bg-red-500 transition-all shadow-[0_0_40px_rgba(220,38,38,0.4)] flex items-center justify-center gap-3 hover:scale-105">
-                 <Calendar size={20} /> Contattaci per un Ingaggio
+                 <CalendarBlank size={20} /> Contattaci per un Ingaggio
                </button>
              </div>
 

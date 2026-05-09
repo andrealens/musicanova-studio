@@ -1,27 +1,70 @@
 "use client";
-import React, { Suspense, useRef } from 'react';
+import React, { Suspense, useRef, useState, useCallback, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { ContactShadows, Environment, PresentationControls } from '@react-three/drei';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { 
-  ArrowRight, Sparkles, Music, Laptop, GraduationCap, MapPin, Coffee 
-} from 'lucide-react';
+import { motion } from 'framer-motion';
+import {
+  ArrowRight,
+  Sparkle,
+  MusicNote,
+  Laptop,
+  GraduationCap,
+  MapPin,
+  Coffee,
+} from "@phosphor-icons/react";
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import CassetteModel from '../src/components/CassetteModel';
+import { MasonryItem } from '../src/components/Masonry';
 import { useIsMobile } from '@/src/hooks/useIsMobile';
+
+const Masonry = dynamic(() => import('../src/components/Masonry'), {
+  ssr: false,
+  loading: () => <div className="w-full h-64 animate-pulse bg-white/5 rounded-2xl" />,
+});
+const GalleryLightbox = dynamic(() => import('../src/components/GalleryLightbox'), {
+  ssr: false,
+});
 
 const cardStyle = "bg-white/5 backdrop-blur-3xl border border-white/10 shadow-2xl rounded-[3rem] transition-all duration-300";
 
-// COMPONENTE AGGIORNATO: Ora accetta titolo e descrizione per gestire testi lunghi con eleganza
-const ScrollingBlurText = ({ title, description }: { title: string | React.ReactNode, description?: React.ReactNode }) => {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const blur = useTransform(scrollYProgress, [0, 0.4, 0.6, 1], [10, 0, 0, 10]);
-  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0]);
+const ScrollingBlurText = ({
+  title,
+  description
+}: {
+  title: string | React.ReactNode,
+  description?: React.ReactNode
+}) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold: 0.2 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <div className="py-32 px-6 max-w-4xl mx-auto text-center flex flex-col items-center gap-10 pointer-events-auto relative z-20 bg-transparent">
-      <motion.div ref={ref} style={{ filter: useTransform(blur, (v) => `blur(${v}px)`), opacity }}>
+    <div
+      ref={ref}
+      className="py-32 px-6 max-w-4xl mx-auto text-center flex flex-col items-center gap-10"
+    >
+      <div
+        style={{
+          opacity: isVisible ? 1 : 0,
+          transition: 'opacity 0.8s ease',
+          willChange: 'opacity',
+        }}
+      >
         <h2 className="text-3xl md:text-5xl font-bold leading-tight text-white mb-8">
           {title}
         </h2>
@@ -30,20 +73,65 @@ const ScrollingBlurText = ({ title, description }: { title: string | React.React
             {description}
           </p>
         )}
-      </motion.div>
+      </div>
     </div>
   );
 };
 
 export default function Home() {
   const isMobile = useIsMobile();
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
+  const [isReady, setIsReady] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted) return;
+    const timer = setTimeout(() => {
+      setIsReady(true);
+    }, 800);
+    return () => clearTimeout(timer);
+  }, [isMounted]);
+
+  const openLightbox = useCallback((item: MasonryItem) => {
+    const index = galleryItems.findIndex(i => i.id === item.id);
+    setLightboxIndex(index);
+  }, []);
+
+  const closeLightbox = useCallback(() => setLightboxIndex(null), []);
+  const prevImage = useCallback(() => setLightboxIndex(i => (i !== null && i > 0 ? i - 1 : i)), []);
+  const nextImage = useCallback(() => setLightboxIndex(i => (i !== null && i < galleryItems.length - 1 ? i + 1 : i)), []);
+  const galleryItems: MasonryItem[] = [
+    { id: '08', img: '/home_gallery/08.webp', height: 520 },
+    { id: '09', img: '/home_gallery/09.webp', height: 420 },
+    { id: '14', img: '/home_gallery/14.webp', height: 560 },
+    { id: '15', img: '/home_gallery/15.webp', height: 460 },
+    { id: '16', img: '/home_gallery/16.webp', height: 500 },
+    { id: '17', img: '/home_gallery/17.webp', height: 440 },
+    { id: '18', img: '/home_gallery/18.webp', height: 520 },
+    { id: '19', img: '/home_gallery/19.webp', height: 480 },
+    { id: '20', img: '/home_gallery/20.webp', height: 560 },
+    { id: '22', img: '/home_gallery/22.webp', height: 420 },
+    { id: '24', img: '/home_gallery/24.webp', height: 500 },
+    { id: '26', img: '/home_gallery/26.webp', height: 460 },
+    { id: '41', img: '/home_gallery/41.webp', height: 540 },
+    { id: '57', img: '/home_gallery/57.webp', height: 480 },
+    { id: '58', img: '/home_gallery/58.webp', height: 520 },
+    { id: '60', img: '/home_gallery/60.webp', height: 440 },
+    { id: '64', img: '/home_gallery/64.webp', height: 500 },
+    { id: '65', img: '/home_gallery/65.webp', height: 560 },
+    { id: '72', img: '/home_gallery/72.webp', height: 420 },
+    { id: '73', img: '/home_gallery/73.webp', height: 480 },
+  ];
 
   return (
     <div className="w-full bg-transparent text-white selection:bg-red-500 selection:text-white">
       
       {/* --- HERO SECTION (STICKY) --- */}
-      <section className="relative w-full min-h-screen flex items-center overflow-hidden z-0">
-        {!isMobile && (
+      <section className="relative w-full min-h-screen flex items-center overflow-hidden z-0 will-change-transform">
+        {!isMobile && isMounted && (
           <div className="absolute inset-0 z-0 pointer-events-auto">
             <motion.div
               initial={{ opacity: 0, y: 28 }}
@@ -51,7 +139,12 @@ export default function Home() {
               transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
               className="w-full h-full"
             >
-              <Canvas camera={{ position: [0, 0, 5], fov: 25 }} dpr={[1, 2]}>
+              <Canvas
+                frameloop="always"
+                performance={{ min: 0.5 }}
+                camera={{ position: [0, 0, 5], fov: 25 }}
+                dpr={[1, 2]}
+              >
                 <ambientLight intensity={1.5} />
                 <spotLight position={[10, 10, 10]} intensity={2} angle={0.3} penumbra={1} />
                 <Suspense fallback={null}>
@@ -128,16 +221,25 @@ export default function Home() {
       </section>
 
       {/* --- CONTENT COVER --- */}
-      <div className="relative z-20 bg-transparent">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isReady ? 1 : 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+      >
+      <div className="relative z-20 bg-transparent will-change-transform">
 
         <section id="corsi" className="pt-24 pb-16 px-6 md:px-10 max-w-7xl mx-auto pointer-events-auto relative z-20">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
             
             {/* BOX 1: MUSIGRAMMA */}
-            <div className={`md:col-span-8 md:row-span-2 ${cardStyle} p-12 relative overflow-hidden group border-[#00ced1]/20 hover:border-[#00ced1]/60 flex flex-col justify-between min-h-[500px] bg-transparent`}>
+            <div className={`md:col-span-8 md:row-span-2 ${cardStyle} p-12 relative overflow-hidden group border-[#00ced1]/20 hover:border-[#00ced1]/60 flex flex-col justify-between min-h-[500px] bg-[#0A0A0A]`}>
                <div>
                   <div className="flex items-center gap-3 mb-6">
-                    <Sparkles className="text-[#00ced1]" size={32} />
+                    <Sparkle
+                      weight="duotone"
+                      className="text-[#00ced1]"
+                      size={32}
+                    />
                     <span className="px-3 py-1 rounded-full bg-[#00ced1]/10 text-[#00ced1] text-xs font-bold uppercase tracking-widest border border-[#00ced1]/20">Esclusiva</span>
                   </div>
                   <h3 className="text-4xl md:text-5xl font-bold mb-6 italic text-white">Metodo Musigramma™</h3>
@@ -170,8 +272,12 @@ export default function Home() {
             </div>
             
             {/* BOX 2: I CORSI */}
-            <div className={`md:col-span-4 ${cardStyle} p-10 flex flex-col justify-between border-white/10 group hover:border-white/30 bg-transparent`}>
-               <GraduationCap className="text-white mb-6 group-hover:scale-110 transition-transform duration-300" size={32} />
+            <div className={`md:col-span-4 ${cardStyle} p-10 flex flex-col justify-between border-white/10 group hover:border-white/30 bg-[#0A0A0A]`}>
+               <GraduationCap
+                  weight="duotone"
+                  className="text-white mb-6 group-hover:scale-110 transition-transform duration-300"
+                  size={32}
+                />
                <div>
                  <h4 className="text-2xl font-bold mb-4 uppercase italic text-white">I Corsi</h4>
                  <div className="flex flex-col gap-3">
@@ -188,8 +294,12 @@ export default function Home() {
             </div>
 
             {/* BOX 3: COMMUNITY */}
-            <div className={`md:col-span-4 ${cardStyle} p-10 flex flex-col justify-between border-indigo-500/20 group hover:border-indigo-500/50 bg-transparent`}>
-               <Music className="text-indigo-500 mb-6 group-hover:scale-110 transition-transform duration-300" size={32} />
+            <div className={`md:col-span-4 ${cardStyle} p-10 flex flex-col justify-between border-indigo-500/20 group hover:border-indigo-500/50 bg-[#0A0A0A]`}>
+               <MusicNote
+                  weight="duotone"
+                  className="text-indigo-500 mb-6 group-hover:scale-110 transition-transform duration-300"
+                  size={32}
+                />
                <div>
                  <h4 className="text-2xl font-bold mb-2 uppercase italic text-white">All Ages</h4>
                  <p className="text-gray-400 text-sm">Dai 6 agli 80 anni. La musica non ha età, solo passione.</p>
@@ -197,10 +307,10 @@ export default function Home() {
             </div>
 
             {/* BOX 4: TECH SPECS */}
-            <div className={`md:col-span-12 ${cardStyle} p-10 border-white/5 flex flex-col md:flex-row items-center justify-between gap-8 bg-transparent`}>
+            <div className={`md:col-span-12 ${cardStyle} p-10 border-white/5 flex flex-col md:flex-row items-center justify-between gap-8 bg-[#0A0A0A]`}>
               <div className="flex items-center gap-6">
                 <div className="w-16 h-16 rounded-2xl bg-[#111] flex items-center justify-center text-white border border-white/10">
-                  <Laptop size={32} />
+                  <Laptop weight="duotone" size={32} />
                 </div>
                 <div>
                   <h4 className="text-2xl font-bold text-white mb-1">Strumentazione in Sede</h4>
@@ -218,18 +328,23 @@ export default function Home() {
 
         {/* --- LA TUA SECONDA CASA --- */}
         <section className="py-16 px-6 md:px-10 max-w-5xl mx-auto relative z-20 pointer-events-auto">
-          <motion.div 
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className={`${cardStyle} p-10 md:p-16 border-amber-500/20 relative overflow-hidden group`}
+          {isMounted && (
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 1.0,
+              ease: [0.16, 1, 0.3, 1],
+              delay: 1.2
+            }}
+            style={{ willChange: 'transform, opacity' }}
+            className={`${cardStyle} p-10 md:p-16 border-amber-500/20 bg-gradient-to-br from-[#0A0A0A] via-[#120a05] to-[#1a1005] relative overflow-hidden group`}
           >
              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-amber-600/10 blur-[120px] rounded-full pointer-events-none transition-opacity duration-700 group-hover:opacity-70 opacity-40" />
 
              <div className="relative z-10 flex flex-col items-center text-center">
                 <span className="text-amber-500 font-bold tracking-widest text-xs md:text-sm uppercase mb-6 flex items-center gap-2 bg-amber-500/10 px-4 py-2 rounded-full border border-amber-500/20">
-                  <MapPin size={16} /> LA TUA SECONDA CASA A PONTICELLA
+                  <MapPin weight="duotone" size={16} /> LA TUA SECONDA CASA A PONTICELLA
                 </span>
                 
                 <h2 className="text-4xl md:text-6xl font-bold mb-8 text-white leading-tight">
@@ -252,13 +367,18 @@ export default function Home() {
                 </div>
 
                 <div className="mt-12 inline-flex items-center gap-3 px-6 py-4 rounded-full bg-white/5 border border-white/10 backdrop-blur-md shadow-xl hover:bg-white/10 transition-colors">
-                  <Coffee className="text-amber-400" size={20} />
+                  <Coffee
+                    weight="duotone"
+                    className="text-amber-400"
+                    size={20}
+                  />
                   <p className="text-sm md:text-base text-gray-200 font-medium tracking-wide">
                     Vieni a conoscerci in studio. Il caffè è sempre pronto.
                   </p>
                 </div>
              </div>
           </motion.div>
+          )}
         </section>
 
         {/* --- SCROLLING TEXT: METODO MUSIGRAMMA EXPANDED --- */}
@@ -269,6 +389,41 @@ export default function Home() {
             </>
           }
           description="Un ecosistema educativo rivoluzionario che rende l&apos;armonia visibile e tangibile. Dimentica i vecchi tomi impolverati: il nostro percorso integra un manuale innovativo ricco di immagini, una web app interattiva e un dispositivo fisico esclusivo. Attraverso geometrie intuitive, trasformiamo concetti astratti in pura comprensione musicale, permettendoti di &apos;toccare&apos; le note prima ancora di suonarle."
+        />
+
+        <section className="py-16 px-6 md:px-10 max-w-7xl mx-auto relative z-20 pointer-events-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.1 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="text-center mb-12"
+          >
+            <span className="text-indigo-400 font-mono uppercase tracking-widest text-xs mb-3 block">
+              Il nostro Studio
+            </span>
+            <h2 className="text-4xl md:text-5xl font-bold text-white">
+              La nostra <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-[#00ced1]">casa</span>.
+            </h2>
+          </motion.div>
+
+          <Masonry
+            items={galleryItems}
+            animateFrom="bottom"
+            stagger={0.04}
+            scaleOnHover
+            hoverScale={0.97}
+            blurToFocus={false}
+            onItemClick={openLightbox}
+          />
+        </section>
+
+        <GalleryLightbox
+          items={galleryItems}
+          currentIndex={lightboxIndex}
+          onClose={closeLightbox}
+          onPrev={prevImage}
+          onNext={nextImage}
         />
 
         {/* --- LIVE SECTION (SPOSTATA IN FONDO) --- */}
@@ -290,14 +445,19 @@ export default function Home() {
                  </Link>
                </div>
                <div className="relative aspect-video rounded-3xl overflow-hidden border border-white/10 group shadow-2xl rotate-1 hover:rotate-0 transition-transform duration-500">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                 <img src="https://images.unsplash.com/photo-1514320298574-2b9d53b05423?q=80&w=1200" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Live Performance" />
+                <img
+                  src="/home_gallery/63.webp"
+                  className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110"
+                  alt="MusicaNova Band Live"
+                  decoding="async"
+                />
                </div>
              </div>
           </div>
         </section>
 
       </div>
+      </motion.div>
     </div>
   );
 }

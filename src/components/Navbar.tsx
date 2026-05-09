@@ -72,6 +72,7 @@ export default function Navbar() {
             <Link href="/musigramma" className="hover:text-white transition-colors">Musigramma</Link>
             <Link href="/band-live" className="hover:text-white transition-colors">Band & Live</Link>
             <Link href="/chi-siamo" className="hover:text-white transition-colors">Chi Siamo</Link>
+            <Link href="/contatti" className="hover:text-white transition-colors">Contatti</Link>
           </div>
 
           {/* WRAPPER BOTTONI DESTRA */}
@@ -110,6 +111,7 @@ export default function Navbar() {
         <Link href="/musigramma" onClick={() => setIsOpen(false)} className="text-2xl font-bold text-white">Musigramma</Link>
         <Link href="/band-live" onClick={() => setIsOpen(false)} className="text-2xl font-bold text-white">Band & Live</Link>
         <Link href="/chi-siamo" onClick={() => setIsOpen(false)} className="text-2xl font-bold text-white">Chi Siamo</Link>
+        <Link href="/contatti" onClick={() => setIsOpen(false)} className="text-2xl font-bold text-[#00ced1]">Contatti</Link>
       </div>
     </>
   );
