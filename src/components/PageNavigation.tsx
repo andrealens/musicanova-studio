@@ -7,6 +7,7 @@ import { ArrowLeft, ArrowRight } from "@phosphor-icons/react";
 const pages = [
   { path: '/', label: 'Home' },
   { path: '/la-scuola', label: 'La Scuola' },
+  { path: '/corsi', label: 'Corsi' },
   { path: '/corsi/pianoforte', label: 'Pianoforte' },
   { path: '/corsi/chitarra', label: 'Chitarra' },
   { path: '/musigramma', label: 'Musigramma' },

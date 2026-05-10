@@ -248,12 +248,12 @@ export default function LaScuola() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {[
-            "https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=800",
-            "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=800",
-            "https://images.unsplash.com/photo-1524678606370-a47ad25cb82a?w=800",
-            "https://images.unsplash.com/photo-1460723237483-7a6dc9d0b212?w=800",
-            "https://images.unsplash.com/photo-1551373884-8a0750074def?w=800",
-            "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=800"
+            "/scuola_gallery/02.webp",
+            "/scuola_gallery/12.webp",
+            "/scuola_gallery/27.webp",
+            "/scuola_gallery/31.webp",
+            "/scuola_gallery/35.webp",
+            "/scuola_gallery/45.webp",
           ].map((imgUrl, i) => (
             <FadeIn key={i} delay={0.1 * i}>
               <div className="group relative h-[350px] rounded-[2.5rem] overflow-hidden bg-[#111] border border-white/5 hover:border-indigo-500/50 transition-colors cursor-pointer">
@@ -263,6 +263,8 @@ export default function LaScuola() {
                 <img
                   src={imgUrl}
                   alt={`Gallery MusicaNova ${i + 1}`}
+                  loading="lazy"
+                  decoding="async"
                   className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                 />
 

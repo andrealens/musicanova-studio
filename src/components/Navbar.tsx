@@ -63,7 +63,7 @@ export default function Navbar() {
             <Link href="/la-scuola" className="hover:text-white transition-colors">La Scuola</Link>
             
             <div className="flex items-center gap-4 px-4 py-1 rounded-full bg-white/5 border border-indigo-500/30">
-              <span className="text-xs font-bold uppercase tracking-widest text-indigo-400 cursor-default">Corsi:</span>
+              <Link href="/corsi" className="text-xs font-bold uppercase tracking-widest text-indigo-400 hover:text-white transition-colors">Corsi:</Link>
               <Link href="/corsi/pianoforte" className="hover:text-white text-indigo-400 transition-colors font-semibold">Pianoforte</Link>
               <span className="text-indigo-600">/</span>
               <Link href="/corsi/chitarra" className="hover:text-white text-indigo-400 transition-colors font-semibold">Chitarra</Link>
