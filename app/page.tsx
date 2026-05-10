@@ -1,5 +1,5 @@
 "use client";
-import React, { Suspense, useRef, useState, useCallback, useEffect } from 'react';
+import React, { Suspense, useRef, useState, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { ContactShadows, Environment, PresentationControls } from '@react-three/drei';
 import { motion } from 'framer-motion';
@@ -21,9 +21,6 @@ import { useIsMobile } from '@/src/hooks/useIsMobile';
 const Masonry = dynamic(() => import('../src/components/Masonry'), {
   ssr: false,
   loading: () => <div className="w-full h-64 animate-pulse bg-white/5 rounded-2xl" />,
-});
-const GalleryLightbox = dynamic(() => import('../src/components/GalleryLightbox'), {
-  ssr: false,
 });
 
 const cardStyle = "bg-white/5 backdrop-blur-3xl border border-white/10 shadow-2xl rounded-[3rem] transition-all duration-300";
@@ -80,7 +77,6 @@ const ScrollingBlurText = ({
 
 export default function Home() {
   const isMobile = useIsMobile();
-  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [isMounted, setIsMounted] = useState(false);
   const [isReady, setIsReady] = useState(false);
   useEffect(() => {
@@ -95,14 +91,6 @@ export default function Home() {
     return () => clearTimeout(timer);
   }, [isMounted]);
 
-  const openLightbox = useCallback((item: MasonryItem) => {
-    const index = galleryItems.findIndex(i => i.id === item.id);
-    setLightboxIndex(index);
-  }, []);
-
-  const closeLightbox = useCallback(() => setLightboxIndex(null), []);
-  const prevImage = useCallback(() => setLightboxIndex(i => (i !== null && i > 0 ? i - 1 : i)), []);
-  const nextImage = useCallback(() => setLightboxIndex(i => (i !== null && i < galleryItems.length - 1 ? i + 1 : i)), []);
   const galleryItems: MasonryItem[] = [
     { id: '08', img: '/home_gallery/08.webp', height: 520 },
     { id: '09', img: '/home_gallery/09.webp', height: 420 },
@@ -414,17 +402,8 @@ export default function Home() {
             scaleOnHover
             hoverScale={0.97}
             blurToFocus={false}
-            onItemClick={openLightbox}
           />
         </section>
-
-        <GalleryLightbox
-          items={galleryItems}
-          currentIndex={lightboxIndex}
-          onClose={closeLightbox}
-          onPrev={prevImage}
-          onNext={nextImage}
-        />
 
         {/* --- LIVE SECTION (SPOSTATA IN FONDO) --- */}
         <section id="live" className="py-12 px-6 md:px-10 max-w-7xl mx-auto mb-20 pointer-events-auto relative z-20 bg-transparent">

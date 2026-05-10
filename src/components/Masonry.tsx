@@ -74,7 +74,6 @@ interface MasonryProps {
   scaleOnHover?: boolean;
   hoverScale?: number;
   blurToFocus?: boolean;
-  onItemClick?: (item: MasonryItem) => void;
 }
 
 const Masonry: React.FC<MasonryProps> = ({
@@ -86,7 +85,6 @@ const Masonry: React.FC<MasonryProps> = ({
   scaleOnHover = true,
   hoverScale = 0.95,
   blurToFocus = true,
-  onItemClick,
 }) => {
   const columns = useMedia(
     ['(min-width:1500px)', '(min-width:1000px)', '(min-width:600px)', '(min-width:400px)'],
@@ -203,9 +201,8 @@ const Masonry: React.FC<MasonryProps> = ({
         <div
           key={item.id}
           data-key={item.id}
-          className="group absolute box-content cursor-pointer"
+          className="group absolute box-content"
           style={{ willChange: 'transform, width, height, opacity' }}
-          onClick={() => onItemClick?.(item)}
           onMouseEnter={() => handleMouseEnter(item.id)}
           onMouseLeave={() => handleMouseLeave(item.id)}
         >
@@ -215,17 +212,12 @@ const Masonry: React.FC<MasonryProps> = ({
               alt={`Gallery MusicaNova ${item.id}`}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-              className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+              className="object-cover transition-all duration-700 grayscale group-hover:grayscale-0 group-hover:scale-110"
               loading="lazy"
               quality={75}
             />
             {/* Overlay al hover */}
             <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/0 transition-all duration-300 group-hover:bg-black/20">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 opacity-0 backdrop-blur-md group-hover:opacity-100">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-                  <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
-                </svg>
-              </div>
             </div>
           </div>
         </div>

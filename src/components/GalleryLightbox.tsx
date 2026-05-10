@@ -38,25 +38,16 @@ export default function GalleryLightbox({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleKeyDown]);
 
-  // Blocca lo scroll del body quando il lightbox è aperto
   useEffect(() => {
     if (isOpen) {
-      const scrollY = window.scrollY;
-      document.body.style.overflow = 'hidden';
-      document.body.dataset.scrollY = String(scrollY);
+      document.body.style.overflow = 'hidden'
     } else {
-      const scrollY = Number(document.body.dataset.scrollY || 0);
-      document.body.style.overflow = '';
-      delete document.body.dataset.scrollY;
-      window.scrollTo(0, scrollY);
+      document.body.style.overflow = ''
     }
     return () => {
-      const scrollY = Number(document.body.dataset.scrollY || 0);
-      document.body.style.overflow = '';
-      delete document.body.dataset.scrollY;
-      window.scrollTo(0, scrollY);
-    };
-  }, [isOpen]);
+      document.body.style.overflow = ''
+    }
+  }, [isOpen])
 
   return (
     <AnimatePresence>
@@ -67,7 +58,7 @@ export default function GalleryLightbox({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25 }}
-          className="fixed inset-0 z-[500] flex items-center justify-center"
+          className="fixed inset-0 z-[200] flex items-center justify-center"
           onClick={onClose}
         >
           {/* Backdrop */}
@@ -93,7 +84,7 @@ export default function GalleryLightbox({
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-10 max-w-[90vw] max-h-[85vh] flex items-center justify-center"
+            className="relative max-w-5xl max-h-[90vh] w-full mx-auto"
             onClick={e => e.stopPropagation()}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}

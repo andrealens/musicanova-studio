@@ -1,5 +1,6 @@
 "use client";
 import React, { useRef } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import {
@@ -256,16 +257,17 @@ export default function LaScuola() {
             "/scuola_gallery/45.webp",
           ].map((imgUrl, i) => (
             <FadeIn key={i} delay={0.1 * i}>
-              <div className="group relative h-[350px] rounded-[2.5rem] overflow-hidden bg-[#111] border border-white/5 hover:border-indigo-500/50 transition-colors cursor-pointer">
+              <div className="group relative h-[350px] rounded-[2.5rem] overflow-hidden bg-[#111] border border-white/5 hover:border-indigo-500/50 transition-colors">
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <Image
                   src={imgUrl}
                   alt={`Gallery MusicaNova ${i + 1}`}
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                   loading="lazy"
-                  decoding="async"
-                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                  quality={75}
                 />
 
                 <div className="absolute bottom-0 left-0 w-full p-8 z-20 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
