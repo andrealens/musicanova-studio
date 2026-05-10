@@ -106,6 +106,7 @@ export default function Navbar() {
         style={{ transform: "translateY(-100%)", opacity: 0 }}
       >
         <Link href="/la-scuola" onClick={() => setIsOpen(false)} className="text-2xl font-bold text-white">La Scuola</Link>
+        <Link href="/corsi" onClick={() => setIsOpen(false)} className="text-2xl font-bold text-indigo-400">Corsi</Link>
         <Link href="/corsi/pianoforte" onClick={() => setIsOpen(false)} className="text-2xl font-bold text-indigo-400">Pianoforte</Link>
         <Link href="/corsi/chitarra" onClick={() => setIsOpen(false)} className="text-2xl font-bold text-indigo-400">Chitarra</Link>
         <Link href="/musigramma" onClick={() => setIsOpen(false)} className="text-2xl font-bold text-white">Musigramma</Link>

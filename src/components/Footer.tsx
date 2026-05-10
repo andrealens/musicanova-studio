@@ -87,6 +87,26 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-gray-600 text-xs font-mono uppercase tracking-[0.2em]">
         <p>© 2026 MusicaNova Studio</p>
         <p>Phygital Music Academy</p>
+        <p className="flex items-center gap-2 flex-wrap justify-center">
+          <span>Dev & Design</span>
+          <a 
+            href="https://www.ecommercelens.it" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-[#00ced1] hover:text-white transition-colors"
+          >
+            Andrea Lenzi
+          </a>
+          <span>&</span>
+          <a 
+            href="https://www.brainboxstudio.it" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-[#00ced1] hover:text-white transition-colors"
+          >
+            BrainBoxStudio
+          </a>
+        </p>
       </div>
     </footer>
   );
