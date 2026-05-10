@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import {
   PaperPlaneTilt,
   MapPin,
@@ -33,14 +34,15 @@ const FadeIn = ({
   );
 };
 
-export default function ContattiPage() {
+function ContattiForm() {
+  const searchParams = useSearchParams();
   const [sent, setSent] = useState(false);
   const [fields, setFields] = useState({
     nome: "",
     email: "",
     telefono: "",
     messaggio: "",
-    interesse: "chitarra",
+    interesse: searchParams.get("interesse") ?? "chitarra",
   });
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -48,6 +50,113 @@ export default function ContattiPage() {
     setSent(true);
   };
 
+  return (
+    <div className="bg-[#0A0A0A] border border-white/10 rounded-[3rem] p-8 md:p-10">
+      <h2 className="text-2xl font-bold mb-2">Scrivici</h2>
+      <p className="text-gray-400 text-sm mb-8">
+        Compila il modulo: ti ricontatteremo il prima possibile.
+      </p>
+
+      {!sent ? (
+        <div className="space-y-5">
+          <div>
+            <label className="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
+              Nome
+            </label>
+            <input
+              type="text"
+              value={fields.nome}
+              onChange={(e) =>
+                setFields({ ...fields, nome: e.target.value })
+              }
+              className="w-full bg-[#111] border border-white/10 rounded-2xl p-4 text-white focus:border-[#00ced1] outline-none transition-all"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
+              Email
+            </label>
+            <input
+              type="email"
+              value={fields.email}
+              onChange={(e) =>
+                setFields({ ...fields, email: e.target.value })
+              }
+              className="w-full bg-[#111] border border-white/10 rounded-2xl p-4 text-white focus:border-[#00ced1] outline-none transition-all"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
+              Telefono <span className="text-gray-600">(opzionale)</span>
+            </label>
+            <input
+              type="tel"
+              value={fields.telefono}
+              onChange={(e) =>
+                setFields({ ...fields, telefono: e.target.value })
+              }
+              className="w-full bg-[#111] border border-white/10 rounded-2xl p-4 text-white focus:border-[#00ced1] outline-none transition-all"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
+              Sono interessato a
+            </label>
+            <select
+              value={fields.interesse}
+              onChange={(e) =>
+                setFields({ ...fields, interesse: e.target.value })
+              }
+              className="w-full bg-[#111] border border-white/10 rounded-2xl p-4 text-white focus:border-[#00ced1] outline-none transition-all appearance-none"
+            >
+              <option value="chitarra">Corso di Chitarra</option>
+              <option value="pianoforte">Corso di Pianoforte</option>
+              <option value="prova">Lezione di Prova Gratuita</option>
+              <option value="band">Ingaggio Band/Live</option>
+              <option value="altro">Altro</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
+              Messaggio
+            </label>
+            <textarea
+              rows={4}
+              value={fields.messaggio}
+              onChange={(e) =>
+                setFields({ ...fields, messaggio: e.target.value })
+              }
+              className="w-full resize-y min-h-[120px] bg-[#111] border border-white/10 rounded-2xl p-4 text-white focus:border-[#00ced1] outline-none transition-all"
+            />
+          </div>
+          <button
+            type="button"
+            className="w-full mt-2 inline-flex items-center justify-center gap-2 bg-[#00ced1] text-black font-bold py-4 rounded-2xl hover:brightness-110 transition-all"
+            onClick={handleSubmit}
+          >
+            <PaperPlaneTilt size={20} strokeWidth={2.25} />
+            Invia Messaggio
+          </button>
+        </div>
+      ) : (
+        <div className="flex flex-col items-center text-center gap-4 py-8">
+          <CheckCircle
+            weight="duotone"
+            size={48}
+            className="text-[#00ced1]"
+            strokeWidth={2}
+            aria-hidden
+          />
+          <p className="text-lg font-medium">
+            Messaggio inviato! Ti risponderemo presto.
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default function ContattiPage() {
   return (
     <div className="w-full min-h-screen bg-transparent text-white selection:bg-[#00ced1]/30 selection:text-white overflow-hidden">
       {/* HERO */}
@@ -74,108 +183,9 @@ export default function ContattiPage() {
       <section className="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 py-24">
         {/* COLONNA SX — Form */}
         <FadeIn>
-          <div className="bg-[#0A0A0A] border border-white/10 rounded-[3rem] p-8 md:p-10">
-            <h2 className="text-2xl font-bold mb-2">Scrivici</h2>
-            <p className="text-gray-400 text-sm mb-8">
-              Compila il modulo: ti ricontatteremo il prima possibile.
-            </p>
-
-            {!sent ? (
-              <div className="space-y-5">
-                <div>
-                  <label className="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
-                    Nome
-                  </label>
-                  <input
-                    type="text"
-                    value={fields.nome}
-                    onChange={(e) =>
-                      setFields({ ...fields, nome: e.target.value })
-                    }
-                    className="w-full bg-[#111] border border-white/10 rounded-2xl p-4 text-white focus:border-[#00ced1] outline-none transition-all"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    value={fields.email}
-                    onChange={(e) =>
-                      setFields({ ...fields, email: e.target.value })
-                    }
-                    className="w-full bg-[#111] border border-white/10 rounded-2xl p-4 text-white focus:border-[#00ced1] outline-none transition-all"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
-                    Telefono <span className="text-gray-600">(opzionale)</span>
-                  </label>
-                  <input
-                    type="tel"
-                    value={fields.telefono}
-                    onChange={(e) =>
-                      setFields({ ...fields, telefono: e.target.value })
-                    }
-                    className="w-full bg-[#111] border border-white/10 rounded-2xl p-4 text-white focus:border-[#00ced1] outline-none transition-all"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
-                    Sono interessato a
-                  </label>
-                  <select
-                    value={fields.interesse}
-                    onChange={(e) =>
-                      setFields({ ...fields, interesse: e.target.value })
-                    }
-                    className="w-full bg-[#111] border border-white/10 rounded-2xl p-4 text-white focus:border-[#00ced1] outline-none transition-all appearance-none"
-                  >
-                    <option value="chitarra">Corso di Chitarra</option>
-                    <option value="pianoforte">Corso di Pianoforte</option>
-                    <option value="prova">Lezione di Prova Gratuita</option>
-                    <option value="band">Ingaggio Band/Live</option>
-                    <option value="altro">Altro</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
-                    Messaggio
-                  </label>
-                  <textarea
-                    rows={4}
-                    value={fields.messaggio}
-                    onChange={(e) =>
-                      setFields({ ...fields, messaggio: e.target.value })
-                    }
-                    className="w-full resize-y min-h-[120px] bg-[#111] border border-white/10 rounded-2xl p-4 text-white focus:border-[#00ced1] outline-none transition-all"
-                  />
-                </div>
-                <button
-                  type="button"
-                  className="w-full mt-2 inline-flex items-center justify-center gap-2 bg-[#00ced1] text-black font-bold py-4 rounded-2xl hover:brightness-110 transition-all"
-                  onClick={handleSubmit}
-                >
-                  <PaperPlaneTilt size={20} strokeWidth={2.25} />
-                  Invia Messaggio
-                </button>
-              </div>
-            ) : (
-              <div className="flex flex-col items-center text-center gap-4 py-8">
-                <CheckCircle
-                  weight="duotone"
-                  size={48}
-                  className="text-[#00ced1]"
-                  strokeWidth={2}
-                  aria-hidden
-                />
-                <p className="text-lg font-medium">
-                  Messaggio inviato! Ti risponderemo presto.
-                </p>
-              </div>
-            )}
-          </div>
+          <Suspense fallback={null}>
+            <ContattiForm />
+          </Suspense>
         </FadeIn>
 
         {/* COLONNA DX — Info */}

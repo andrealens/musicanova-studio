@@ -4,10 +4,10 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { Comparison, ComparisonItem, ComparisonHandle } from "@/src/components/ComparisonSlider";
-import { MusicNote } from "@phosphor-icons/react";
 import {
   GraduationCap,
   Guitar,
+  VinylRecord,
   PianoKeys,
   Heart,
   Users,
@@ -163,7 +163,7 @@ export default function CorsiPage() {
               <div className="relative flex flex-col items-center h-full">
                 <div className="absolute inset-0 left-1/2 w-px bg-gradient-to-b from-transparent via-white/30 to-transparent -translate-x-1/2" />
                 <div className="absolute top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-[#020205] border-2 border-white/30 flex items-center justify-center shadow-[0_0_30px_rgba(255,255,255,0.1)] backdrop-blur-sm">
-                  <MusicNote weight="duotone" size={24} className="text-white" />
+                  <VinylRecord weight="duotone" size={28} className="text-white" />
                 </div>
               </div>
             </ComparisonHandle>

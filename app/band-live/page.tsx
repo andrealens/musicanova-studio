@@ -1,5 +1,8 @@
 "use client";
-import React, { useMemo, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
+import dynamic from 'next/dynamic';
+import Image from 'next/image';
+import Link from 'next/link';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import {
   MusicNote,
@@ -14,7 +17,80 @@ import {
   CalendarBlank,
 } from "@phosphor-icons/react";
 
+const Lightning = dynamic(() => import('@/src/components/Lightning'), { ssr: false });
+
 // --- COMPONENTI UI & ANIMAZIONI ---
+
+const AudioWave = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const BARS = 48;
+    const seeds = Array.from({ length: BARS }, (_, i) => 0.5 + ((i * 137.508) % 100) / 200);
+    let t = 0;
+    let rafId: number;
+
+    const draw = () => {
+      const W = canvas.width;
+      const H = canvas.height;
+      ctx.clearRect(0, 0, W, H);
+      const cy = H / 2;
+      const gap = W / BARS;
+      const barW = 4;
+
+      for (let i = 0; i < BARS; i++) {
+        const x = i * gap + gap / 2;
+        const h =
+          (Math.sin(t * seeds[i] * 3 + i * 0.35) * 0.5 + 0.5) *
+          (Math.sin(t * 0.7 + i * 0.2) * 0.3 + 0.7) *
+          (H * 0.4) + 4;
+
+        const ratio = i / BARS;
+        const r = Math.round(239 * (1 - ratio) + 168 * ratio);
+        const g = Math.round(68 * (1 - ratio) + 85 * ratio);
+        const b = Math.round(68 * (1 - ratio) + 247 * ratio);
+        const alpha = 0.5 + ratio * 0.5;
+
+        ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
+        ctx.shadowColor = `rgba(${r},${g},${b},0.7)`;
+        ctx.shadowBlur = 8;
+
+        const rr = barW / 2;
+        ctx.beginPath();
+        ctx.roundRect(x - barW / 2, cy - h, barW, h * 2, rr);
+        ctx.fill();
+      }
+
+      t += 0.025;
+      rafId = requestAnimationFrame(draw);
+    };
+
+    const resize = () => {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    };
+    resize();
+    window.addEventListener('resize', resize);
+    rafId = requestAnimationFrame(draw);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener('resize', resize);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="w-full h-24 mb-8"
+    />
+  );
+};
 
 // FadeIn standard dal basso
 const FadeIn = ({ children, delay = 0 }: { children: React.ReactNode, delay?: number }) => (
@@ -27,34 +103,6 @@ const FadeIn = ({ children, delay = 0 }: { children: React.ReactNode, delay?: nu
     {children}
   </motion.div>
 );
-
-// Animazione SVG "Onde Sonore" per la sezione Blues/Jazz
-const AudioWave = () => {
-  const durations = useMemo(
-    () => Array.from({ length: 20 }, (_, i) => 1 + ((i * 37) % 100) / 100),
-    []
-  );
-
-  return (
-    <div className="flex items-center justify-center gap-1 h-24 mb-8">
-      {[...Array(20)].map((_, i) => (
-        <motion.div
-          key={i}
-          className={`w-2 rounded-full ${i % 2 === 0 ? 'bg-red-500' : 'bg-indigo-500'}`}
-          initial={{ height: "20%" }}
-          animate={{ height: ["20%", "100%", "20%"] }}
-          transition={{
-            duration: durations[i],
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: i * 0.1
-          }}
-          style={{ opacity: 0.7 }}
-        />
-      ))}
-    </div>
-  );
-};
 
 // Testo Scorrevole (Marquee) per i nomi degli artisti
 const ArtistMarquee = ({ names }: { names: string[] }) => {
@@ -83,7 +131,7 @@ export default function BandLivePage() {
   const yParallax = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
 
   return (
-    <div ref={containerRef} className="w-full bg-[#050505] text-white selection:bg-red-900 selection:text-white overflow-hidden">
+    <div ref={containerRef} className="w-full text-white selection:bg-red-900 selection:text-white overflow-hidden">
       
       {/* --- HERO SECTION: VIDEO BACKGROUND --- */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
@@ -98,6 +146,16 @@ export default function BandLivePage() {
             <source src="https://assets.mixkit.co/videos/preview/mixkit-guitarist-playing-in-a-concert-with-warm-lights-41857-large.mp4" type="video/mp4" />
           </video>
         </motion.div>
+
+        <div className="absolute inset-0 z-[15] pointer-events-none mix-blend-screen opacity-30">
+          <Lightning
+            hue={260}
+            xOffset={0}
+            speed={0.8}
+            intensity={1.2}
+            size={1}
+          />
+        </div>
         
         <div className="relative z-20 text-center px-6 max-w-5xl mx-auto mt-20">
           <FadeIn>
@@ -194,7 +252,7 @@ export default function BandLivePage() {
             <div className="bg-[#111] rounded-3xl overflow-hidden border border-white/10 group hover:border-indigo-500/50 transition-all h-full flex flex-col">
               <div className="h-64 relative overflow-hidden">
                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                 <img src="https://images.unsplash.com/photo-1543584860-840ad949c31a?q=80&w=1200" alt="Duo Acustico Intimo" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                 <img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?q=80&w=1200" alt="Duo Piano e Chitarra Live" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                  <div className="absolute inset-0 bg-indigo-900/30 mix-blend-multiply" />
                  <div className="absolute bottom-6 left-6 bg-indigo-600 py-1 px-3 rounded text-xs font-bold uppercase">Intimo & Versatile</div>
               </div>
@@ -206,8 +264,8 @@ export default function BandLivePage() {
                   </h3>
                   <p className="text-gray-400 text-sm mb-8">Chitarra, Voce e Piano. La formula perfetta per atmosfere rilassate ed eleganti.</p>
                   <ul className="space-y-4 mb-8">
-                    <li className="flex items-start gap-3 text-gray-300"><Coffee size={18} className="text-indigo-500 mt-1 shrink-0"/> Locali, wine bar e dehors estivi.</li>
-                    <li className="flex items-start gap-3 text-gray-300"><Sparkle size={18} className="text-indigo-500 mt-1 shrink-0"/> Eventi privati, cene aziendali, matrimoni.</li>
+                    <li className="flex items-start gap-3 text-gray-300"><Coffee weight="duotone" size={18} className="text-indigo-500 mt-1 shrink-0"/> Locali, wine bar e dehors estivi.</li>
+                    <li className="flex items-start gap-3 text-gray-300"><Sparkle weight="duotone" size={18} className="text-indigo-500 mt-1 shrink-0"/> Eventi privati, cene aziendali, matrimoni.</li>
                     <li className="flex items-start gap-3 text-gray-300"><MusicNote size={18} className="text-indigo-500 mt-1 shrink-0"/> Aperitivi musicali con classe.</li>
                   </ul>
                 </div>
@@ -220,7 +278,7 @@ export default function BandLivePage() {
             <div className="bg-[#111] rounded-3xl overflow-hidden border border-white/10 group hover:border-red-500/50 transition-all h-full flex flex-col">
               <div className="h-64 relative overflow-hidden">
                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                 <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1200" alt="Band Live Stage" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                 <img src="https://images.unsplash.com/photo-1760024101626-d6d5709aad3d?q=80&w=1200" alt="Luci palco concerto live" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                  <div className="absolute inset-0 bg-red-900/30 mix-blend-multiply" />
                  <div className="absolute bottom-6 left-6 bg-red-600 py-1 px-3 rounded text-xs font-bold uppercase">Energia & Dinamica</div>
               </div>
@@ -232,8 +290,8 @@ export default function BandLivePage() {
                   </h3>
                   <p className="text-gray-400 text-sm mb-8">Quando serve più spinta. La batteria completa il sound e apre nuove possibilità.</p>
                   <ul className="space-y-4 mb-8">
-                    <li className="flex items-start gap-3 text-gray-300"><Warehouse size={18} className="text-red-500 mt-1 shrink-0"/> Concerti su palchi, festival e rassegne.</li>
-                    <li className="flex items-start gap-3 text-gray-300"><Confetti size={18} className="text-red-500 mt-1 shrink-0"/> Feste di piazza, coinvolgimento ritmato.</li>
+                    <li className="flex items-start gap-3 text-gray-300"><Warehouse weight="duotone" size={18} className="text-red-500 mt-1 shrink-0"/> Concerti su palchi, festival e rassegne.</li>
+                    <li className="flex items-start gap-3 text-gray-300"><Confetti weight="duotone" size={18} className="text-red-500 mt-1 shrink-0"/> Feste di piazza, coinvolgimento ritmato.</li>
                     <li className="flex items-start gap-3 text-gray-300"><Microphone size={18} className="text-red-500 mt-1 shrink-0"/> Jazz club, blues bar e live venue.</li>
                   </ul>
                 </div>
@@ -274,7 +332,7 @@ export default function BandLivePage() {
                {/* Play Button UI */}
                <div className="absolute center inset-0 flex items-center justify-center">
                  <div className="w-24 h-24 rounded-full bg-red-600/80 backdrop-blur-md flex items-center justify-center border-2 border-red-400 group-hover:scale-110 transition-transform shadow-lg shadow-red-600/50">
-                    <PlayCircle className="text-white w-12 h-12 fill-white" />
+                    <PlayCircle weight="fill" className="text-white w-12 h-12" />
                  </div>
                </div>
                <div className="absolute bottom-8 left-8">
@@ -298,6 +356,53 @@ export default function BandLivePage() {
         </FadeIn>
       </section>
 
+      {/* --- SEZIONE: I MUSICISTI --- */}
+      <section className="py-16 px-6 md:px-10 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+          {/* Francesco */}
+          <FadeIn>
+            <div className="group bg-[#111] rounded-[3rem] overflow-hidden border border-white/10 hover:border-red-500/40 transition-all duration-500">
+              <div className="relative aspect-[4/3] overflow-hidden">
+                <Image
+                  src="/home_gallery/22.webp"
+                  alt="Francesco Morreale"
+                  fill
+                  className="object-cover object-[center_30%] grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+                <div className="absolute bottom-0 left-0 p-8">
+                  <span className="text-red-500 font-mono text-xs uppercase tracking-widest mb-2 block">Chitarra & Voce</span>
+                  <h3 className="text-2xl font-bold text-white">Francesco Morreale</h3>
+                </div>
+              </div>
+            </div>
+          </FadeIn>
+
+          {/* Claudio */}
+          <FadeIn delay={0.15}>
+            <div className="group bg-[#111] rounded-[3rem] overflow-hidden border border-white/10 hover:border-indigo-500/40 transition-all duration-500">
+              <div className="relative aspect-[4/3] overflow-hidden">
+                <Image
+                  src="/home_gallery/58.webp"
+                  alt="Claudio Bernardi"
+                  fill
+                  className="object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+                <div className="absolute bottom-0 left-0 p-8">
+                  <span className="text-indigo-400 font-mono text-xs uppercase tracking-widest mb-2 block">Pianoforte</span>
+                  <h3 className="text-2xl font-bold text-white">Claudio Bernardi</h3>
+                </div>
+              </div>
+            </div>
+          </FadeIn>
+
+        </div>
+      </section>
+
       {/* --- SEZIONE 6: BOOKING CTA (Footer Specifico) --- */}
       <section id="booking" className="py-32 px-6 relative overflow-hidden bg-gradient-to-b from-[#050505] to-[#110202]">
          {/* Stage Light Effect */}
@@ -317,9 +422,12 @@ export default function BandLivePage() {
              </p>
 
              <div className="flex flex-col md:flex-row justify-center gap-6 mb-16">
-               <button className="px-10 py-5 bg-red-600 text-white font-bold rounded-full hover:bg-red-500 transition-all shadow-[0_0_40px_rgba(220,38,38,0.4)] flex items-center justify-center gap-3 hover:scale-105">
+               <Link
+                 href="/contatti?interesse=band"
+                 className="px-10 py-5 bg-red-600 text-white font-bold rounded-full hover:bg-red-500 transition-all shadow-[0_0_40px_rgba(220,38,38,0.4)] flex items-center justify-center gap-3 hover:scale-105"
+               >
                  <CalendarBlank size={20} /> Contattaci per un Ingaggio
-               </button>
+               </Link>
              </div>
 
              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left md:text-center border-t border-white/10 pt-12">
