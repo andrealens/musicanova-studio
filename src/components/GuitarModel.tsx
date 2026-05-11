@@ -121,30 +121,39 @@ function Model() {
 
 useGLTF.preload('/guitar.glb');
 
-export default function GuitarScene() {
+export default function GuitarScene({
+  bp1600,
+  bp1366,
+  bp1024,
+  bpMobile,
+}: {
+  bp1600?: { scale?: number; posX?: number; posY?: number };
+  bp1366?: { scale?: number; posX?: number; posY?: number };
+  bp1024?: { scale?: number; posX?: number; posY?: number };
+  bpMobile?: { scale?: number; posX?: number; posY?: number };
+} = {}) {
   const { viewport, size } = useThree();
 
-  // Breakpoint identici a PianoModel — adatta i valori numerici al tuo gusto visivo
   let currentScale = 0.35;
   let posX = 0;
   let posY = 0;
 
   if (size.width >= 1600) {
-    currentScale = 0.75;
-    posX = viewport.width * 0.15;
-    posY = -2.55;
+    currentScale = bp1600?.scale ?? 0.75;
+    posX = bp1600?.posX ?? viewport.width * 0.15;
+    posY = bp1600?.posY ?? -2.55;
   } else if (size.width >= 1366) {
-    currentScale = 0.65;
-    posX = viewport.width * 0.15;
-    posY = -2.55;
+    currentScale = bp1366?.scale ?? 0.65;
+    posX = bp1366?.posX ?? viewport.width * 0.15;
+    posY = bp1366?.posY ?? -2.55;
   } else if (size.width >= 1024) {
-    currentScale = 0.45;
-    posX = viewport.width * 0.15;
-    posY = -2.00;
+    currentScale = bp1024?.scale ?? 0.45;
+    posX = bp1024?.posX ?? viewport.width * 0.15;
+    posY = bp1024?.posY ?? -2.0;
   } else {
-    currentScale = 0.25;
-    posX = 0;
-    posY = -viewport.height * 0.15;
+    currentScale = bpMobile?.scale ?? 0.25;
+    posX = bpMobile?.posX ?? 0;
+    posY = bpMobile?.posY ?? -viewport.height * 0.15;
   }
 
   return (

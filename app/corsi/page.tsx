@@ -2,8 +2,12 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { Canvas } from "@react-three/fiber";
 import { Comparison, ComparisonItem, ComparisonHandle } from "@/src/components/ComparisonSlider";
+import { useIsMobile } from "@/src/hooks/useIsMobile";
 import {
   GraduationCap,
   Guitar,
@@ -18,6 +22,9 @@ import {
   Question,
   Clock,
 } from "@phosphor-icons/react";
+
+const GuitarScene = dynamic(() => import("@/src/components/GuitarModel"), { ssr: false });
+const PianoModel = dynamic(() => import("@/src/components/PianoModel"), { ssr: false });
 
 const FadeIn = ({
   children,
@@ -69,9 +76,16 @@ const faqItems = [
 export default function CorsiPage() {
   const [openFaq, setOpenFaq] = useState<number>(0);
   const [activeTab, setActiveTab] = useState<'chitarra' | 'pianoforte'>('chitarra');
+  const isMobile = useIsMobile(1000);
+  const hideModels = useIsMobile(1295);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setActiveTab('chitarra');
+  }, []);
+
+  useEffect(() => {
+    setIsMounted(true);
   }, []);
 
   return (
@@ -79,7 +93,7 @@ export default function CorsiPage() {
       <section className="relative h-screen w-full overflow-hidden">
 
         {/* DESKTOP — Comparison Slider */}
-        <div className="hidden md:block h-full w-full">
+        <div className="hidden min-[1000px]:block h-full w-full">
           <Comparison mode="drag" className="h-full w-full">
             
             {/* LATO SINISTRO — CHITARRA */}
@@ -95,13 +109,29 @@ export default function CorsiPage() {
                   CHITARRA
                 </span>
                 <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-red-600/15 blur-[120px] rounded-full pointer-events-none" />
+                {!hideModels && isMounted && (
+                  <div className="absolute inset-0 z-0 pointer-events-none">
+                    <Canvas
+                      gl={{ antialias: true, alpha: true }}
+                      camera={{ position: [0, 0, 16], fov: 40 }}
+                      style={{ background: "transparent", pointerEvents: "none" }}
+                    >
+                      <Suspense fallback={null}>
+                        <GuitarScene
+                          bp1600={{ scale: 0.5, posX: 3, posY: -2 }}
+                          bp1366={{ scale: 0.5, posX: 3, posY: -2 }}
+                          bp1024={{ scale: 0.5, posX: 2.5, posY: -2 }}
+                        />
+                      </Suspense>
+                    </Canvas>
+                  </div>
+                )}
                 <motion.div
                   initial={{ opacity: 0, x: -60 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 1.2, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
                   className="relative z-10 w-auto max-w-[480px]"
                 >
-                  <Guitar weight="duotone" size={64} className="text-red-500 mb-6" />
                   <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-none mb-6">
                     <span className="text-transparent bg-clip-text bg-gradient-to-br from-white via-red-200 to-red-600">
                       Chitarra
@@ -133,13 +163,31 @@ export default function CorsiPage() {
                   PIANO
                 </span>
                 <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-indigo-600/15 blur-[120px] rounded-full pointer-events-none" />
+                {!hideModels && isMounted && (
+                  <div className="absolute inset-0 z-0 pointer-events-none" style={{ transform: 'translateX(-35%)' }}>
+                    <Canvas
+                      gl={{ antialias: true, alpha: true }}
+                      camera={{ position: [0, 2, 9], fov: 45 }}
+                      style={{ background: "transparent", pointerEvents: "none" }}
+                    >
+                      <ambientLight intensity={0.7} />
+                      <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1.5} />
+                      <Suspense fallback={null}>
+                        <PianoModel
+                          bp1600={{ scale: 1.2, posX: 0.5, posY: -1 }}
+                          bp1245={{ scale: 1.2, posX: -0.3, posY: -1 }}
+                          bp919={{ scale: 1.0, posX: -1, posY: -0.8 }}
+                        />
+                      </Suspense>
+                    </Canvas>
+                  </div>
+                )}
                 <motion.div
                   initial={{ opacity: 0, x: 60 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 1.2, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
                   className="relative z-10 w-auto max-w-[480px] text-right"
                 >
-                  <PianoKeys weight="duotone" size={64} className="text-indigo-400 mb-6 ml-auto" />
                   <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-none mb-6">
                     <span className="text-transparent bg-clip-text bg-gradient-to-bl from-white via-indigo-200 to-indigo-600">
                       Pianoforte
@@ -162,8 +210,17 @@ export default function CorsiPage() {
             <ComparisonHandle>
               <div className="relative flex flex-col items-center h-full">
                 <div className="absolute inset-0 left-1/2 w-px bg-gradient-to-b from-transparent via-white/30 to-transparent -translate-x-1/2" />
-                <div className="absolute top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-[#020205] border-2 border-white/30 flex items-center justify-center shadow-[0_0_30px_rgba(255,255,255,0.1)] backdrop-blur-sm">
-                  <VinylRecord weight="duotone" size={28} className="text-white" />
+                <div className="absolute top-1/2 -translate-y-1/2 flex flex-col items-center gap-3">
+                  <motion.div
+                    animate={{ x: [-6, 6, -6] }}
+                    transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+                    className="w-14 h-14 rounded-full bg-[#020205] border-2 border-white/30 flex items-center justify-center shadow-[0_0_30px_rgba(255,255,255,0.1)] backdrop-blur-sm"
+                  >
+                    <VinylRecord weight="duotone" size={28} className="text-white" />
+                  </motion.div>
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-white/40 whitespace-nowrap">
+                    ← trascina →
+                  </span>
                 </div>
               </div>
             </ComparisonHandle>
@@ -172,7 +229,7 @@ export default function CorsiPage() {
         </div>
 
         {/* MOBILE — Tabs */}
-        <div className="flex md:hidden h-full w-full flex-col">
+        <div className="flex min-[1000px]:hidden h-full w-full flex-col">
           
           {/* Tab switcher */}
           <div className="relative z-20 flex items-center justify-center pt-28 pb-4 gap-3 px-6">

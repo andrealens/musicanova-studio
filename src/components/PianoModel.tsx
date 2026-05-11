@@ -65,7 +65,17 @@ function Model() {
 
 useGLTF.preload('/black_piano.glb');
 
-export default function PianoModel() {
+export default function PianoModel({
+  bp1600,
+  bp1245,
+  bp919,
+  bpMobile,
+}: {
+  bp1600?: { scale?: number; posX?: number; posY?: number };
+  bp1245?: { scale?: number; posX?: number; posY?: number };
+  bp919?: { scale?: number; posX?: number; posY?: number };
+  bpMobile?: { scale?: number; posX?: number; posY?: number };
+} = {}) {
   const { viewport, size } = useThree();
 
   let currentScale = 0.35; // NOTA: Cursor, adatta questo valore base se il piano o la chitarra sono nativamente molto più grandi o piccoli
@@ -73,21 +83,21 @@ export default function PianoModel() {
   let posY = 0;
 
   if (size.width >= 1600) {
-    currentScale = 1.60;
-    posX = viewport.width * 0.05;
-    posY = -1.00;
+    currentScale = bp1600?.scale ?? 1.6;
+    posX = bp1600?.posX ?? viewport.width * 0.05;
+    posY = bp1600?.posY ?? -1.0;
   } else if (size.width >= 1245) {
-    currentScale = 1.40;
-    posX = viewport.width * 0.03;
-    posY = -1.00;
+    currentScale = bp1245?.scale ?? 1.4;
+    posX = bp1245?.posX ?? viewport.width * 0.03;
+    posY = bp1245?.posY ?? -1.0;
   } else if (size.width >= 919) {
-    currentScale = 1.00;
-    posX = viewport.width * 0.05;
-    posY = -0.80;
+    currentScale = bp919?.scale ?? 1.0;
+    posX = bp919?.posX ?? viewport.width * 0.05;
+    posY = bp919?.posY ?? -0.8;
   } else {
-    currentScale = 0.25;
-    posX = 0;
-    posY = -viewport.height * 0.15;
+    currentScale = bpMobile?.scale ?? 0.25;
+    posX = bpMobile?.posX ?? 0;
+    posY = bpMobile?.posY ?? -viewport.height * 0.15;
   }
 
   return (
