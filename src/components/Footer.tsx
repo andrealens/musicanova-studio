@@ -70,13 +70,13 @@ export default function Footer() {
             </div>
             <div className="flex gap-4">
               {/* Aggiunti aria-label per Accessibilità e SEO */}
-              <a href="#" aria-label="Canale YouTube MusicaNova Studio" className="w-12 h-12 rounded-full bg-[#111] flex items-center justify-center text-white border border-white/5 hover:bg-red-600 hover:border-red-600 transition-all duration-300">
+              <a href="https://www.youtube.com/@FrancescoMorrealeMusicaNova" target="_blank" rel="noopener noreferrer" aria-label="Canale YouTube MusicaNova Studio" className="w-12 h-12 rounded-full bg-[#111] flex items-center justify-center text-white border border-white/5 hover:bg-red-600 hover:border-red-600 transition-all duration-300">
                 <YoutubeLogo weight="duotone" size={20}/>
               </a>
-              <a href="#" aria-label="Profilo Instagram MusicaNova Studio" className="w-12 h-12 rounded-full bg-[#111] flex items-center justify-center text-white border border-white/5 hover:bg-red-600 hover:border-red-600 transition-all duration-300">
+              <a href="https://www.instagram.com/musicanova_studio/" target="_blank" rel="noopener noreferrer" aria-label="Profilo Instagram MusicaNova Studio" className="w-12 h-12 rounded-full bg-[#111] flex items-center justify-center text-white border border-white/5 hover:bg-red-600 hover:border-red-600 transition-all duration-300">
                 <InstagramLogo weight="duotone" size={20}/>
               </a>
-              <a href="#" aria-label="Pagina Facebook MusicaNova Studio" className="w-12 h-12 rounded-full bg-[#111] flex items-center justify-center text-white border border-white/5 hover:bg-red-600 hover:border-red-600 transition-all duration-300">
+              <a href="https://www.facebook.com/profile.php?id=61556544116760" target="_blank" rel="noopener noreferrer" aria-label="Pagina Facebook MusicaNova Studio" className="w-12 h-12 rounded-full bg-[#111] flex items-center justify-center text-white border border-white/5 hover:bg-red-600 hover:border-red-600 transition-all duration-300">
                 <FacebookLogo weight="duotone" size={20}/>
               </a>
             </div>

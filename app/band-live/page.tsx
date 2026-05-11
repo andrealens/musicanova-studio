@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -128,6 +128,7 @@ const ArtistMarquee = ({ names }: { names: string[] }) => {
 export default function BandLivePage() {
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: containerRef });
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const yParallax = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
 
   return (
@@ -325,20 +326,40 @@ export default function BandLivePage() {
         <FadeIn>
           <div className="relative group cursor-pointer rounded-[3rem] overflow-hidden border border-red-500/20 shadow-2xl shadow-red-900/20">
             <div className="aspect-video relative overflow-hidden">
-               {/* Placeholder Immagine Video */}
-               {/* eslint-disable-next-line @next/next/no-img-element */}
-               <img src="https://images.unsplash.com/photo-1501386761578-eac5c94b800a?q=80&w=1200" className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700" alt="Live Video Placeholder" />
-               <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
-               {/* Play Button UI */}
-               <div className="absolute center inset-0 flex items-center justify-center">
-                 <div className="w-24 h-24 rounded-full bg-red-600/80 backdrop-blur-md flex items-center justify-center border-2 border-red-400 group-hover:scale-110 transition-transform shadow-lg shadow-red-600/50">
-                    <PlayCircle weight="fill" className="text-white w-12 h-12" />
-                 </div>
-               </div>
-               <div className="absolute bottom-8 left-8">
-                 <p className="text-red-400 font-mono uppercase text-sm mb-2">Live Session</p>
-                <h3 className="text-2xl font-bold text-white">Guarda l&apos;energia dal vivo</h3>
-               </div>
+              {!isVideoPlaying ? (
+                <>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="https://images.unsplash.com/photo-1501386761578-eac5c94b800a?q=80&w=1200"
+                    className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"
+                    alt="Live Video Placeholder"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
+                  <button
+                    type="button"
+                    onClick={() => setIsVideoPlaying(true)}
+                    className="absolute inset-0 flex items-center justify-center w-full h-full"
+                    aria-label="Riproduci video"
+                  >
+                    <div className="w-24 h-24 rounded-full bg-red-600/80 backdrop-blur-md flex items-center justify-center border-2 border-red-400 group-hover:scale-110 transition-transform shadow-lg shadow-red-600/50">
+                      <PlayCircle weight="fill" className="text-white w-12 h-12 fill-white" />
+                    </div>
+                  </button>
+                  <div className="absolute bottom-8 left-8 pointer-events-none">
+                    <p className="text-red-400 font-mono uppercase text-sm mb-2">Live Session</p>
+                    <h3 className="text-2xl font-bold text-white">Guarda l&apos;energia dal vivo</h3>
+                  </div>
+                </>
+              ) : (
+                <iframe
+                  className="absolute inset-0 w-full h-full"
+                  src="https://www.youtube-nocookie.com/embed/lk2urrMQXy4?autoplay=1&rel=0"
+                  title="MusicaNova Live Session"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              )}
             </div>
           </div>
         </FadeIn>

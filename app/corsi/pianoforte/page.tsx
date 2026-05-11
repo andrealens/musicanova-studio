@@ -109,19 +109,29 @@ export default function PianofortePage() {
 
       {/* --- DETTAGLI --- */}
       <section id="dettagli" className="relative z-20 py-24 px-6 md:px-10 bg-transparent border-t border-white/10">
-         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+         <motion.div
+            className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8"
+            variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.15 } } }}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.25 }}
+         >
             {[
               { t: "Tecnica", d: "Postura, agilità e tocco. Le basi solide per ogni genere.", i: Lightning },
               { t: "Repertorio", d: "Da Bach ai Coldplay. Suoniamo ciò che ami davvero.", i: MusicNotes },
               { t: "Creatività", d: "Composizione e improvvisazione fin dalle prime lezioni.", i: Star }
             ].map((item, i) => (
-               <motion.div 
+               <motion.div
                  key={i}
-                 initial={{ opacity: 0, y: 30 }}
-                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
-                viewport={{ once: true, margin: "-50px" }}
-                className="group p-8 rounded-3xl bg-white/5 backdrop-blur-2xl border border-white/5 hover:border-indigo-500/30 transition-all hover:bg-white/10"
+                 variants={{
+                   hidden: { opacity: 0, y: 30 },
+                   visible: {
+                     opacity: 1,
+                     y: 0,
+                     transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
+                   },
+                 }}
+                 className="group p-8 rounded-3xl bg-white/5 backdrop-blur-2xl border border-white/5 hover:border-indigo-500/30 transition-all hover:bg-white/10"
                >
                  <div className="w-14 h-14 rounded-2xl bg-indigo-900/10 flex items-center justify-center text-indigo-500 mb-6 group-hover:scale-110 transition-transform">
                     <item.i size={28} weight="duotone"/>
@@ -132,7 +142,7 @@ export default function PianofortePage() {
                  <p className="text-gray-400 leading-relaxed">{item.d}</p>
                </motion.div>
             ))}
-         </div>
+         </motion.div>
       </section>
 
       {/* --- SEZIONE INSEGNANTE: CLAUDIO BERNARDI --- */}
@@ -185,6 +195,39 @@ export default function PianofortePage() {
                   Ho appreso, grazie ai miei maestri, il modo di studiare, la gioia di poter suonare, l&apos;equilibrio e il metodo. Di tutte queste cose ho fatto una sintesi. Questa è, credo, la maniera migliore (cioè l&apos;esperienza, unità alla comprensione di chi hai davanti) per arrivare a una buona relazione maestro/studente che possa far cresce ed innamorare della musica le persone.
                 </p>
               </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      <section className="relative z-[20] py-24 px-6 md:px-10 bg-transparent border-t border-white/10">
+        <div className="max-w-5xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            <h2 className="font-bold text-3xl md:text-4xl mb-4 text-white">Ascoltaci suonare</h2>
+          </motion.div>
+          <p className="text-gray-400 mb-10">
+            Una piccola anteprima di quello che imparerai con noi.
+          </p>
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 1.0, delay: 0.2, ease: "easeOut" }}
+          >
+            <div className="relative w-full aspect-video rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+              <iframe
+                className="absolute inset-0 w-full h-full"
+                src="https://www.youtube-nocookie.com/embed/xA3_910bX0Q"
+                title="Video MusicaNova Pianoforte"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
             </div>
           </motion.div>
         </div>

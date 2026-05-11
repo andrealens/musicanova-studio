@@ -14,6 +14,9 @@ import {
   GraduationCap,
   ArrowRight,
 } from "@phosphor-icons/react";
+import dynamic from "next/dynamic";
+
+const Particles = dynamic(() => import("@/src/components/Particles"), { ssr: false });
 
 const FadeIn = ({
   children,
@@ -161,11 +164,25 @@ export default function ContattiPage() {
     <div className="w-full min-h-screen bg-transparent text-white selection:bg-[#00ced1]/30 selection:text-white overflow-hidden">
       {/* HERO */}
       <section className="relative h-[50vh] flex flex-col items-center justify-center px-6 text-center">
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <Particles
+            particleColors={["#ffffff", "#a5b4fc", "#00ced1"]}
+            particleCount={180}
+            particleSpread={8}
+            speed={0.08}
+            particleBaseSize={80}
+            moveParticlesOnHover={true}
+            particleHoverFactor={0.3}
+            alphaParticles={true}
+            disableRotation={false}
+            pixelRatio={1}
+          />
+        </div>
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="max-w-3xl mx-auto"
+          className="relative z-10 max-w-3xl mx-auto"
         >
           <span className="inline-block px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-gray-400 mb-6">
             Ponticella · San Lazzaro di Savena (BO)

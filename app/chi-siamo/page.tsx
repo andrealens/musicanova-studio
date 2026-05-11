@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import {
   MusicNote,
@@ -16,7 +16,7 @@ const FadeInSection = ({ children, delay = 0 }: { children: React.ReactNode, del
     <motion.div
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
+      viewport={{ once: true, amount: 0.1 }}
       transition={{ duration: 0.8, delay, ease: "easeOut" }}
     >
       {children}
@@ -29,6 +29,7 @@ export default function ChiSiamo() {
   
   // Parallax per l'immagine Hero
   const { scrollYProgress } = useScroll({ target: containerRef, offset: ["start start", "end start"] });
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const yBg = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
 
   return (
@@ -96,9 +97,9 @@ export default function ChiSiamo() {
           
           {/* Foto Duo */}
           <FadeInSection delay={0.2}>
-             <div className="aspect-video rounded-[3rem] overflow-hidden border border-white/10 -rotate-3 hover:rotate-0 transition-transform duration-700 order-2 md:order-1">
+             <div className="aspect-square rounded-[3rem] overflow-hidden border border-white/10 -rotate-3 hover:rotate-0 transition-transform duration-700 order-2 md:order-1">
                {/* eslint-disable-next-line @next/next/no-img-element */}
-               <img src="https://images.unsplash.com/photo-1514320298574-2b9d53b05423?w=800" className="w-full h-full object-cover" alt="Duo Musicale" />
+               <img src="/home_gallery/67.webp" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" alt="Francesco e Claudio - Il Duo MusicaNova" />
              </div>
           </FadeInSection>
 
@@ -198,14 +199,35 @@ export default function ChiSiamo() {
                <div className="relative group cursor-pointer">
                   <div className="absolute inset-0 bg-red-600/20 blur-[60px] rounded-full group-hover:bg-red-600/30 transition-all duration-500" />
                   <div className="relative aspect-video rounded-3xl overflow-hidden border border-white/10">
-                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                     <img src="https://images.unsplash.com/photo-1501612722927-d1d5d738d026?w=1200" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Live Concert" />
-                     <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors" />
-                     <div className="absolute center inset-0 flex items-center justify-center">
-                        <div className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 group-hover:scale-110 transition-transform">
-                           <Microphone className="text-white w-8 h-8" />
-                        </div>
-                     </div>
+                    {!isVideoPlaying ? (
+                      <>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src="https://images.unsplash.com/photo-1501386761578-eac5c94b800a?q=80&w=1200"
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                          alt="Live Concert"
+                        />
+                        <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors" />
+                        <button
+                          onClick={() => setIsVideoPlaying(true)}
+                          className="absolute inset-0 flex items-center justify-center w-full h-full"
+                          aria-label="Riproduci video live MusicaNova"
+                        >
+                          <div className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 group-hover:scale-110 transition-transform">
+                            <Microphone className="text-white w-8 h-8" />
+                          </div>
+                        </button>
+                      </>
+                    ) : (
+                      <iframe
+                        className="absolute inset-0 w-full h-full"
+                        src="https://www.youtube-nocookie.com/embed/4Ib4itfxrzU?autoplay=1&rel=0"
+                        title="MusicaNova Live"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
+                    )}
                   </div>
                </div>
             </FadeInSection>
