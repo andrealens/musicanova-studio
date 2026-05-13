@@ -171,7 +171,7 @@ export default function MusigrammaPage() {
               title: "Impara con l'AI",
               description:
                 "L'app iOS/Android non è un lettore di contenuti. È un tutor adattivo: riconosce gradi e intervalli, personalizza il percorso e ti accompagna al livello successivo.",
-              tag: "Vibe Coding & AI",
+              tag: "AI & Node Approach",
               icon: (
                 <Robot
                   weight="duotone"
@@ -260,7 +260,7 @@ export default function MusigrammaPage() {
               },
               {
                 icon: <Robot weight="duotone" size={36} className="text-indigo-400" />,
-                title: "Vibe Coding & AI",
+                title: "AI & Node Approach",
                 headline: "Un tutor adattivo disponibile 24/7",
                 body: "L'integrazione con OpenAI API permette all'app di riconoscere automaticamente gradi, intervalli e rivolti e di personalizzare ogni percorso utente in tempo reale.",
                 accent: "border-indigo-500/30 hover:border-indigo-400/60",

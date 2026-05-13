@@ -19,7 +19,7 @@ export default function Navbar() {
       delay: 0.5,
       ease: "power2.out"
     });
-  }, { scope: navRef });
+  }, { scope: navRef, dependencies: [] });
 
   // 2. Animazione del Menu Mobile
   useGSAP(() => {
@@ -79,7 +79,9 @@ export default function Navbar() {
           <div className="flex items-center gap-4">
             {/* CTA */}
             <Link 
-              href="/#contatti" 
+              href="https://calendly.com/musicanovastudio/lezione-di-prova-gratuita"
+              target="_blank"
+              rel="noopener noreferrer"
               className="bg-indigo-600 text-white px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-indigo-500 hover:scale-105 transition-all shadow-lg shadow-indigo-600/20"
             >
               Prova

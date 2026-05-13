@@ -15,6 +15,7 @@ import {
   ArrowRight,
 } from "@phosphor-icons/react";
 import dynamic from "next/dynamic";
+import emailjs from "@emailjs/browser";
 
 const Particles = dynamic(() => import("@/src/components/Particles"), { ssr: false });
 
@@ -40,6 +41,7 @@ const FadeIn = ({
 function ContattiForm() {
   const searchParams = useSearchParams();
   const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [fields, setFields] = useState({
     nome: "",
     email: "",
@@ -48,9 +50,28 @@ function ContattiForm() {
     interesse: searchParams.get("interesse") ?? "chitarra",
   });
 
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    setSent(true);
+    try {
+      setLoading(true);
+      await emailjs.send(
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
+        {
+          nome: fields.nome,
+          email: fields.email,
+          telefono: fields.telefono,
+          interesse: fields.interesse,
+          messaggio: fields.messaggio,
+        },
+        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
+      );
+      setSent(true);
+      setLoading(false);
+    } catch (error) {
+      console.error("EmailJS error:", error);
+      setLoading(false);
+    }
   };
 
   return (
@@ -81,6 +102,7 @@ function ContattiForm() {
             </label>
             <input
               type="email"
+              suppressHydrationWarning
               value={fields.email}
               onChange={(e) =>
                 setFields({ ...fields, email: e.target.value })
@@ -136,9 +158,22 @@ function ContattiForm() {
             type="button"
             className="w-full mt-2 inline-flex items-center justify-center gap-2 bg-[#00ced1] text-black font-bold py-4 rounded-2xl hover:brightness-110 transition-all"
             onClick={handleSubmit}
+            disabled={loading}
           >
-            <PaperPlaneTilt size={20} strokeWidth={2.25} />
-            Invia Messaggio
+            {loading ? (
+              <span className="flex items-center justify-center gap-2">
+                <svg className="animate-spin h-4 w-4 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+                </svg>
+                Stiamo inviando la tua richiesta...
+              </span>
+            ) : (
+              <>
+                <PaperPlaneTilt size={20} strokeWidth={2.25} />
+                Invia Messaggio
+              </>
+            )}
           </button>
         </div>
       ) : (
@@ -191,7 +226,7 @@ export default function ContattiPage() {
             Vieni a trovarci
           </h1>
           <p className="text-lg md:text-xl text-gray-400 leading-relaxed">
-            Via Jussi 6 — Ponticella, San Lazzaro di Savena (BO) 40068
+            Via del Rio 9 — Ponticella, San Lazzaro di Savena (BO) 40068
           </p>
         </motion.div>
       </section>
@@ -216,7 +251,7 @@ export default function ContattiPage() {
               />
               <h3 className="text-xl font-bold mb-3">Dove Siamo</h3>
               <p className="text-gray-300 leading-relaxed">
-                Via Jussi 6, Ponticella · San Lazzaro di Savena (BO) 40068
+                Via del Rio 9, Ponticella, San Lazzaro di Savena (BO) 40068
               </p>
               <p className="text-gray-500 text-sm mt-3">
                 A 10 minuti dal centro di Bologna
@@ -226,23 +261,23 @@ export default function ContattiPage() {
 
           <FadeIn delay={0.15}>
             <div className="bg-[#0A0A0A] border border-white/10 rounded-3xl p-6">
-              <div className="flex items-start gap-3 mb-4">
-                <Envelope size={24} className="text-[#00ced1] shrink-0 mt-1" />
-                <div>
-                  <h3 className="text-xl font-bold mb-2">
-                    Contatti Diretti
-                  </h3>
-                  <a
-                    href="mailto:info@musicanovastudio.it"
-                    className="text-[#00ced1] hover:underline"
-                  >
-                    info@musicanovastudio.it
-                  </a>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <Phone size={24} className="text-[#00ced1] shrink-0 mt-1" />
-                <p className="text-gray-400">[Inserisci Numero]</p>
+              <Envelope weight="duotone" size={28} className="text-[#00ced1] mb-4" />
+              <h3 className="text-xl font-bold mb-4">Contatti Diretti</h3>
+              <div className="space-y-3">
+                <a
+                  href="mailto:musicanovastudio@gmail.com"
+                  className="flex items-center gap-3 text-gray-300 hover:text-white transition-colors"
+                >
+                  <Envelope size={18} className="text-red-500 shrink-0" />
+                  musicanovastudio@gmail.com
+                </a>
+                <a
+                  href="tel:+393464005500"
+                  className="flex items-center gap-3 text-gray-300 hover:text-white transition-colors"
+                >
+                  <Phone size={18} className="text-red-500 shrink-0" />
+                  +39 346 400 5500
+                </a>
               </div>
             </div>
           </FadeIn>
@@ -268,7 +303,7 @@ export default function ContattiPage() {
         <FadeIn>
           <div className="h-[400px] rounded-[3rem] overflow-hidden border border-white/10 bg-[#111]">
             <iframe
-              src="https://maps.google.com/maps?q=Ponticella+San+Lazzaro+di+Savena+Bologna&output=embed"
+              src="https://maps.google.com/maps?q=Via+del+Rio+9+Ponticella+San+Lazzaro+di+Savena+Bologna&output=embed"
               className="w-full h-full grayscale opacity-80 hover:opacity-100 hover:grayscale-0 transition-all duration-700 border-0"
               title="MusicaNova Studio — Mappa"
               loading="lazy"
@@ -297,7 +332,9 @@ export default function ContattiPage() {
               suonare insieme.
             </p>
             <Link
-              href="/#contatti"
+              href="https://calendly.com/musicanovastudio/lezione-di-prova-gratuita"
+              target="_blank"
+              rel="noopener noreferrer"
               className="mt-8 inline-flex items-center gap-2 bg-indigo-600 text-white px-10 py-4 rounded-full font-bold hover:bg-indigo-500 transition-all"
             >
               Prenota ora

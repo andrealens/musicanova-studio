@@ -458,11 +458,21 @@ export default function BandLivePage() {
                </div>
                <div>
                  <h4 className="font-bold text-white mb-2 uppercase text-sm tracking-widest">Email Booking</h4>
-                 <p className="text-red-400 font-medium">[Inserisci Email Qui]</p>
+                 <a 
+                   href="mailto:musicanovastudio@gmail.com"
+                   className="text-gray-400 font-medium hover:text-white transition-colors"
+                 >
+                   musicanovastudio@gmail.com
+                 </a>
                </div>
                <div>
                  <h4 className="font-bold text-white mb-2 uppercase text-sm tracking-widest">Telefono</h4>
-                 <p className="text-red-400 font-medium">[Inserisci Telefono Qui]</p>
+                 <a 
+                   href="tel:+393464005500"
+                   className="text-gray-400 font-medium hover:text-white transition-colors"
+                 >
+                   +39 346 400 5500
+                 </a>
                </div>
              </div>
 

@@ -118,7 +118,9 @@ export default function ChitarraPage() {
 
               <div className="flex flex-wrap gap-4">
                 <Link
-                  href="/#contatti"
+                  href="https://calendly.com/musicanovastudio/lezione-di-prova-gratuita"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="group inline-flex items-center gap-4 px-8 py-4 bg-red-600 text-white rounded-full font-bold hover:bg-red-500 transition-all shadow-[0_0_30px_rgba(220,38,38,0.4)] hover:scale-105"
                 >
                   <span>Prenota una lezione</span>

@@ -91,7 +91,7 @@ export default function PianofortePage() {
               </p>
               
               <div className="flex flex-wrap gap-4">
-                <Link href="/#contatti" className="group inline-flex items-center gap-4 px-8 py-4 bg-indigo-600 text-white rounded-full font-bold hover:bg-indigo-500 transition-all shadow-[0_0_30px_rgba(99,102,241,0.4)] hover:scale-105">
+                <Link href="https://calendly.com/musicanovastudio/lezione-di-prova-gratuita" target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-4 px-8 py-4 bg-indigo-600 text-white rounded-full font-bold hover:bg-indigo-500 transition-all shadow-[0_0_30px_rgba(99,102,241,0.4)] hover:scale-105">
                   <span>Prenota una lezione</span>
                   <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform"/>
                 </Link>

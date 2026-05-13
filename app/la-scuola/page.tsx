@@ -14,6 +14,8 @@ import {
   House,
   ArrowRight,
 } from "@phosphor-icons/react";
+import { useState } from 'react';
+import ContactModal from '@/src/components/ContactModal';
 
 const FadeIn = ({
   children,
@@ -69,6 +71,7 @@ const MusigrammaBackground = () => {
 
 export default function LaScuola() {
   const containerRef = useRef(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { scrollYProgress } = useScroll({ target: containerRef });
   const yParallax = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
 
@@ -319,13 +322,14 @@ export default function LaScuola() {
               </div>
             </div>
 
-            <button className="px-10 py-4 bg-white text-black font-bold rounded-full hover:scale-105 transition-transform flex items-center gap-2 mx-auto">
+            <button onClick={() => setIsModalOpen(true)} className="px-10 py-4 bg-white text-black font-bold rounded-full hover:scale-105 transition-transform flex items-center gap-2 mx-auto">
               Prenota la tua Prova <ArrowRight size={20} />
             </button>
           </div>
         </FadeIn>
       </section>
 
+    <ContactModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   );
 }

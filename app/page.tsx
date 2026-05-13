@@ -17,6 +17,7 @@ import dynamic from 'next/dynamic';
 import CassetteModel from '../src/components/CassetteModel';
 import { MasonryItem } from '../src/components/Masonry';
 import { useIsMobile } from '@/src/hooks/useIsMobile';
+import ContactModal from '@/src/components/ContactModal';
 
 const Masonry = dynamic(() => import('../src/components/Masonry'), {
   ssr: false,
@@ -79,6 +80,8 @@ export default function Home() {
   const isMobile = useIsMobile();
   const [isMounted, setIsMounted] = useState(false);
   const [isReady, setIsReady] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
   useEffect(() => {
     setIsMounted(true);
   }, []);
@@ -197,7 +200,7 @@ export default function Home() {
                 transition={{ duration: 0.5, delay: 0.22, ease: "easeOut" }}
                 className="flex flex-wrap gap-4"
               >
-                <Link href="#contatti" className="bg-white text-black px-8 py-4 rounded-full font-bold flex items-center gap-2 hover:bg-red-500 hover:text-white transition-all group shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(239,68,68,0.5)] transform hover:scale-105">
+                <Link href="https://calendly.com/musicanovastudio/lezione-di-prova-gratuita" target="_blank" rel="noopener noreferrer" className="bg-white text-black px-8 py-4 rounded-full font-bold flex items-center gap-2 hover:bg-red-500 hover:text-white transition-all group shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(239,68,68,0.5)] transform hover:scale-105">
                   Prenota una Prova <ArrowRight className="group-hover:translate-x-2 transition-transform" />
                 </Link>
                 <Link href="/la-scuola" className="border border-white/20 px-8 py-4 rounded-full font-bold hover:bg-white/5 backdrop-blur-sm transition-colors">
@@ -354,16 +357,20 @@ export default function Home() {
                   </p>
                 </div>
 
-                <div className="mt-12 inline-flex items-center gap-3 px-6 py-4 rounded-full bg-white/5 border border-white/10 backdrop-blur-md shadow-xl hover:bg-white/10 transition-colors">
+                <button
+                  type="button"
+                  className="mt-12 inline-flex items-center gap-3 px-6 py-4 rounded-full bg-white/5 border border-white/10 backdrop-blur-md shadow-xl hover:bg-white/10 transition-colors cursor-pointer hover:scale-105 transition-transform duration-300"
+                  onClick={() => setIsOpen(true)}
+                >
                   <Coffee
                     weight="duotone"
                     className="text-amber-400"
                     size={20}
                   />
-                  <p className="text-sm md:text-base text-gray-200 font-medium tracking-wide">
+                  <span className="text-sm md:text-base text-gray-200 font-medium tracking-wide">
                     Vieni a conoscerci in studio. Il caffè è sempre pronto.
-                  </p>
-                </div>
+                  </span>
+                </button>
              </div>
           </motion.div>
           )}
@@ -437,6 +444,8 @@ export default function Home() {
 
       </div>
       </motion.div>
+
+      <ContactModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </div>
   );
 }

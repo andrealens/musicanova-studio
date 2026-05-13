@@ -9,6 +9,7 @@ import {
   Microphone,
   MapPin,
 } from "@phosphor-icons/react";
+import ContactModal from '@/src/components/ContactModal';
 
 // Componente per le sezioni di testo che appaiono dal basso
 const FadeInSection = ({ children, delay = 0 }: { children: React.ReactNode, delay?: number }) => {
@@ -26,6 +27,7 @@ const FadeInSection = ({ children, delay = 0 }: { children: React.ReactNode, del
 
 export default function ChiSiamo() {
   const containerRef = useRef(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   
   // Parallax per l'immagine Hero
   const { scrollYProgress } = useScroll({ target: containerRef, offset: ["start start", "end start"] });
@@ -241,12 +243,13 @@ export default function ChiSiamo() {
            <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-10">
              Ti aspettiamo per una lezione di prova gratuita. Porta la tua curiosità: noi mettiamo la musica, il sorriso e tanta esperienza.
            </p>
-           <button className="px-10 py-5 bg-[#00ced1] text-black font-bold rounded-full hover:bg-[#00a8a8] transition-all shadow-[0_0_30px_rgba(0,206,209,0.3)] flex items-center gap-3 mx-auto">
+           <button onClick={() => setIsModalOpen(true)} className="px-10 py-5 bg-[#00ced1] text-black font-bold rounded-full hover:bg-[#00a8a8] transition-all shadow-[0_0_30px_rgba(0,206,209,0.3)] flex items-center gap-3 mx-auto">
              <MapPin size={20} /> Prenota la tua Prova
            </button>
          </FadeInSection>
       </section>
 
+    <ContactModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   );
 }

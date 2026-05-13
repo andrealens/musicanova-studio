@@ -580,7 +580,9 @@ export default function CorsiPage() {
             Prima lezione gratuita. Nessun impegno. Solo musica, passione e tanta voglia di crescere.
           </p>
           <Link
-            href="/#contatti"
+            href="https://calendly.com/musicanovastudio/lezione-di-prova-gratuita"
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-3 bg-[#00ced1] text-black px-10 py-5 rounded-full font-bold hover:brightness-105 transition"
           >
             Prenota la tua prova <ArrowRight size={20} />
