@@ -19,6 +19,7 @@ import PageNavigation from "../src/components/PageNavigation";
 import AnimatedBackgroundClient from "../src/components/AnimatedBackgroundClient";
 import GoogleAnalytics from '../src/components/GoogleAnalytics';
 import PageViewTracker from '../src/components/PageViewTracker';
+import CookieBanner from '../src/components/CookieBanner';
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -92,6 +93,7 @@ export default function RootLayout({
         </main>
 
         <Footer />
+        <CookieBanner />
       </body>
     </html>
   );
