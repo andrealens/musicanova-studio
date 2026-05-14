@@ -53,8 +53,12 @@ export default function Navbar() {
           className="pointer-events-auto w-full min-[920px]:w-auto flex items-center justify-between gap-8 px-6 min-[920px]:px-8 py-4 rounded-full bg-white/5 backdrop-blur-2xl border border-white/10 shadow-2xl"
         >
           {/* LOGO */}
-          <Link href="/" className="text-white font-bold tracking-tighter text-xl group">
-            MN<span className="text-indigo-500 group-hover:text-white transition-colors">.</span>
+          <Link href="/" className="flex items-center">
+            <img 
+              src="/logo/musicanova_logo.png" 
+              alt="MusicaNova Studio" 
+              className="h-16 w-auto"
+            />
           </Link>
 
           {/* MENU CENTRALE (Solo Desktop da 920px in su) */}
