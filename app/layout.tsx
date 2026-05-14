@@ -17,6 +17,8 @@ import PageNavigation from "../src/components/PageNavigation";
  * layout.tsx è un Server Component e Next.js lo vieta.
  */
 import AnimatedBackgroundClient from "../src/components/AnimatedBackgroundClient";
+import GoogleAnalytics from '../src/components/GoogleAnalytics';
+import PageViewTracker from '../src/components/PageViewTracker';
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -67,6 +69,8 @@ export default function RootLayout({
           selection:bg-indigo-500/30 overflow-x-hidden
         `}
       >
+        <GoogleAnalytics />
+        <PageViewTracker />
         <SmoothScroll />
 
         {/* Layer 1: blob animati — montati solo sul client */}
