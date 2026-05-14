@@ -25,26 +25,21 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "MusicaNova Studio",
-  description: "Scuola di musica a Ponticella, San Lazzaro di Savena. Corsi di chitarra e pianoforte per tutte le età. Prima lezione gratuita.",
-  icons: {
-    icon: '/logo/musicanova_logo.png',
-    apple: '/logo/musicanova_logo.png',
-  },
+  title: "MusicaNova Studio | Scuola di Musica a San Lazzaro di Savena",
+  description: "Scuola di musica a Ponticella, San Lazzaro di Savena (Bologna). Corsi di chitarra e pianoforte per tutte le età, dai 6 agli 80 anni. Prima lezione gratuita. Metodo Musigramma™.",
   openGraph: {
-    title: "MusicaNova Studio",
-    description: "Scuola di musica a Ponticella, San Lazzaro di Savena. Corsi di chitarra e pianoforte per tutte le età.",
-    url: "https://musicanovastudio.com",
     siteName: "MusicaNova Studio",
-    images: [
-      {
-        url: '/logo/musicanova_logo.png',
-        width: 800,
-        height: 800,
-      }
-    ],
     locale: "it_IT",
     type: "website",
+    url: "https://musicanovastudio.com",
+    images: [{
+      url: "https://www.musicanovastudio.com/logo/musicanova_logo.png",
+      width: 800,
+      height: 800,
+    }],
+  },
+  twitter: {
+    card: "summary_large_image",
   },
 };
 
