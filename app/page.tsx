@@ -18,6 +18,7 @@ import CassetteModel from '../src/components/CassetteModel';
 import { MasonryItem } from '../src/components/Masonry';
 import { useIsMobile } from '@/src/hooks/useIsMobile';
 import ContactModal from '@/src/components/ContactModal';
+import Testimonianze from '../src/components/Testimonianze';
 
 const Masonry = dynamic(() => import('../src/components/Masonry'), {
   ssr: false,
@@ -441,6 +442,8 @@ export default function Home() {
              </div>
           </div>
         </section>
+
+        <Testimonianze />
 
       </div>
       </motion.div>
