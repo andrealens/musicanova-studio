@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import Script from "next/script";
 
 declare global {
@@ -33,6 +34,8 @@ function readConsent(): CookieConsent {
 }
 
 export default function MetaPixel() {
+  const pathname = usePathname();
+  const isFirstPathnameEffect = useRef(true);
   const [hasMarketingConsent, setHasMarketingConsent] = useState(false);
   const [scriptLoaded, setScriptLoaded] = useState(false);
 
@@ -81,6 +84,17 @@ export default function MetaPixel() {
     window.fbq("track", "PageView");
     window.__metaPixelInitialized = true;
   }, [hasMarketingConsent, scriptLoaded]);
+
+  useEffect(() => {
+    if (isFirstPathnameEffect.current) {
+      isFirstPathnameEffect.current = false;
+      return;
+    }
+    if (!hasMarketingConsent) return;
+    if (typeof window.fbq !== "function") return;
+
+    window.fbq("track", "PageView");
+  }, [pathname, hasMarketingConsent]);
 
   if (!hasMarketingConsent) return null;
 
